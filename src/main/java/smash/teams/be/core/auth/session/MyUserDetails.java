@@ -10,10 +10,10 @@ import java.util.Collection;
 
 @Setter
 @Getter
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class MyUserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private User user;
 
-    public UserDetails(User user) {
+    public MyUserDetails(User user) {
         this.user = user;
     }
 
@@ -32,7 +32,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     @Override
     public String getUsername() {
         return user.getEmail();
-    } // check - user.getEmail()을 return해도 괜찮을까?
+    } // username이 없어서 대신 email return
 
     @Override
     public boolean isAccountNonExpired() {

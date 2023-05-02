@@ -6,7 +6,9 @@ import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 
-public class DummyEntity {
+import java.time.LocalDateTime;
+
+public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 추가하면 notNull인 값들 추가로 넣어주기
     public User newUser(String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
@@ -49,6 +51,20 @@ public class DummyEntity {
                 .build();
     }
 
+    public User newAdmin(String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .profileImage(null)
+                .remain(20)
+                .role(Role.ADMIN.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .build();
+    }
+
     public User newUserWithTeam(String name, Team team) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
@@ -64,7 +80,7 @@ public class DummyEntity {
                 .build();
     }
 
-//    public User newMockUser(Long id, String username, String fullName){
+//    public User newMockUser(Long id, String name){
 //        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //        return User.builder()
 //                .id(id)
@@ -77,4 +93,26 @@ public class DummyEntity {
 //                .createdAt(LocalDateTime.now())
 //                .build();
 //    }
+
+    public User newMockAdmin(Long id, String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .id(id)
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .profileImage(null)
+                .remain(20)
+                .role(Role.ADMIN.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public Team newTeam(String team) {
+        return Team.builder()
+                .team(team)
+                .build();
+    }
 }

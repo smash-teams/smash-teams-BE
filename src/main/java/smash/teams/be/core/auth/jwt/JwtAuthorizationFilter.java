@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import smash.teams.be.core.auth.session.UserDetails;
+import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.model.user.User;
 
 import javax.servlet.FilterChain;
@@ -42,12 +42,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String role = decodedJWT.getClaim("role").asString();
 
             User user = User.builder().id(id).role(role).build();
-            UserDetails userDetails = new UserDetails(user);
+            MyUserDetails myUserDetails = new MyUserDetails(user);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            userDetails.getPassword(),
-                            userDetails.getAuthorities()
+                            myUserDetails,
+                            myUserDetails.getPassword(),
+                            myUserDetails.getAuthorities()
                     );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             System.out.println("디버그 : 인증 객체 만들어짐");
