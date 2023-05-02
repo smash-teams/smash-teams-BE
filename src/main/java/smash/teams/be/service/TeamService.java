@@ -39,7 +39,7 @@ public class TeamService {
             throw new Exception400(id + "", "존재하지 않는 팀입니다.");
         }
         // 팀에 소속된 인원이 1명이라도 있을 경우 팀 삭제 불가
-        int count = userRepository.calculateCountById(teamOP.get().getId());
+        int count = userRepository.calculateCountByTeamId(teamOP.get().getId());
         if (count > 0) {
             throw new Exception400(id + "", "팀에 소속된 인원이 1명 이상입니다.");
         }
