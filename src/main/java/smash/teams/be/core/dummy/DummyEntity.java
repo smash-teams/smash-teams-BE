@@ -1,6 +1,7 @@
 package smash.teams.be.core.dummy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
@@ -44,6 +45,21 @@ public class DummyEntity {
                 .profileImage(null)
                 .remain(20)
                 .role(Role.CEO.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .build();
+    }
+
+    public User newUserWithTeam(String name, Team team) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .team(team)
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .profileImage(null)
+                .remain(20)
+                .role(Role.USER.getRole())
                 .status(Status.ACTIVE.getStatus())
                 .build();
     }
