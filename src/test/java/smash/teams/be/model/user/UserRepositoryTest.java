@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.core.exception.Exception400;
+import smash.teams.be.model.team.Team;
+import smash.teams.be.model.team.TeamRepository;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
@@ -23,6 +25,8 @@ public class UserRepositoryTest extends DummyEntity {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private TeamRepository teamRepository;
+    @Autowired
     private EntityManager em;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -30,6 +34,7 @@ public class UserRepositoryTest extends DummyEntity {
     @BeforeEach
     public void setUp() {
         em.createNativeQuery("ALTER TABLE user_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE team_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
         userRepository.save(newUser("이승민"));
         userRepository.save(newUser("송재근"));
         em.clear();
@@ -49,5 +54,24 @@ public class UserRepositoryTest extends DummyEntity {
 
         // then
         assertThat(userPS.getEmail()).isEqualTo("이승민@gmail.com");
+    }
+
+    @Test
+    public void calculate_count_by_team_id_test() {
+        // given
+        Long teamId = 1L;
+
+        // given2
+        Team team = teamRepository.save(Team.builder()
+                .team("개발")
+                .build());
+        userRepository.save(newUserWithTeam("이승민", team));
+        userRepository.save(newUserWithTeam("최민식", team));
+
+        // when
+        int i = userRepository.calculateCountByTeamId(teamId);
+
+        // then
+        assertThat(i).isEqualTo(2);
     }
 }
