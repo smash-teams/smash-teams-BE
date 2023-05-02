@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import smash.teams.be.core.MyRestDoc;
 
 import javax.persistence.EntityManager;
 
@@ -20,7 +19,7 @@ import javax.persistence.EntityManager;
 @Sql("classpath:db/teardown.sql")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class UserControllerTest extends MyRestDoc {
+public class UserControllerTest {
 
 //    private DummyEntity dummy = new DummyEntity();
 
