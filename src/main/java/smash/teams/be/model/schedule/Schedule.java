@@ -17,10 +17,10 @@ public class Schedule {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User User;
+    private User user;
 
-    private String start;
-    private String end;
+    private String startDate;
+    private String endDate;
     private String type;
     private String status;
     private String reason;
@@ -41,11 +41,11 @@ public class Schedule {
 
 
     @Builder
-    public Schedule(Long id, smash.teams.be.model.user.User user, String start, String end, String type, String status, String reason, String master, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, String master, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        User = user;
-        this.start = start;
-        this.end = end;
+        this.user = user;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.type = type;
         this.status = status;
         this.reason = reason;
