@@ -9,13 +9,13 @@ import smash.teams.be.model.user.UserRepository;
 
 @RequiredArgsConstructor
 @Service
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class MyUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User userPS = userRepository.findByEmail(username).orElseThrow(
                 () -> new InternalAuthenticationServiceException("인증 실패"));
-        return new UserDetails(userPS);
+        return new MyUserDetails(userPS);
     }
 }
