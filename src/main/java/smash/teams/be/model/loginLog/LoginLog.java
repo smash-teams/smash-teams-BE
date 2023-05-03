@@ -17,9 +17,12 @@ public class LoginLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long userId;
     private String userAgent;
     private String clientIP;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
