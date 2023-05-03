@@ -17,8 +17,8 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody TeamRequest.AddDTO addDTO) {
-        Team team = teamService.add(addDTO); // OSIV = false, 비영속
+    public ResponseEntity<?> add(@RequestBody TeamRequest.AddInDTO addInDTO) {
+        Team team = teamService.add(addInDTO); // OSIV = false, 비영속
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(team);
         return ResponseEntity.ok().body(responseDTO);

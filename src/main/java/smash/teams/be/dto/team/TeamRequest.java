@@ -7,7 +7,7 @@ import smash.teams.be.model.team.Team;
 public class TeamRequest {
     @Getter
     @Setter
-    public static class AddDTO {
+    public static class AddInDTO {
         private String teamName;
 
         public Team toEntity() {

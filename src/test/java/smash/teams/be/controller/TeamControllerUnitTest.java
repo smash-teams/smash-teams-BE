@@ -54,9 +54,9 @@ public class TeamControllerUnitTest {
     @Test
     public void add_test() throws Exception {
         // given
-        TeamRequest.AddDTO addDTO = new TeamRequest().AddDTO();
-        addDTO.setTeam("cos");
-        String requestBody = om.writeValueAsString(addDTO);
+        TeamRequest.AddInDTO addInDTO = new TeamRequest().AddDTO();
+        addInDTO.setTeam("cos");
+        String requestBody = om.writeValueAsString(addInDTO);
 
         // stub
         User cos = newMockUser(1L,"cos", "코스");
