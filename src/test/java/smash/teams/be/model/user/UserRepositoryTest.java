@@ -65,7 +65,7 @@ public class UserRepositoryTest extends DummyEntity {
         Team team = teamRepository.save(Team.builder()
                 .teamName("개발팀")
                 .build());
-        userRepository.save(newUserWithTeam("이승민", team));
+        userRepository.save(newUserWithTeam("이윤경", team));
         userRepository.save(newUserWithTeam("최민식", team));
 
         // when

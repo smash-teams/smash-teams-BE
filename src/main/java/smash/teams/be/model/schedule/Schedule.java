@@ -17,7 +17,6 @@ public class Schedule {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(nullable = false)
     private User user;
 
     @Column(nullable = false, length = 30)
