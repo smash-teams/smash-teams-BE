@@ -19,13 +19,13 @@ public class TeamService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Team add(TeamRequest.AddDTO addDTO) {
-        Optional<Team> teamOP = teamRepository.findByTeamName(addDTO.getTeamName());
+    public Team add(TeamRequest.AddInDTO addInDTO) {
+        Optional<Team> teamOP = teamRepository.findByTeamName(addInDTO.getTeamName());
         if (teamOP.isPresent()) {
-            throw new Exception400(addDTO.getTeamName(), "이미 존재하는 팀입니다.");
+            throw new Exception400(addInDTO.getTeamName(), "이미 존재하는 팀입니다.");
         }
         try {
-            Team teamPS = teamRepository.save(addDTO.toEntity());
+            Team teamPS = teamRepository.save(addInDTO.toEntity());
             return teamPS;
         } catch (Exception e) {
             throw new Exception500("팀 추가 실패 : " + e.getMessage());
