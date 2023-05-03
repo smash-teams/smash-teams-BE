@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    @Query("select t from Team t where t.team = :team")
-    Optional<Team> findByTeam(@Param("team") String team);
+    @Query("select t from Team t where t.teamName = :teamName")
+    Optional<Team> findByTeamName(@Param("teamName") String teamName);
 }
