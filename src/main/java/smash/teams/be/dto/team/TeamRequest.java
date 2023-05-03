@@ -8,11 +8,11 @@ public class TeamRequest {
     @Getter
     @Setter
     public static class AddDTO {
-        private String team;
+        private String teamName;
 
         public Team toEntity() {
             return Team.builder()
-                    .team(team)
+                    .teamName(teamName)
                     .build();
         }
     }

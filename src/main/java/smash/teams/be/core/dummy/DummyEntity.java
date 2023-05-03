@@ -110,9 +110,9 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .build();
     }
 
-    public Team newTeam(String team) {
+    public Team newTeam(String teamName) {
         return Team.builder()
-                .team(team)
+                .teamName(teamName)
                 .build();
     }
 }

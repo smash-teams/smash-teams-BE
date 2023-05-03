@@ -25,23 +25,23 @@ public class TeamRepositoryTest extends DummyEntity {
     @BeforeEach
     public void setUp() {
         em.createNativeQuery("ALTER TABLE team_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        teamRepository.save(newTeam("개발"));
-        teamRepository.save(newTeam("마케팅"));
+        teamRepository.save(newTeam("개발팀"));
+        teamRepository.save(newTeam("마케팅팀"));
         em.clear();
     }
 
     @Test
-    public void find_by_team_test() {
+    public void find_by_team_name_test() {
         // given
-        String team = "마케팅";
+        String teamName = "마케팅팀";
 
         // when
-        Optional<Team> teamOP = teamRepository.findByTeam(team);
+        Optional<Team> teamOP = teamRepository.findByTeamName(teamName);
         if (teamOP.isEmpty()) {
-            throw new Exception400(team, "팀을 찾을 수 없습니다.");
+            throw new Exception400(teamName, "팀을 찾을 수 없습니다.");
         }
 
         // then
-        assertThat(teamOP.get().getTeam()).isEqualTo("마케팅");
+        assertThat(teamOP.get().getTeamName()).isEqualTo("마케팅팀");
     }
 }

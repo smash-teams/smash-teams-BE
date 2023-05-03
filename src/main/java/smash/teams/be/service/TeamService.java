@@ -20,9 +20,9 @@ public class TeamService {
 
     @Transactional
     public Team add(TeamRequest.AddDTO addDTO) {
-        Optional<Team> teamOP = teamRepository.findByTeam(addDTO.getTeam());
+        Optional<Team> teamOP = teamRepository.findByTeamName(addDTO.getTeamName());
         if (teamOP.isPresent()) {
-            throw new Exception400(addDTO.getTeam(), "이미 존재하는 팀입니다.");
+            throw new Exception400(addDTO.getTeamName(), "이미 존재하는 팀입니다.");
         }
         try {
             Team teamPS = teamRepository.save(addDTO.toEntity());
