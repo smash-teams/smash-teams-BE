@@ -14,6 +14,4 @@ public @interface WithMockAdmin {
     long id() default 1L;
 
     String username() default "admin@gmail.com";
-
-    String role() default "ADMIN";
 }

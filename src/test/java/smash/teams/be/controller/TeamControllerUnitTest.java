@@ -10,14 +10,16 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import smash.teams.be.core.WithMockAdmin;
 import smash.teams.be.core.advice.LogAdvice;
 import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
+import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.team.TeamRequest;
+import smash.teams.be.dto.team.TeamResponse;
 import smash.teams.be.service.TeamService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @ActiveProfiles("test")
-@Sql("classpath:db/teardown.sql")
 @EnableAspectJAutoProxy // AOP 활성화
 @Import({
         ValidAdvice.class,
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         // 필요한 Controller 가져오기, 특정 필터를 제외하기
         controllers = {TeamController.class}
 )
-public class TeamControllerUnitTest {
+public class TeamControllerUnitTest extends DummyEntity {
 
     @Autowired
     private MockMvc mvc;
@@ -51,28 +52,28 @@ public class TeamControllerUnitTest {
     @MockBean
     private TeamService teamService;
 
+    @WithMockAdmin
     @Test
     public void add_test() throws Exception {
         // given
-        TeamRequest.AddInDTO addInDTO = new TeamRequest().AddDTO();
-        addInDTO.setTeam("cos");
+        TeamRequest.AddInDTO addInDTO = new TeamRequest.AddInDTO();
+        addInDTO.setTeamName("마케팅팀");
         String requestBody = om.writeValueAsString(addInDTO);
 
         // stub
-        User cos = newMockUser(1L,"cos", "코스");
-        UserResponse.JoinOutDTO joinOutDTO = new UserResponse.JoinOutDTO(cos);
-        Mockito.when(userService.회원가입(any())).thenReturn(joinOutDTO);
+        Mockito.when(teamService.add(any()))
+                .thenReturn(new TeamResponse.AddOutDTO(newMockTeam(3L, "마케팅팀")));
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/admin/team/add").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.data.id").value(1L));
-        resultActions.andExpect(jsonPath("$.data.username").value("cos"));
-        resultActions.andExpect(jsonPath("$.data.fullName").value("코스"));
+        resultActions.andExpect(jsonPath("$.data.teamId").value(3L));
+        resultActions.andExpect(jsonPath("$.data.teamName").value("마케팅팀"));
+        resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
         resultActions.andExpect(status().isOk());
     }
 }

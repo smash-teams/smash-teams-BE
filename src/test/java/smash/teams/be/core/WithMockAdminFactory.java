@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 import smash.teams.be.core.auth.session.MyUserDetails;
+import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 
@@ -21,10 +22,10 @@ public class WithMockAdminFactory implements WithSecurityContextFactory<WithMock
                 .password("1234")
                 .email(mockAdmin.username())
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
-                .role(mockAdmin.role())
+                .role(Role.ADMIN.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .build();
         MyUserDetails myUserDetails = new MyUserDetails(user);

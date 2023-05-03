@@ -117,4 +117,12 @@ public class DummyEntity {
                 .teamName(teamName)
                 .build();
     }
+
+    public Team newMockTeam(Long id, String teamName) {
+        return Team.builder()
+                .id(id)
+                .teamName(teamName)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }
