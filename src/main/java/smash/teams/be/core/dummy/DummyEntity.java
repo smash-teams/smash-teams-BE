@@ -8,7 +8,7 @@ import smash.teams.be.model.user.User;
 
 import java.time.LocalDateTime;
 
-public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 추가하면 notNull인 값들 추가로 넣어주기
+public class DummyEntity {
     public User newUser(String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
@@ -16,10 +16,10 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.USER.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .build();
     }
 
@@ -30,10 +30,10 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.MANAGER.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .build();
     }
 
@@ -44,10 +44,10 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.CEO.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .build();
     }
 
@@ -58,10 +58,10 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.ADMIN.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .build();
     }
 
@@ -73,26 +73,28 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.USER.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .build();
     }
 
-//    public User newMockUser(Long id, String name){
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        return User.builder()
-//                .id(id)
-//                .username(username)
-//                .password(passwordEncoder.encode("1234"))
-//                .fullName(fullName)
-//                .email(username+"@nate.com")
-//                .role("USER")
-//                .status(true)
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//    }
+    public User newMockUser(Long id, String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .id(id)
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.USER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 
     public User newMockAdmin(Long id, String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -102,10 +104,10 @@ public class DummyEntity { // check - newMock** 메서드들은 나중에 valid 
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
-                .profileImage(null)
                 .remain(20)
                 .role(Role.ADMIN.getRole())
                 .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

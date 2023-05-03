@@ -2,6 +2,7 @@ package smash.teams.be.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,15 @@ import smash.teams.be.dto.team.TeamResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.service.TeamService;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController("/auth/admin/team")
 public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody TeamRequest.AddInDTO addInDTO) {
+    public ResponseEntity<?> add(@Valid @RequestBody TeamRequest.AddInDTO addInDTO, Errors errors) {
         TeamResponse.AddOutDTO addOutDTO = teamService.add(addInDTO); // OSIV = false, 비영속
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(addOutDTO);
