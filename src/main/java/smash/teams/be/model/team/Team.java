@@ -1,7 +1,6 @@
 package smash.teams.be.model.team;
 
 import lombok.*;
-import smash.teams.be.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +15,10 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String team;
+    @Column(nullable = false, length = 20)
+    private String teamName;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -31,9 +33,9 @@ public class Team {
     }
 
     @Builder
-    public Team(Long id, String team, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Team(Long id, String teamName, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.team = team;
+        this.teamName = teamName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

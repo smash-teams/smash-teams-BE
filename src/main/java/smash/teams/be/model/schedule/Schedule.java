@@ -17,15 +17,30 @@ public class Schedule {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
     private User user;
 
+    @Column(nullable = false, length = 30)
     private String startDate;
+
+    @Column(nullable = false, length = 30)
     private String endDate;
+
+    @Column(nullable = false, length = 10)
     private String type;
+
+    @Column(nullable = false, length = 10)
     private String status;
+
+    @Column(length = 50)
     private String reason;
-    private String master;
+
+    @Column(nullable = false, length = 30)
+    private String approver;
+
     private LocalDateTime finishedAt;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -41,7 +56,7 @@ public class Schedule {
 
 
     @Builder
-    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, String master, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, String approver, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.startDate = startDate;
@@ -49,7 +64,7 @@ public class Schedule {
         this.type = type;
         this.status = status;
         this.reason = reason;
-        this.master = master;
+        this.approver = approver;
         this.finishedAt = finishedAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
