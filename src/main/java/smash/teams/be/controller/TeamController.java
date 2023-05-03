@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import smash.teams.be.dto.ResponseDTO;
 import smash.teams.be.dto.team.TeamRequest;
+import smash.teams.be.dto.team.TeamResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.service.TeamService;
 
@@ -18,9 +19,9 @@ public class TeamController {
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody TeamRequest.AddInDTO addInDTO) {
-        Team team = teamService.add(addInDTO); // OSIV = false, 비영속
+        TeamResponse.AddOutDTO addOutDTO = teamService.add(addInDTO); // OSIV = false, 비영속
 
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(team);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(addOutDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
 
