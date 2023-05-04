@@ -50,9 +50,8 @@ public class Schedule {
         this.updatedAt = LocalDateTime.now();
     }
 
-
     @Builder
-    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, String approver, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.startDate = startDate;
@@ -60,7 +59,6 @@ public class Schedule {
         this.type = type;
         this.status = status;
         this.reason = reason;
-        this.approver = approver;
         this.finishedAt = finishedAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
