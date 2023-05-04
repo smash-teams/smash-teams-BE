@@ -1,7 +1,7 @@
 package smash.teams.be.model.schedule;
 
 public enum Type {
-    DAYOFF("연차"), HALFOFF("반차"), SHIFT("당직");
+    DAYOFF("DAYOFF"), HALFOFF("HALFOFF"), SHIFT("SHIFT");
 
     private final String type;
 

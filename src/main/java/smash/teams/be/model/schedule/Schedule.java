@@ -34,9 +34,6 @@ public class Schedule {
     @Column(length = 50)
     private String reason;
 
-    @Column(nullable = false, length = 30)
-    private String approver;
-
     private LocalDateTime finishedAt;
 
     @Column(nullable = false)
