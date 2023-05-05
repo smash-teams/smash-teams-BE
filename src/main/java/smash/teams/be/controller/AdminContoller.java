@@ -17,6 +17,16 @@ import javax.validation.Valid;
 public class AdminContoller {
     private final AdminService adminService;
 
+    @GetMapping("")
+    public ResponseEntity<?> getAdminPage(@RequestParam(defaultValue = "") String teamName,
+                                          @RequestParam(defaultValue = "") String keyword,
+                                          @RequestParam(defaultValue = "0") int page) {
+        AdminResponse.GetAdminPageOutDTO getAdminPageOutDTO = adminService.getAdminPage(teamName, keyword, page);
+
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(getAdminPageOutDTO);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
     @PostMapping("/team/add")
     public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
         AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
