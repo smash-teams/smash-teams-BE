@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smash.teams.be.core.exception.Exception400;
 import smash.teams.be.core.exception.Exception500;
-import smash.teams.be.dto.team.TeamRequest;
-import smash.teams.be.dto.team.TeamResponse;
+import smash.teams.be.dto.admin.AdminRequest;
+import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.UserRepository;
@@ -15,19 +15,19 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class TeamService {
+public class AdminService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public TeamResponse.AddOutDTO add(TeamRequest.AddInDTO addInDTO) {
+    public AdminResponse.AddOutDTO add(AdminRequest.AddInDTO addInDTO) {
         Optional<Team> teamOP = teamRepository.findByTeamName(addInDTO.getTeamName());
         if (teamOP.isPresent()) {
             throw new Exception400(addInDTO.getTeamName(), "이미 존재하는 팀입니다.");
         }
         try {
             Team teamPS = teamRepository.save(addInDTO.toEntity());
-            return new TeamResponse.AddOutDTO(teamPS);
+            return new AdminResponse.AddOutDTO(teamPS);
         } catch (Exception e) {
             throw new Exception500("팀 추가 실패 : " + e.getMessage());
         }

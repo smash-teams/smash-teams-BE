@@ -5,29 +5,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import smash.teams.be.dto.ResponseDTO;
-import smash.teams.be.dto.team.TeamRequest;
-import smash.teams.be.dto.team.TeamResponse;
-import smash.teams.be.service.TeamService;
+import smash.teams.be.dto.admin.AdminRequest;
+import smash.teams.be.dto.admin.AdminResponse;
+import smash.teams.be.service.AdminService;
 
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping(("/auth/admin/team"))
+@RequestMapping(("/auth/admin"))
 @RestController
-public class TeamController {
-    private final TeamService teamService;
+public class AdminContoller {
+    private final AdminService adminService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody @Valid TeamRequest.AddInDTO addInDTO, Errors errors) {
-        TeamResponse.AddOutDTO addOutDTO = teamService.add(addInDTO); // OSIV = false, 비영속
+    @PostMapping("/team/add")
+    public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
+        AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(addOutDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/team/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        teamService.delete(id);
+        adminService.delete(id);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>();
         return ResponseEntity.ok().body(responseDTO);

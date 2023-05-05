@@ -1,10 +1,10 @@
-package smash.teams.be.dto.team;
+package smash.teams.be.dto.admin;
 
 import lombok.Getter;
 import lombok.Setter;
 import smash.teams.be.model.team.Team;
 
-public class TeamResponse {
+public class AdminResponse {
     @Getter
     @Setter
     public static class AddOutDTO {

@@ -9,8 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.team.TeamRequest;
-import smash.teams.be.dto.team.TeamResponse;
+import smash.teams.be.dto.admin.AdminRequest;
+import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.UserRepository;
 
@@ -20,10 +20,10 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class TeamServiceTest extends DummyEntity {
+public class AdminServiceTest extends DummyEntity {
 
     @InjectMocks
-    private TeamService teamService;
+    private AdminService adminService;
     @Mock
     private TeamRepository teamRepository;
     @Mock
@@ -32,7 +32,7 @@ public class TeamServiceTest extends DummyEntity {
     @Test
     public void add_test() {
         // given
-        TeamRequest.AddInDTO addInDTO = new TeamRequest.AddInDTO();
+        AdminRequest.AddInDTO addInDTO = new AdminRequest.AddInDTO();
         addInDTO.setTeamName("회계팀");
 
         // stub 1
@@ -42,7 +42,7 @@ public class TeamServiceTest extends DummyEntity {
         Mockito.when(teamRepository.save(any())).thenReturn(newMockTeam(4L, "회계팀"));
 
         // when
-        TeamResponse.AddOutDTO addOutDTO = teamService.add(addInDTO);
+        AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO);
 
         // then
         Assertions.assertThat(addOutDTO.getTeamId()).isEqualTo(4L);
