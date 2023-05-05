@@ -1,4 +1,4 @@
-package smash.teams.be.dto.team;
+package smash.teams.be.dto.admin;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import smash.teams.be.model.team.Team;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class TeamRequest {
+public class AdminRequest {
     @Getter
     @Setter
     public static class AddInDTO {

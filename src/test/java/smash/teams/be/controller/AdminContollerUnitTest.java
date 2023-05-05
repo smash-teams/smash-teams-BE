@@ -18,9 +18,9 @@ import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.team.TeamRequest;
-import smash.teams.be.dto.team.TeamResponse;
-import smash.teams.be.service.TeamService;
+import smash.teams.be.dto.admin.AdminRequest;
+import smash.teams.be.dto.admin.AdminResponse;
+import smash.teams.be.service.AdminService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,28 +41,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 }) // Advice 와 Security 설정 가져오기
 @WebMvcTest(
         // 필요한 Controller 가져오기, 특정 필터를 제외하기
-        controllers = {TeamController.class}
+        controllers = {AdminContoller.class}
 )
-public class TeamControllerUnitTest extends DummyEntity {
+public class AdminContollerUnitTest extends DummyEntity {
 
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper om;
     @MockBean
-    private TeamService teamService;
+    private AdminService adminService;
 
     @WithMockAdmin
     @Test
     public void add_test() throws Exception {
         // given
-        TeamRequest.AddInDTO addInDTO = new TeamRequest.AddInDTO();
+        AdminRequest.AddInDTO addInDTO = new AdminRequest.AddInDTO();
         addInDTO.setTeamName("마케팅팀");
         String requestBody = om.writeValueAsString(addInDTO);
 
         // stub
-        Mockito.when(teamService.add(any()))
-                .thenReturn(new TeamResponse.AddOutDTO(newMockTeam(3L, "마케팅팀")));
+        Mockito.when(adminService.add(any()))
+                .thenReturn(new AdminResponse.AddOutDTO(newMockTeam(3L, "마케팅팀")));
 
         // when
         ResultActions resultActions = mvc
