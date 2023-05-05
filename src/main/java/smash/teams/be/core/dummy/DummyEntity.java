@@ -23,7 +23,7 @@ public class DummyEntity {
                 .remain(20)
                 .role(Role.USER.getRole())
                 .status(Status.ACTIVE.getStatus())
-                .startWork(LocalDateTime.now())
+                .startWork(LocalDateTime.now().toLocalDate().atStartOfDay())
                 .build();
     }
 
