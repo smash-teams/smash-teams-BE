@@ -67,9 +67,9 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule2, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule2.getUser())));
         scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule3, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule3.getUser())));
 
-        ScheduleResponse.ScheduleListDTO scheduleList = new ScheduleResponse.ScheduleListDTO(scheduleOutList);
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = new ScheduleResponse.ScheduleListDTO(scheduleOutList);
 
-        Mockito.when(scheduleService.getScheduleList(any())).thenReturn(scheduleList);
+        Mockito.when(scheduleService.getScheduleList(any())).thenReturn(scheduleListDTO);
 
         // when
         ResultActions resultActions = mvc.perform(get("/auth/user/schedule"));
