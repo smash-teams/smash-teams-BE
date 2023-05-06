@@ -17,16 +17,16 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     public ScheduleResponse.ScheduleListDTO getScheduleList(Long userId){
-        List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
-        if(schedules.isEmpty()){
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByUserId(userId);
+        if(scheduleList.isEmpty()){
             throw new Exception404("스케쥴을 찾을 수 없습니다.");
         }
-        List<ScheduleResponse.ScheduleOutDTO> scheduleList = new ArrayList<>();
-        for(Schedule schedule : schedules){
-            ScheduleResponse.UserOutWithScheduleOutDTO userOutWithScheduleDTO = new ScheduleResponse.UserOutWithScheduleOutDTO(schedule.getUser());
-            scheduleList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutWithScheduleDTO));
+        List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
+        for(Schedule schedule : scheduleList){
+            ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+            scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
         }
 
-        return new ScheduleResponse.ScheduleListDTO(scheduleList);
+        return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
     }
 }

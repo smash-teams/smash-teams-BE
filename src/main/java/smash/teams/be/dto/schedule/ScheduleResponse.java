@@ -27,9 +27,9 @@ public class ScheduleResponse {
         private String type;
         private String status;
         private String reason;
-        private UserOutWithScheduleOutDTO user;
+        private UserOutDTOWithScheduleOutDTO user;
 
-        public ScheduleOutDTO(Schedule schedule, UserOutWithScheduleOutDTO user) {
+        public ScheduleOutDTO(Schedule schedule, UserOutDTOWithScheduleOutDTO user) {
             this.scheduleId = schedule.getId();
             this.startDate = schedule.getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             this.endDate = schedule.getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -41,7 +41,7 @@ public class ScheduleResponse {
     }
 
     @Getter @Setter
-    public static class UserOutWithScheduleOutDTO{
+    public static class UserOutDTOWithScheduleOutDTO{
         private Long userId;
         private String name;
         private String email;
@@ -51,7 +51,7 @@ public class ScheduleResponse {
         private String teamName;
         private String profileImage;
 
-        public UserOutWithScheduleOutDTO(User user) {
+        public UserOutDTOWithScheduleOutDTO(User user) {
             this.userId = user.getId();
             this.name = user.getName();
             this.email = user.getEmail();
