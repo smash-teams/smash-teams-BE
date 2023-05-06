@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter // DTO 만들면 삭제해야됨
 @Getter
 @Table(name = "schedule_tb")
 @Entity
@@ -20,10 +19,10 @@ public class Schedule {
     private User user;
 
     @Column(nullable = false, length = 30)
-    private String startDate;
+    private LocalDateTime startDate;
 
     @Column(nullable = false, length = 30)
-    private String endDate;
+    private LocalDateTime endDate;
 
     @Column(nullable = false, length = 10)
     private String type;
@@ -51,7 +50,7 @@ public class Schedule {
     }
 
     @Builder
-    public Schedule(Long id, User user, String startDate, String endDate, String type, String status, String reason, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Schedule(Long id, User user, LocalDateTime startDate, LocalDateTime endDate, String type, String status, String reason, LocalDateTime finishedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.startDate = startDate;
