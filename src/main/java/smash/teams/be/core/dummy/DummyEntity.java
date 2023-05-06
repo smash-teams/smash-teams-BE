@@ -1,12 +1,16 @@
 package smash.teams.be.core.dummy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import smash.teams.be.model.schedule.Schedule;
+import smash.teams.be.model.schedule.Type;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DummyEntity {
     public User newUser(String name) {
@@ -123,6 +127,41 @@ public class DummyEntity {
                 .id(id)
                 .teamName(teamName)
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public Schedule newScheduleForTest(Long scheduleId, Long userId, String userRole, String userName, Long teamId, String teamName, String scheduleStatus, String scheduleReason){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return Schedule.builder()
+                .id(scheduleId)
+                .startDate(LocalDateTime.parse("2022-01-01T09:00:00"))
+                .endDate(LocalDateTime.parse("2022-01-01T09:00:00"))
+                .type(Type.DAYOFF.getType())
+                .status(scheduleStatus)
+                .reason(scheduleReason)
+                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .finishedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .user(User.builder()
+                        .id(userId)
+                        .team(Team.builder()
+                                .id(teamId)
+                                .teamName(teamName)
+                                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                                .build())
+                        .name(userName)
+                        .password(passwordEncoder.encode("1234"))
+                        .email(userName+"@gmail.com")
+                        .phoneNumber("010-"+userId+userId+userId+userId+"-"+userId+userId+userId+userId)
+                        .role(userRole)
+                        .status(Status.ACTIVE.getStatus())
+                        .remain(20)
+                        .startWork(LocalDate.parse("2020-01-01").atStartOfDay())
+                        .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                        .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                        .profileImage(null)
+                        .build())
                 .build();
     }
 }

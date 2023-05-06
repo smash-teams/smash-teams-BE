@@ -19,8 +19,8 @@ public class ScheduleController {
     @GetMapping("/auth/user/schedule")
     public ResponseEntity<?> getScheduleList(@AuthenticationPrincipal MyUserDetails myUserDetails){
         Long userId = myUserDetails.getUser().getId();
-        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleList(userId);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
+        ScheduleResponse.ScheduleListDTO scheduleList = scheduleService.getScheduleList(userId);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleList);
         return ResponseEntity.ok(responseDTO);
     }
 }
