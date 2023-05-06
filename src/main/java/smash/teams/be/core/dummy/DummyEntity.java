@@ -164,4 +164,44 @@ public class DummyEntity {
                         .build())
                 .build();
     }
+
+    public Schedule newScheduleForRepoTest(User user){
+        return Schedule.builder()
+                .user(user)
+                .startDate(LocalDateTime.parse("2022-01-01T09:00:00"))
+                .endDate(LocalDateTime.parse("2022-01-01T09:00:00"))
+                .type("DAYOFF")
+                .status("APPROVED")
+                .reason("여행")
+                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .finishedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .build();
+    }
+
+    public User newUserForRepoTest(Team team, String userName){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .team(team)
+                .name(userName)
+                .password(passwordEncoder.encode("1234"))
+                .email(userName+"@gmail.com")
+                .phoneNumber("010-1111-1111")
+                .role("USER")
+                .status("ACTIVATE")
+                .remain(20)
+                .startWork(LocalDate.parse("2020-01-01").atStartOfDay())
+                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .profileImage(null)
+                .build();
+    }
+
+    public Team newTeamForRepoTest(String teamName){
+        return Team.builder()
+                .teamName(teamName)
+                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .build();
+    }
 }
