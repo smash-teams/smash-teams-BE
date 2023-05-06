@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter // DTO 만들면 삭제해야됨
 @Getter
 @Table(name = "user_tb")
 @Entity
@@ -44,7 +43,7 @@ public class User {
     @Column(nullable = false, length = 10)
     private Integer remain;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private LocalDateTime startWork;
 
     @Column(nullable = false)
