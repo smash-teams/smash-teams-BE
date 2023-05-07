@@ -1,5 +1,7 @@
 package smash.teams.be.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,6 +37,14 @@ public class ScheduleController {
         ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/auth/user/main")
+    public ResponseEntity<?> loadScheduleList() throws JsonProcessingException {
+        ScheduleResponse.ListOutDto listOutDto = scheduleService.findByScheduleList();
+        System.out.println(new ObjectMapper().writeValueAsString(listOutDto));
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(listOutDto);
         return ResponseEntity.ok(responseDTO);
     }
 }
