@@ -50,6 +50,14 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public void updateTeamName(Team team) { // 소속팀 변경
+        this.team = team;
+    }
+
+    public void updateRole(String role) { // 권한 변경
+        this.role = role;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

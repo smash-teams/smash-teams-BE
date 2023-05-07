@@ -81,6 +81,29 @@ public class AdminService {
 
     @Log
     @Transactional
+    public void updateAuthAndTeam(AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO) {
+        User userPS = userRepository.findById(updateAuthAndTeamInDTO.getUserId()).orElseThrow(
+                () -> new Exception400(String.valueOf(updateAuthAndTeamInDTO.getUserId()), "존재하지 않는 사용자입니다.")
+        );
+        Team teamPS = teamRepository.findByTeamName(updateAuthAndTeamInDTO.getTeamName()).orElseThrow(
+                () -> new Exception400(updateAuthAndTeamInDTO.getTeamName(), "존재하지 않는 팀입니다.")
+        );
+        try {
+            // 권한 변경
+            if (!userPS.getRole().equals(updateAuthAndTeamInDTO.getRole())) {
+                userPS.updateRole(updateAuthAndTeamInDTO.getRole());
+            }
+            // 소속팀 변경
+            if (!userPS.getTeam().getTeamName().equals(updateAuthAndTeamInDTO.getTeamName())) {
+                userPS.updateTeamName(teamPS);
+            }
+        } catch (Exception e) {
+            throw new Exception500("권한 또는 팀 변경 실패 : " + e.getMessage());
+        }
+    }
+
+    @Log
+    @Transactional
     public AdminResponse.AddOutDTO add(AdminRequest.AddInDTO addInDTO) {
         if (teamRepository.findByTeamName(addInDTO.getTeamName()).isPresent()) {
             throw new Exception400(addInDTO.getTeamName(), "이미 존재하는 팀입니다.");
@@ -97,12 +120,12 @@ public class AdminService {
     @Transactional
     public void delete(Long id) {
         Team teamPS = teamRepository.findById(id).orElseThrow(
-                () -> new Exception400(id + "", "존재하지 않는 팀입니다.")
+                () -> new Exception400(String.valueOf(id), "존재하지 않는 팀입니다.")
         );
         // 팀에 소속된 인원이 1명이라도 있을 경우 팀 삭제 불가
         int count = userRepository.calculateCountByTeamId(teamPS.getId());
         if (count > 0) {
-            throw new Exception400(id + "", "팀에 소속된 인원이 1명 이상입니다.");
+            throw new Exception400(String.valueOf(id), "팀에 소속된 인원이 1명 이상입니다.");
         }
         try {
             teamRepository.deleteById(id);
