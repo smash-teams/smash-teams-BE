@@ -173,21 +173,21 @@ public class DummyEntity {
                 .build();
     }
 
-    public Schedule newScheduleForRepoTest(User user){
+    public Schedule newScheduleForRepoTest(User user,String type, String status, String reason){
         return Schedule.builder()
                 .user(user)
                 .startDate(LocalDateTime.parse("2022-01-01T09:00:00"))
                 .endDate(LocalDateTime.parse("2022-01-01T09:00:00"))
-                .type("DAYOFF")
-                .status("APPROVED")
-                .reason("여행")
+                .type(type)
+                .status(status)
+                .reason(reason)
                 .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .finishedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .build();
     }
 
-    public User newUserForRepoTest(Team team, String userName){
+    public User newUserForRepoTest(Team team, String userName, String role){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .team(team)
