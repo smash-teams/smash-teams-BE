@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import smash.teams.be.core.annotation.ErrorLog;
+import smash.teams.be.core.annotation.Log;
 import smash.teams.be.dto.ResponseDTO;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
@@ -17,6 +19,8 @@ import javax.validation.Valid;
 public class AdminContoller {
     private final AdminService adminService;
 
+    @Log
+    @ErrorLog
     @GetMapping("")
     public ResponseEntity<?> getAdminPage(@RequestParam(defaultValue = "") String teamName,
                                           @RequestParam(defaultValue = "") String keyword,
@@ -27,6 +31,8 @@ public class AdminContoller {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    @Log
+    @ErrorLog
     @PostMapping("/team/add")
     public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
         AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
@@ -35,6 +41,8 @@ public class AdminContoller {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    @Log
+    @ErrorLog
     @PostMapping("/team/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         adminService.delete(id);

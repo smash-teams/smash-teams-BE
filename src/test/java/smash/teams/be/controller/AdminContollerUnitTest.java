@@ -20,6 +20,7 @@ import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
+import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.service.AdminService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -51,6 +52,9 @@ public class AdminContollerUnitTest extends DummyEntity {
     private ObjectMapper om;
     @MockBean
     private AdminService adminService;
+    @MockBean
+    private ErrorLogRepository errorLogRepository;
+
 
     @WithMockAdmin
     @Test
