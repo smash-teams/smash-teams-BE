@@ -20,7 +20,6 @@ public class AdminContoller {
     private final AdminService adminService;
 
     @Log
-    @ErrorLog
     @GetMapping("")
     public ResponseEntity<?> getAdminPage(@RequestParam(defaultValue = "") String teamName,
                                           @RequestParam(defaultValue = "") String keyword,
@@ -32,7 +31,6 @@ public class AdminContoller {
     }
 
     @Log
-    @ErrorLog
     @PostMapping("/team/add")
     public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
         AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
@@ -42,7 +40,6 @@ public class AdminContoller {
     }
 
     @Log
-    @ErrorLog
     @PostMapping("/team/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         adminService.delete(id);

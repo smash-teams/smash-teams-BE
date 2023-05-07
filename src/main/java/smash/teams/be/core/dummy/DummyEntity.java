@@ -1,8 +1,12 @@
 package smash.teams.be.core.dummy;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.Type;
+import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
@@ -11,8 +15,12 @@ import smash.teams.be.model.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DummyEntity {
+    private final int SIZE = 12; // 한 페이지 당 사용자 정보 최대 갯수
+
     public User newUser(String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
@@ -197,11 +205,49 @@ public class DummyEntity {
                 .build();
     }
 
-    public Team newTeamForRepoTest(String teamName){
+    public Team newTeamForRepoTest(String teamName) {
         return Team.builder()
                 .teamName(teamName)
                 .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .build();
+    }
+
+    public List<User> newMockUserList(String teamName) {
+        return new ArrayList<>() {{
+            add((newMockUser(1L, "이승민")));
+            add((newMockUser(2L, "이윤경")));
+            add((newMockUser(3L, "이한울")));
+        }};
+    }
+
+    public List<AdminResponse.UserListDTO> newMockUserListByDTO(String teamName) {
+        return new ArrayList<>() {{
+            add(new AdminResponse.UserListDTO(
+                    newMockUser(1L, "이승민"), LocalDateTime.now().toLocalDate().toString(), teamName));
+            add(new AdminResponse.UserListDTO(
+                    newMockUser(2L, "이윤경"), LocalDateTime.now().toLocalDate().toString(), teamName));
+            add(new AdminResponse.UserListDTO(
+                    newMockUser(3L, "이한울"), LocalDateTime.now().toLocalDate().toString(), teamName));
+        }};
+    }
+
+    public List<AdminResponse.TeamListDTO> newMockTeamList() {
+        return new ArrayList<>() {{
+            add(new AdminResponse.TeamListDTO(
+                    newMockTeam(1L, "개발팀"), 3));
+            add(new AdminResponse.TeamListDTO(
+                    newMockTeam(2L, "회계팀"), 1));
+            add(new AdminResponse.TeamListDTO(
+                    newMockTeam(3L, "마케팅팀"), 1));
+        }};
+    }
+
+    public Page<User> newMockUserPage(String teamName) {
+        return new PageImpl<>(
+                newMockUserList(teamName),
+                PageRequest.of(0, SIZE),
+                3
+        );
     }
 }
