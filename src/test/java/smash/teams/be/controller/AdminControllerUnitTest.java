@@ -21,15 +21,16 @@ import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
+import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
+import smash.teams.be.model.user.User;
 import smash.teams.be.service.AdminService;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,7 +87,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(status().isOk());
     }
 
-    @WithMockAdmin
+    @WithMockAdmin(id = 4L)
     @Test
     public void getAdminPage_test() throws Exception {
         // given
@@ -158,6 +159,35 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.first").value(true));
         resultActions.andExpect(jsonPath("$.data.last").value(false));
         resultActions.andExpect(jsonPath("$.data.empty").value(false));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithMockAdmin(id = 2L)
+    @Test
+    public void updateAuthAndTeam_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        // stub
+        Team team = newMockTeam(1L, "개발팀");
+        User user = newMockUserWithTeam(1L, "이승민", team);
+
+        Team team2 = newMockTeam(2L, "회계팀");
+        AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new AdminRequest.UpdateAuthAndTeamInDTO();
+        updateAuthAndTeamInDTO.setUserId(id);
+        updateAuthAndTeamInDTO.setTeamName(team2.getTeamName());
+        updateAuthAndTeamInDTO.setRole(Role.MANAGER.getRole());
+        String requestBody = om.writeValueAsString(updateAuthAndTeamInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(patch("/auth/admin/users")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
         resultActions.andExpect(status().isOk());
     }
 }
