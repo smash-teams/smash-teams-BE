@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import smash.teams.be.core.MyWithMockUser;
 import smash.teams.be.core.WithMockUser;
 import smash.teams.be.core.advice.LogAdvice;
 import smash.teams.be.core.advice.ValidAdvice;
@@ -138,5 +139,31 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.role").value("USER"));
         resultActions.andExpect(status().isOk());
+    }
+
+    @MyWithMockUser(id = 1L, name = "ssar", role = "USER", status = "ACTIVE")
+    @Test
+    public void loadScheduleList_test() throws Exception {
+        // given
+        List<Schedule> scheduleListPS = new ArrayList<>();
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(1L, 11L, 111L, "유저A", "A팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(2L, 22L, 222L, "유저B", "B팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(3L, 33L, 333L, "유저C", "C팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(4L, 44L, 444L, "유저D", "D팀"));
+
+        // stub
+        ScheduleResponse.ListOutDto listOutDto = new ScheduleResponse.ListOutDto(scheduleListPS);
+        Mockito.when(scheduleService.findByScheduleList()).thenReturn(listOutDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/auth/user/main"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(4));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("유저A"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.teamName").value("C팀"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[3].reason").value("여행"));
     }
 }

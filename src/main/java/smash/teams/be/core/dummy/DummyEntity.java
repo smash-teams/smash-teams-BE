@@ -267,4 +267,37 @@ public class DummyEntity {
                 3
         );
     }
+
+    public Schedule newMockScheduleWithUserWithTeam(Long scheduleId, Long userId, Long teamId, String userName, String teamName){
+        return Schedule.builder()
+                .id(scheduleId)
+                .user(User.builder()
+                        .id(userId)
+                        .team(Team.builder()
+                                .id(teamId)
+                                .teamName(teamName)
+                                .createdAt(LocalDateTime.now())
+                                .updatedAt(LocalDateTime.now())
+                                .build())
+                        .name(userName)
+                        .email(userName+"@gmail.com")
+                        .phoneNumber("010-1111-1111")
+                        .role("USER")
+                        .status("ACTIVATE")
+                        .remain(20)
+                        .startWork(LocalDate.parse("2020-01-01", DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay())
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .profileImage(null)
+                        .build())
+                .startDate(LocalDateTime.parse("2022-01-01T09:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))     )
+                .endDate(LocalDateTime.parse("2022-01-01T09:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+                .type("DAYOFF")
+                .status("APPROVED")
+                .reason("여행")
+                .updatedAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
 }

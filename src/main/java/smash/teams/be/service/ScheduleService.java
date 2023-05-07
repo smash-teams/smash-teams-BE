@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smash.teams.be.core.annotation.Log;
+import smash.teams.be.core.exception.Exception403;
 import smash.teams.be.core.exception.Exception404;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.schedule.Schedule;
@@ -55,7 +56,7 @@ public class ScheduleService {
     private List<Schedule> getSchedules(Long userId, String role, String teamName) {
 
         if (role.equals("CEO")) {
-            return scheduleRepository.findSchedules();
+            return scheduleRepository.findSchedulesWithName();
         }
 
         if (role.equals("MANAGER")) {
@@ -63,5 +64,14 @@ public class ScheduleService {
         }
 
         return Collections.emptyList();
+    }
+
+    public ScheduleResponse.ListOutDto findByScheduleList() {
+        List<Schedule> scheduleListPS = scheduleRepository.findSchedulesWithName();
+        if (scheduleListPS == null) {
+            throw new Exception403("스케줄을 찾을 수 없습니다.");
+        }
+
+        return new ScheduleResponse.ListOutDto(scheduleListPS);
     }
 }

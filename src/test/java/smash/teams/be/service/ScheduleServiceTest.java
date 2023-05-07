@@ -1,11 +1,15 @@
 package smash.teams.be.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.schedule.ScheduleResponse;
@@ -25,9 +29,14 @@ public class ScheduleServiceTest extends DummyEntity {
 
     @InjectMocks
     private ScheduleService scheduleService;
-
     @Mock
     private ScheduleRepository scheduleRepository;
+    @Mock
+    private AuthenticationManager authenticationManager;
+    @Spy
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Spy
+    private ObjectMapper om;
 
     @Test
     public void getScheduleList_test() {
@@ -112,7 +121,7 @@ public class ScheduleServiceTest extends DummyEntity {
             Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
         }
         if(role.equals("CEO")) {
-            Mockito.when(scheduleRepository.findSchedules()).thenReturn(schedules);
+            Mockito.when(scheduleRepository.findSchedulesWithName()).thenReturn(schedules);
         }
 
         // when
@@ -158,5 +167,28 @@ public class ScheduleServiceTest extends DummyEntity {
             assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedulesManager.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
             assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedulesManager.get(2).getUser().getProfileImage());
         }
+    }
+
+    @Test
+    public void findByScheduleList_test() throws Exception {
+        // given
+        List<Schedule> scheduleListPS = new ArrayList<>();
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(1L, 11L, 111L, "유저A", "A팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(2L, 22L, 222L, "유저B", "B팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(3L, 33L, 333L, "유저C", "C팀"));
+        scheduleListPS.add(newMockScheduleWithUserWithTeam(4L, 44L, 444L, "유저D", "D팀"));
+
+        Mockito.when(scheduleRepository.findSchedulesWithName()).thenReturn(scheduleListPS); // 영속화 된 상태 가정
+        System.out.println("테스트1 : " + scheduleListPS);
+
+        // when
+        ScheduleResponse.ListOutDto listOutDto = scheduleService.findByScheduleList(); // Dto 된 상태
+        String responseBody = om.writeValueAsString(listOutDto);
+        System.out.println("테스트2 : " + responseBody);
+
+        // then
+        assertThat(listOutDto.getScheduleList().size()).isEqualTo(scheduleListPS.size());
+        assertThat(listOutDto.getScheduleList().get(3).getUser().getTeamName()).isEqualTo("D팀");
+        assertThat(listOutDto.getScheduleList().get(1).getEndDate()).isEqualTo("2022-01-01T09:00:00");
     }
 }

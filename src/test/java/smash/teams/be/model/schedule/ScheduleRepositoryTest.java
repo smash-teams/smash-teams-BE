@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.core.exception.Exception400;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
@@ -17,6 +16,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
 @DataJpaTest
@@ -106,7 +107,7 @@ public class ScheduleRepositoryTest extends DummyEntity {
         // given
 
         // when
-        List<Schedule> schedules = scheduleRepository.findSchedules();
+        List<Schedule> schedules = scheduleRepository.findSchedulesWithName();
 
         // then
         assertThat(schedules.size()).isEqualTo(10);
@@ -148,5 +149,17 @@ public class ScheduleRepositoryTest extends DummyEntity {
         assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
         assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
         assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void findSchedulesWithName_test() throws Exception {
+        // given
+
+        // when
+        List<Schedule> schedulesListPS = scheduleRepository.findSchedulesWithName();
+
+        // then
+        assertEquals(10, schedulesListPS.size());
+        assertTrue(schedulesListPS.stream().allMatch(schedule -> schedule.getUser() != null));
     }
 }
