@@ -83,4 +83,25 @@ public class ScheduleRepositoryTest extends DummyEntity {
         assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("지원팀");
 
     }
+
+    @Test
+    public void findSchedules_test() {
+        // given
+        Long userId = 3L;
+
+        // when
+        List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
+
+
+        // then
+        assertThat(schedules.size()).isEqualTo(2);
+        assertThat(schedules.get(0).getId()).isEqualTo(3L);
+        assertThat(schedules.get(1).getId()).isEqualTo(5L);
+        assertThat(schedules.get(0).getUser().getId()).isEqualTo(3L);
+        assertThat(schedules.get(1).getUser().getId()).isEqualTo(3L);
+        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimdayoff");
+        assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimdayoff");
+        assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("지원팀");
+
+    }
 }

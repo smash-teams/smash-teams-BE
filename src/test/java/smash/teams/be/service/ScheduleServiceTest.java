@@ -77,15 +77,14 @@ public class ScheduleServiceTest extends DummyEntity {
     @Test
     public void getScheduleListForManage_test() {
         // given
-//        Long userId = 1L;
-//        String role = "CEO";
-//        String teamName = null;
+        Long userId = 1L;
+        String role = "CEO";
+        String teamName = null;
 
-        Long userId = 2L;
-        String role = "MANAGER";
-        String teamName = "개발팀";
+//        Long userId = 2L;
+//        String role = "MANAGER";
+//        String teamName = "개발팀";
 
-        List<Schedule> schedules = new ArrayList<>();
         Schedule schedule1 = newScheduleForTest(1L,1L,"CEO",    "kimuceo",   null,null,   "APPROVED","병가");
         Schedule schedule2 = newScheduleForTest(2L,2L,"MANAGER","kimmanager",1L,  "개발팀","APPROVED","휴가");
         Schedule schedule3 = newScheduleForTest(3L,3L,"USER",   "kimuser",   1L,  "개발팀","APPROVED","병가");
@@ -94,6 +93,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Schedule schedule6 = newScheduleForTest(6L,1L,"CEO",    "kimceo",    null,null,   "APPROVED","휴가");
         Schedule schedule7 = newScheduleForTest(7L,3L,"USER",   "kimuser",   1L,  "개발팀","LAST",    "휴가");
 
+        List<Schedule> schedules = new ArrayList<>();
         schedules.add(schedule1);
         schedules.add(schedule2);
         schedules.add(schedule3);
@@ -102,8 +102,14 @@ public class ScheduleServiceTest extends DummyEntity {
         schedules.add(schedule6);
         schedules.add(schedule7);
 
+        List<Schedule> schedulesManager = new ArrayList<>();
         if(role.equals("MANAGER")) {
-            Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedules);
+            for(Schedule schedule : schedules){
+                if(teamName.equals(schedule.getUser().getTeam().getTeamName())){
+                    schedulesManager.add(schedule);
+                }
+            }
+            Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
         }
         if(role.equals("CEO")) {
             Mockito.when(scheduleRepository.findSchedules()).thenReturn(schedules);
@@ -113,23 +119,44 @@ public class ScheduleServiceTest extends DummyEntity {
         ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
 
         // Then
-        assertThat(scheduleListDTO).isNotNull();
-        assertThat(scheduleListDTO.getScheduleList()).isNotNull();
-        assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
-        assertThat(scheduleListDTO.getScheduleList()).hasSize(7);
-        assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedules.get(0).getUser().getId());
-        assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedules.get(0).getId());
-        assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedules.get(0).getType());
-        assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedules.get(0).getReason());
-        assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedules.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedules.get(0).getStatus());
-        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedules.get(1).getUser().getId());
-        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedules.get(1).getUser().getName());
-        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedules.get(1).getUser().getEmail());
-        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedules.get(1).getUser().getPhoneNumber());
-        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedules.get(2).getUser().getRole());
-        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedules.get(2).getUser().getTeam().getTeamName());
-        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
-        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
+        if(role.equals("CEO")) {
+            assertThat(scheduleListDTO).isNotNull();
+            assertThat(scheduleListDTO.getScheduleList()).isNotNull();
+            assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedules.get(0).getUser().getId());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedules.get(0).getId());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedules.get(0).getType());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedules.get(0).getReason());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedules.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedules.get(0).getStatus());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedules.get(1).getUser().getId());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedules.get(1).getUser().getName());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedules.get(1).getUser().getEmail());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedules.get(1).getUser().getPhoneNumber());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedules.get(2).getUser().getRole());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedules.get(2).getUser().getTeam().getTeamName());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
+        }
+
+        if(role.equals("MANAGER")){
+            assertThat(scheduleListDTO).isNotNull();
+            assertThat(scheduleListDTO.getScheduleList()).isNotNull();
+            assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedulesManager.size());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedulesManager.get(0).getUser().getId());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedulesManager.get(0).getId());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedulesManager.get(0).getType());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedulesManager.get(0).getReason());
+            assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedulesManager.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedulesManager.get(0).getStatus());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedulesManager.get(1).getUser().getId());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedulesManager.get(1).getUser().getName());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedulesManager.get(1).getUser().getEmail());
+            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedulesManager.get(1).getUser().getPhoneNumber());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedulesManager.get(2).getUser().getRole());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedulesManager.get(2).getUser().getTeam().getTeamName());
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedulesManager.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedulesManager.get(2).getUser().getProfileImage());
+        }
     }
 }
