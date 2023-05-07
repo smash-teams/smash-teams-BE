@@ -57,7 +57,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @MockBean
     private ErrorLogRepository errorLogRepository;
 
-    @WithMockUser(id=1L, username="kimuser@gmail.com", role = "USER")
+    @WithMockUser
     @Test
     public void getScheduleList_test() throws Exception {
         // given
@@ -88,6 +88,52 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("REJECTED"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.userId").value(1L));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("kimuser"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.role").value("USER"));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithMockUser(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamId = 1L, teamName = "개발팀")
+    @Test
+    public void getScheduleListForManage_test() throws Exception {
+        // given
+//        Long userId = 1L;
+//        String role = "CEO";
+//        String teamName = null;
+
+        Long userId = 2L;
+        String role = "MANAGER";
+        String teamName = "개발팀";
+
+
+        Schedule schedule1 = newScheduleForTest(1L,3L,"USER","kimuser",2L,"개발팀","LAST","병가");
+        Schedule schedule2 = newScheduleForTest(2L,3L,"USER","kimuser",2L,"개발팀","REJECTED","여행");
+        Schedule schedule3 = newScheduleForTest(3L,3L,"USER","kimuser",2L,"개발팀","FIRST","여행");
+
+        List<ScheduleResponse.ScheduleOutDTO> scheduleOutList = new ArrayList<>();
+        scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule1, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule1.getUser())));
+        scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule2, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule2.getUser())));
+        scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule3, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule3.getUser())));
+
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = new ScheduleResponse.ScheduleListDTO(scheduleOutList);
+
+        Mockito.when(scheduleService.getScheduleListForManage(userId,role,teamName)).thenReturn(scheduleListDTO);
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/auth/suser/schedule"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(3));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(1));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(2));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(3));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("병가"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("REJECTED"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.userId").value(3L));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("kimuser"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.role").value("USER"));

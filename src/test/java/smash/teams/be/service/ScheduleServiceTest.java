@@ -83,7 +83,7 @@ public class ScheduleServiceTest extends DummyEntity {
 
         Long userId = 2L;
         String role = "MANAGER";
-        String teamName = null;
+        String teamName = "개발팀";
 
         List<Schedule> schedules = new ArrayList<>();
         Schedule schedule1 = newScheduleForTest(1L,1L,"CEO",    "kimuceo",   null,null,   "APPROVED","병가");
