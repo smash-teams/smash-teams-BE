@@ -33,6 +33,8 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static smash.teams.be.dto.admin.AdminRequest.*;
+import static smash.teams.be.dto.admin.AdminResponse.*;
 
 /**
  * @WebMvcTest는 웹 계층 컴포넌트만 테스트로 가져옴
@@ -66,13 +68,13 @@ public class AdminControllerUnitTest extends DummyEntity {
     @Test
     public void add_test() throws Exception {
         // given
-        AdminRequest.AddInDTO addInDTO = new AdminRequest.AddInDTO();
+        AddInDTO addInDTO = new AddInDTO();
         addInDTO.setTeamName("마케팅팀");
         String requestBody = om.writeValueAsString(addInDTO);
 
         // stub
         Mockito.when(adminService.add(any()))
-                .thenReturn(new AdminResponse.AddOutDTO(newMockTeam(3L, "마케팅팀")));
+                .thenReturn(new AddOutDTO(newMockTeam(3L, "마케팅팀")));
 
         // when
         ResultActions resultActions = mvc
@@ -97,7 +99,7 @@ public class AdminControllerUnitTest extends DummyEntity {
 
         // stub
         Mockito.when(adminService.getAdminPage(any(), any(), anyInt()))
-                .thenReturn(new AdminResponse.GetAdminPageOutDTO(
+                .thenReturn(new GetAdminPageOutDTO(
                         newMockTeamList(),
                         newMockUserListByDTO(teamName),
                         12,
@@ -173,7 +175,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         User user = newMockUserWithTeam(1L, "이승민", team);
 
         Team team2 = newMockTeam(2L, "회계팀");
-        AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new AdminRequest.UpdateAuthAndTeamInDTO();
+        UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
         updateAuthAndTeamInDTO.setUserId(id);
         updateAuthAndTeamInDTO.setTeamName(team2.getTeamName());
         updateAuthAndTeamInDTO.setRole(Role.MANAGER.getRole());

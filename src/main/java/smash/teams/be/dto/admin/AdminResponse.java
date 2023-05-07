@@ -85,4 +85,14 @@ public class AdminResponse {
             this.empty = empty;
         }
     }
+
+    @Getter
+    @Setter
+    public static class TestUpdateAuthAndTeamOutDTO { // updateAuthAndTeam(AdminService) 테스트용 DTO
+        private User user;
+
+        public TestUpdateAuthAndTeamOutDTO(User user) {
+            this.user = user;
+        }
+    }
 }
