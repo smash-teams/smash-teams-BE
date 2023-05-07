@@ -25,4 +25,16 @@ public class ScheduleController {
         ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
         return ResponseEntity.ok(responseDTO);
     }
+
+    @GetMapping("/auth/suser/schedule")
+    public ResponseEntity<?> getScheduleListForManage(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Long userId = myUserDetails.getUser().getId();
+        String role = myUserDetails.getUser().getRole();
+        String teamName = myUserDetails.getUser().getTeam().getTeamName();
+
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
+
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
 }

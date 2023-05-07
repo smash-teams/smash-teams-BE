@@ -33,4 +33,40 @@ public class ScheduleService {
 
         return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
     }
+
+    public ScheduleResponse.ScheduleListDTO getScheduleListForManage(Long userId, String role, String teamName) {
+        if (role.equals("CEO")) {
+            List<Schedule> schedules = scheduleRepository.findSchedules();
+            if (schedules.isEmpty()) {
+                throw new Exception404("스케쥴을 찾을 수 없습니다.");
+            }
+
+            List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
+            for (Schedule schedule : schedules) {
+                ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+                scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
+            }
+
+            return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
+
+
+        }
+
+        if (role.equals("MANAGER")) {
+            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamName(teamName);
+            if (schedules.isEmpty()) {
+                throw new Exception404("스케쥴을 찾을 수 없습니다.");
+            }
+
+            List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
+            for (Schedule schedule : schedules) {
+                ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+                scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
+            }
+
+            return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
+        }
+
+        return null;
+    }
 }
