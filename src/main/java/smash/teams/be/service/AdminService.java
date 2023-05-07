@@ -27,49 +27,56 @@ public class AdminService {
     @Log
     @Transactional(readOnly = true)
     public AdminResponse.GetAdminPageOutDTO getAdminPage(String teamName, String keyword, int page) {
-        Page<User> userPGPS;
-        if (teamName.isBlank()) {
-            // keyword 존재 여부에 따른 쿼리 실행
-            if (keyword.isBlank()) {
-                userPGPS = userQueryRepository.findAll(page);
-            } else {
-                userPGPS = userQueryRepository.findAllByKeyword(keyword, page);
-            }
-        } else {
-            // teamName이 DB에 있는 팀인지 확인(데이터 무결성)
-            Team teamPS = teamRepository.findByTeamName(teamName).orElseThrow(
+        // teamName이 DB에 있는 팀인지 확인(데이터 무결성)
+        Team teamPS = null;
+        if (!teamName.isBlank()) {
+            teamPS = teamRepository.findByTeamName(teamName).orElseThrow(
                     () -> new Exception400(teamName, "존재하지 않는 팀입니다.")
             );
-            // keyword 존재 여부에 따른 쿼리 실행
-            if (keyword.isBlank()) {
-                userPGPS = userQueryRepository.findAllByTeamId(teamPS.getId(), page);
-            } else {
-                userPGPS = userQueryRepository.findAllByKeywordAndTeamId(teamPS.getId(), keyword, page);
-            }
         }
+        Page<User> userPGPS = null;
+        try {
+            if (teamName.isBlank()) {
+                // keyword 존재 여부에 따른 쿼리 실행
+                if (keyword.isBlank()) {
+                    userPGPS = userQueryRepository.findAll(page);
+                } else {
+                    userPGPS = userQueryRepository.findAllByKeyword(keyword, page);
+                }
+            } else {
+                // keyword 존재 여부에 따른 쿼리 실행
+                if (keyword.isBlank()) {
+                    userPGPS = userQueryRepository.findAllByTeamId(teamPS.getId(), page);
+                } else {
+                    userPGPS = userQueryRepository.findAllByKeywordAndTeamId(teamPS.getId(), keyword, page);
+                }
+            }
 
-        return new AdminResponse.GetAdminPageOutDTO(
-                teamRepository.findAll().stream()
-                        .map(team -> {
-                            Integer teamCount = userRepository.calculateCountByTeamId(team.getId());
-                            return new AdminResponse.TeamListDTO(team, teamCount);
-                        })
-                        .collect(Collectors.toList()),
-                userPGPS.getContent().stream()
-                        .map(user -> {
-                            String startWork = user.getStartWork().toLocalDate().toString();
-                            String tempTeamName = user.getTeam() != null ? user.getTeam().getTeamName() : null;
-                            return new AdminResponse.UserListDTO(user, startWork, tempTeamName);
-                        })
-                        .collect(Collectors.toList()),
-                userPGPS.getSize(),
-                userPGPS.getTotalElements(),
-                userPGPS.getTotalPages(),
-                userPGPS.getNumber(),
-                userPGPS.isFirst(),
-                userPGPS.isLast(),
-                userPGPS.isEmpty()
-        );
+            return new AdminResponse.GetAdminPageOutDTO(
+                    teamRepository.findAll().stream()
+                            .map(team -> {
+                                Integer teamCount = userRepository.calculateCountByTeamId(team.getId());
+                                return new AdminResponse.TeamListDTO(team, teamCount);
+                            })
+                            .collect(Collectors.toList()),
+                    userPGPS.getContent().stream()
+                            .map(user -> {
+                                String startWork = user.getStartWork().toLocalDate().toString();
+                                String tempTeamName = user.getTeam() != null ? user.getTeam().getTeamName() : null;
+                                return new AdminResponse.UserListDTO(user, startWork, tempTeamName);
+                            })
+                            .collect(Collectors.toList()),
+                    userPGPS.getSize(),
+                    userPGPS.getTotalElements(),
+                    userPGPS.getTotalPages(),
+                    userPGPS.getNumber(),
+                    userPGPS.isFirst(),
+                    userPGPS.isLast(),
+                    userPGPS.isEmpty()
+            );
+        } catch (Exception e) {
+            throw new Exception500("사용자 또는 팀 조회 실패 : " + e.getMessage());
+        }
     }
 
     @Log

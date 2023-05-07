@@ -15,7 +15,16 @@ public class ValidAdvice {
     public void postMapping() {
     }
 
-    @Before("postMapping()")
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.PutMapping)")
+    public void putMapping() {
+    }
+
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
+    public void deleteMapping() {
+    }
+
+    // @Valid에 대한 errors를 exception으로 던져줌.
+    @Before("postMapping() || putMapping() || deleteMapping()")
     public void validationAdvice(JoinPoint jp) {
         Object[] args = jp.getArgs();
         for (Object arg : args) {

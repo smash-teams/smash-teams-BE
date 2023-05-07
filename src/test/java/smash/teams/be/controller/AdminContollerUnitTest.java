@@ -21,9 +21,14 @@ import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
+import smash.teams.be.model.user.Role;
 import smash.teams.be.service.AdminService;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,6 +83,81 @@ public class AdminContollerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.teamId").value(3L));
         resultActions.andExpect(jsonPath("$.data.teamName").value("마케팅팀"));
         resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithMockAdmin
+    @Test
+    public void getAdminPage_test() throws Exception {
+        // given
+        String teamName = "개발팀";
+        String keyword = "이";
+        String page = "0";
+
+        // stub
+        Mockito.when(adminService.getAdminPage(any(), any(), anyInt()))
+                .thenReturn(new AdminResponse.GetAdminPageOutDTO(
+                        newMockTeamList(),
+                        newMockUserListByDTO(teamName),
+                        12,
+                        3L,
+                        1,
+                        0,
+                        true,
+                        false,
+                        false
+                ));
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/auth/admin")
+                        .param("teamName", teamName)
+                        .param("keyword", keyword)
+                        .param("page", page));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.data.teamList[0].teamId").value(1L));
+        resultActions.andExpect(jsonPath("$.data.teamList[0].teamName").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.teamList[0].teamCount").value(3));
+        resultActions.andExpect(jsonPath("$.data.teamList[1].teamId").value(2L));
+        resultActions.andExpect(jsonPath("$.data.teamList[1].teamName").value("회계팀"));
+        resultActions.andExpect(jsonPath("$.data.teamList[1].teamCount").value(1));
+        resultActions.andExpect(jsonPath("$.data.teamList[2].teamId").value(3L));
+        resultActions.andExpect(jsonPath("$.data.teamList[2].teamName").value("마케팅팀"));
+        resultActions.andExpect(jsonPath("$.data.teamList[2].teamCount").value(1));
+        resultActions.andExpect(jsonPath("$.data.userList[0].userId").value(1L));
+        resultActions.andExpect(jsonPath("$.data.userList[0].profileImage").isEmpty());
+        resultActions.andExpect(jsonPath("$.data.userList[0].name").value("이승민"));
+        resultActions.andExpect(jsonPath("$.data.userList[0].email").value("이승민@gmail.com"));
+        resultActions.andExpect(jsonPath("$.data.userList[0].phoneNumber").value("010-1234-5678"));
+        resultActions.andExpect(jsonPath("$.data.userList[0].startWork").value(LocalDateTime.now().toLocalDate().toString()));
+        resultActions.andExpect(jsonPath("$.data.userList[0].teamName").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.userList[0].role").value(Role.USER.getRole()));
+        resultActions.andExpect(jsonPath("$.data.userList[1].userId").value(2L));
+        resultActions.andExpect(jsonPath("$.data.userList[1].profileImage").isEmpty());
+        resultActions.andExpect(jsonPath("$.data.userList[1].name").value("이윤경"));
+        resultActions.andExpect(jsonPath("$.data.userList[1].email").value("이윤경@gmail.com"));
+        resultActions.andExpect(jsonPath("$.data.userList[1].phoneNumber").value("010-1234-5678"));
+        resultActions.andExpect(jsonPath("$.data.userList[1].startWork").value(LocalDateTime.now().toLocalDate().toString()));
+        resultActions.andExpect(jsonPath("$.data.userList[1].teamName").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.userList[1].role").value(Role.USER.getRole()));
+        resultActions.andExpect(jsonPath("$.data.userList[2].userId").value(3L));
+        resultActions.andExpect(jsonPath("$.data.userList[2].profileImage").isEmpty());
+        resultActions.andExpect(jsonPath("$.data.userList[2].name").value("이한울"));
+        resultActions.andExpect(jsonPath("$.data.userList[2].email").value("이한울@gmail.com"));
+        resultActions.andExpect(jsonPath("$.data.userList[2].phoneNumber").value("010-1234-5678"));
+        resultActions.andExpect(jsonPath("$.data.userList[2].startWork").value(LocalDateTime.now().toLocalDate().toString()));
+        resultActions.andExpect(jsonPath("$.data.userList[2].teamName").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.userList[2].role").value(Role.USER.getRole()));
+        resultActions.andExpect(jsonPath("$.data.size").value(12));
+        resultActions.andExpect(jsonPath("$.data.totalElements").value(3L));
+        resultActions.andExpect(jsonPath("$.data.totalPages").value(1));
+        resultActions.andExpect(jsonPath("$.data.curPage").value(0));
+        resultActions.andExpect(jsonPath("$.data.first").value(true));
+        resultActions.andExpect(jsonPath("$.data.last").value(false));
+        resultActions.andExpect(jsonPath("$.data.empty").value(false));
         resultActions.andExpect(status().isOk());
     }
 }
