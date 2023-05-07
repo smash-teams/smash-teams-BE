@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
+import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.UserRepository;
 
@@ -28,6 +29,8 @@ public class AdminServiceTest extends DummyEntity {
     private TeamRepository teamRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private ErrorLogRepository errorLogRepository;
 
     @Test
     public void add_test() {

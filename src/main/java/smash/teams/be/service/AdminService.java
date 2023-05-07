@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.exception.Exception400;
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.dto.admin.AdminRequest;
@@ -23,6 +24,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
 
+    @Log
     @Transactional(readOnly = true)
     public AdminResponse.GetAdminPageOutDTO getAdminPage(String teamName, String keyword, int page) {
         Page<User> userPGPS;
@@ -70,11 +72,12 @@ public class AdminService {
         );
     }
 
+    @Log
     @Transactional
     public AdminResponse.AddOutDTO add(AdminRequest.AddInDTO addInDTO) {
-        teamRepository.findByTeamName(addInDTO.getTeamName()).orElseThrow(
-                () -> new Exception400(addInDTO.getTeamName(), "이미 존재하는 팀입니다.")
-        );
+        if (teamRepository.findByTeamName(addInDTO.getTeamName()).isPresent()) {
+            throw new Exception400(addInDTO.getTeamName(), "이미 존재하는 팀입니다.");
+        }
         try {
             Team teamPS = teamRepository.save(addInDTO.toEntity());
             return new AdminResponse.AddOutDTO(teamPS);
@@ -83,6 +86,7 @@ public class AdminService {
         }
     }
 
+    @Log
     @Transactional
     public void delete(Long id) {
         Team teamPS = teamRepository.findById(id).orElseThrow(
