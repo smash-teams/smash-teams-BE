@@ -75,7 +75,7 @@ public class AdminContollerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/admin/team/add").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/admin/teams").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
