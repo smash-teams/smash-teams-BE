@@ -73,4 +73,63 @@ public class ScheduleServiceTest extends DummyEntity {
         assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
         assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
     }
+
+    @Test
+    public void getScheduleListForManage_test() {
+        // given
+//        Long userId = 1L;
+//        String role = "CEO";
+//        String teamName = null;
+
+        Long userId = 2L;
+        String role = "MANAGER";
+        String teamName = null;
+
+        List<Schedule> schedules = new ArrayList<>();
+        Schedule schedule1 = newScheduleForTest(1L,1L,"CEO",    "kimuceo",   null,null,   "APPROVED","병가");
+        Schedule schedule2 = newScheduleForTest(2L,2L,"MANAGER","kimmanager",1L,  "개발팀","APPROVED","휴가");
+        Schedule schedule3 = newScheduleForTest(3L,3L,"USER",   "kimuser",   1L,  "개발팀","APPROVED","병가");
+        Schedule schedule4 = newScheduleForTest(4L,3L,"USER",   "kimuser",   1L,  "개발팀","REJECTED","휴가");
+        Schedule schedule5 = newScheduleForTest(5L,2L,"MANAGER","kimmanager",1L,  "개발팀","FIRST",   "휴가");
+        Schedule schedule6 = newScheduleForTest(6L,1L,"CEO",    "kimceo",    null,null,   "APPROVED","휴가");
+        Schedule schedule7 = newScheduleForTest(7L,3L,"USER",   "kimuser",   1L,  "개발팀","LAST",    "휴가");
+
+        schedules.add(schedule1);
+        schedules.add(schedule2);
+        schedules.add(schedule3);
+        schedules.add(schedule4);
+        schedules.add(schedule5);
+        schedules.add(schedule6);
+        schedules.add(schedule7);
+
+        if(role.equals("MANAGER")) {
+            Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedules);
+        }
+        if(role.equals("CEO")) {
+            Mockito.when(scheduleRepository.findSchedules()).thenReturn(schedules);
+        }
+
+        // when
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
+
+        // Then
+        assertThat(scheduleListDTO).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList()).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
+        assertThat(scheduleListDTO.getScheduleList()).hasSize(7);
+        assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedules.get(0).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedules.get(0).getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedules.get(0).getType());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedules.get(0).getReason());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedules.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedules.get(0).getStatus());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedules.get(1).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedules.get(1).getUser().getName());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedules.get(1).getUser().getEmail());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedules.get(1).getUser().getPhoneNumber());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedules.get(2).getUser().getRole());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedules.get(2).getUser().getTeam().getTeamName());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
+    }
 }
