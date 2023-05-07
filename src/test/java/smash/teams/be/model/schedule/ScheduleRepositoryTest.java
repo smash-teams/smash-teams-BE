@@ -42,23 +42,37 @@ public class ScheduleRepositoryTest extends DummyEntity {
         teamRepository.save(team1);
         teamRepository.save(team2);
 
-        User kimceo = newUserForRepoTest(null,"kimceo");
-        User kimmanager = newUserForRepoTest(team1,"kimmanager");
-        User kimdayoff = newUserForRepoTest(team2,"kimdayoff");
+        User kimceo = newUserForRepoTest(null,"kimceo", "CEO");
+        User kimmanager = newUserForRepoTest(team1,"kimmanager", "MANAGER");
+        User kimdayoff = newUserForRepoTest(team2,"kimday","USER");
+        User kimhalfoff = newUserForRepoTest(team2, "kimhalf", "USER");
+        User kimshift = newUserForRepoTest(team1, "kimshift", "USER");
         userRepository.save(kimceo);
         userRepository.save(kimmanager);
         userRepository.save(kimdayoff);
+        userRepository.save(kimhalfoff);
+        userRepository.save(kimshift);
 
-        Schedule schedule1 = newScheduleForRepoTest(kimceo);
-        Schedule schedule2 = newScheduleForRepoTest(kimmanager);
-        Schedule schedule3 = newScheduleForRepoTest(kimdayoff);
-        Schedule schedule4 = newScheduleForRepoTest(kimceo);
-        Schedule schedule5 = newScheduleForRepoTest(kimdayoff);
+        Schedule schedule1 = newScheduleForRepoTest(kimceo, "DAYOFF","APPROVED","휴가");
+        Schedule schedule2 = newScheduleForRepoTest(kimmanager, "HALFOFF","APPROVED","병가");
+        Schedule schedule3 = newScheduleForRepoTest(kimdayoff,"DAYOFF","REJECTED","휴가");
+        Schedule schedule4 = newScheduleForRepoTest(kimceo, "HALFOFF","APPROVED","개인사정");
+        Schedule schedule5 = newScheduleForRepoTest(kimdayoff, "HALFOFF","APPROVED","개인사정");
+        Schedule schedule6 = newScheduleForRepoTest(kimdayoff,"SHIFT","APPROVED","당직");
+        Schedule schedule7 = newScheduleForRepoTest(kimhalfoff, "SHIFT","LAST","당직");
+        Schedule schedule8 = newScheduleForRepoTest(kimhalfoff, "DAYOFF","LAST","휴가");
+        Schedule schedule9 = newScheduleForRepoTest(kimmanager,"DAYOFF", "LAST","휴가");
+        Schedule schedule10 = newScheduleForRepoTest(kimshift,"SHIFT", "LAST","당직");
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         scheduleRepository.save(schedule3);
         scheduleRepository.save(schedule4);
         scheduleRepository.save(schedule5);
+        scheduleRepository.save(schedule6);
+        scheduleRepository.save(schedule7);
+        scheduleRepository.save(schedule8);
+        scheduleRepository.save(schedule9);
+        scheduleRepository.save(schedule10);
 
         em.clear();
     }
@@ -73,35 +87,66 @@ public class ScheduleRepositoryTest extends DummyEntity {
 
 
         // then
-        assertThat(schedules.size()).isEqualTo(2);
+        assertThat(schedules.size()).isEqualTo(3);
         assertThat(schedules.get(0).getId()).isEqualTo(3L);
-        assertThat(schedules.get(1).getId()).isEqualTo(5L);
+        assertThat(schedules.get(1).getType()).isEqualTo("HALFOFF");
+        assertThat(schedules.get(2).getId()).isEqualTo(6L);
         assertThat(schedules.get(0).getUser().getId()).isEqualTo(3L);
         assertThat(schedules.get(1).getUser().getId()).isEqualTo(3L);
-        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimdayoff");
-        assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimdayoff");
-        assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("지원팀");
+        assertThat(schedules.get(2).getUser().getId()).isEqualTo(3L);
+        assertThat(schedules.get(0).getReason()).isEqualTo("휴가");
+        assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimday");
+        assertThat(schedules.get(2).getUser().getEmail()).isEqualTo("kimday@gmail.com");
+        assertThat(schedules.get(0).getStatus()).isEqualTo("REJECTED");
 
     }
 
     @Test
     public void findSchedules_test() {
         // given
-        Long userId = 3L;
 
         // when
-        List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
-
+        List<Schedule> schedules = scheduleRepository.findSchedules();
 
         // then
-        assertThat(schedules.size()).isEqualTo(2);
-        assertThat(schedules.get(0).getId()).isEqualTo(3L);
-        assertThat(schedules.get(1).getId()).isEqualTo(5L);
-        assertThat(schedules.get(0).getUser().getId()).isEqualTo(3L);
-        assertThat(schedules.get(1).getUser().getId()).isEqualTo(3L);
-        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimdayoff");
-        assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimdayoff");
-        assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("지원팀");
+        assertThat(schedules.size()).isEqualTo(10);
+        assertThat(schedules.get(0).getId()).isEqualTo(1L);
+        assertThat(schedules.get(1).getUser().getId()).isEqualTo(2L);
+        assertThat(schedules.get(2).getStatus()).isEqualTo("REJECTED");
+        assertThat(schedules.get(3).getType()).isEqualTo("HALFOFF");
+        assertThat(schedules.get(4).getUser().getName()).isEqualTo("kimday");
+        assertThat(schedules.get(5).getUser().getRole()).isEqualTo("USER");
+        assertThat(schedules.get(6).getUser().getTeam().getTeamName()).isEqualTo("지원팀");
+        assertThat(schedules.get(7).getReason()).isEqualTo("휴가");
+        assertThat(schedules.get(8).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
+        assertThat(schedules.get(9).getUser().getEmail()).isEqualTo("kimshift@gmail.com");
 
+    }
+
+    @Test
+    public void findSchedulesByTeamName_test(){
+        // given
+        String teamName = "개발팀";
+
+        // when
+        List<Schedule> schedules = scheduleRepository.findSchedulesByTeamName(teamName);
+
+        // then
+        assertThat(schedules.size()).isEqualTo(3);
+        assertThat(schedules.get(0).getId()).isEqualTo(2L);
+        assertThat(schedules.get(1).getId()).isEqualTo(9L);
+        assertThat(schedules.get(2).getId()).isEqualTo(10L);
+        assertThat(schedules.get(0).getUser().getId()).isEqualTo(2L);
+        assertThat(schedules.get(1).getUser().getId()).isEqualTo(2L);
+        assertThat(schedules.get(2).getUser().getId()).isEqualTo(5L);
+        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimmanager");
+        assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimmanager");
+        assertThat(schedules.get(2).getUser().getName()).isEqualTo("kimshift");
+        assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
+        assertThat(schedules.get(1).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
+        assertThat(schedules.get(2).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
+        assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
+        assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
+        assertThat(schedules.get(2).getUser().getTeam().getId()).isEqualTo(1L);
     }
 }
