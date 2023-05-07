@@ -108,6 +108,23 @@ public class DummyEntity {
                 .build();
     }
 
+    public User newMockUserWithTeam(Long id, String name, Team team) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .id(id)
+                .team(team)
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.USER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
     public User newMockAdmin(Long id, String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
