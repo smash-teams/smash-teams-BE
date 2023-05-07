@@ -30,6 +30,15 @@ public class AdminContoller {
     }
 
     @Log
+    @PatchMapping("/users")
+    public ResponseEntity<?> updateAuthAndTeam(@RequestBody @Valid AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO, Errors errors) {
+        adminService.updateAuthAndTeam(updateAuthAndTeamInDTO);
+
+        ResponseDTO<?> responseDTO = new ResponseDTO<>();
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @Log
     @PostMapping("/teams")
     public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
         AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
