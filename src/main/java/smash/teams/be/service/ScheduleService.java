@@ -48,8 +48,6 @@ public class ScheduleService {
             }
 
             return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
-
-
         }
 
         if (role.equals("MANAGER")) {
