@@ -18,6 +18,7 @@ import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.schedule.ScheduleResponse;
+import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.service.ScheduleService;
 
@@ -53,6 +54,8 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     private ObjectMapper om;
     @MockBean
     private ScheduleService scheduleService;
+    @MockBean
+    private ErrorLogRepository errorLogRepository;
 
     @WithMockUser(id=1L, username="kimuser@gmail.com", role = "USER")
     @Test
