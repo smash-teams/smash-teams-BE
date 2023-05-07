@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping(("/auth/admin"))
 @RestController
-public class AdminContoller {
+public class AdminController {
     private final AdminService adminService;
 
     @Log

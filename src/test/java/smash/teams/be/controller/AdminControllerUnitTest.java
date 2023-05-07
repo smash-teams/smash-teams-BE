@@ -47,9 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 }) // Advice 와 Security 설정 가져오기
 @WebMvcTest(
         // 필요한 Controller 가져오기, 특정 필터를 제외하기
-        controllers = {AdminContoller.class}
+        controllers = {AdminController.class}
 )
-public class AdminContollerUnitTest extends DummyEntity {
+public class AdminControllerUnitTest extends DummyEntity {
 
     @Autowired
     private MockMvc mvc;
