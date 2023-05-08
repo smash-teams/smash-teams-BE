@@ -73,17 +73,14 @@ public class UserControllerUnitTest extends DummyEntity {
         Mockito.when(userService.findMyId(any())).thenReturn(findMyInfoOutDTO);
 
         // when
-        ResultActions resultActions = mvc
-                .perform(get("/auth/user/"+id));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"+id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트2 : " + responseBody);
 
         // then
-//        resultActions.andExpect(jsonPath("$.data.id").value(1L));
-//        resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
-//        resultActions.andExpect(jsonPath("$.data.email").value("ssar@nate.com"));
-//        resultActions.andExpect(jsonPath("$.data.fullName").value("쌀"));
-//        resultActions.andExpect(jsonPath("$.data.role").value("USER"));
-//        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.id").value(1L));
+        resultActions.andExpect(jsonPath("$.data.name").value("cos"));
+        resultActions.andExpect(jsonPath("$.data.email").value("cos@gmail.com"));
+        resultActions.andExpect(status().isOk());
     }
 }
