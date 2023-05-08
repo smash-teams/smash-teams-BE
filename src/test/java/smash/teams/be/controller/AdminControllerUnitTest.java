@@ -18,8 +18,6 @@ import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.admin.AdminRequest;
-import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
@@ -33,8 +31,10 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static smash.teams.be.dto.admin.AdminRequest.*;
-import static smash.teams.be.dto.admin.AdminResponse.*;
+import static smash.teams.be.dto.admin.AdminRequest.AddInDTO;
+import static smash.teams.be.dto.admin.AdminRequest.UpdateAuthAndTeamInDTO;
+import static smash.teams.be.dto.admin.AdminResponse.AddOutDTO;
+import static smash.teams.be.dto.admin.AdminResponse.GetAdminPageOutDTO;
 
 /**
  * @WebMvcTest는 웹 계층 컴포넌트만 테스트로 가져옴
@@ -62,32 +62,6 @@ public class AdminControllerUnitTest extends DummyEntity {
     private AdminService adminService;
     @MockBean
     private ErrorLogRepository errorLogRepository;
-
-
-    @WithMockAdmin
-    @Test
-    public void add_test() throws Exception {
-        // given
-        AddInDTO addInDTO = new AddInDTO();
-        addInDTO.setTeamName("마케팅팀");
-        String requestBody = om.writeValueAsString(addInDTO);
-
-        // stub
-        Mockito.when(adminService.add(any()))
-                .thenReturn(new AddOutDTO(newMockTeam(3L, "마케팅팀")));
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/auth/admin/teams").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-        resultActions.andExpect(jsonPath("$.data.teamId").value(3L));
-        resultActions.andExpect(jsonPath("$.data.teamName").value("마케팅팀"));
-        resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
-        resultActions.andExpect(status().isOk());
-    }
 
     @WithMockAdmin(id = 4L)
     @Test
@@ -186,6 +160,47 @@ public class AdminControllerUnitTest extends DummyEntity {
                 .perform(patch("/auth/admin/users")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithMockAdmin
+    @Test
+    public void add_test() throws Exception {
+        // given
+        AddInDTO addInDTO = new AddInDTO();
+        addInDTO.setTeamName("마케팅팀");
+        String requestBody = om.writeValueAsString(addInDTO);
+
+        // stub
+        Mockito.when(adminService.add(any()))
+                .thenReturn(new AddOutDTO(newMockTeam(3L, "마케팅팀")));
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/admin/teams").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.data.teamId").value(3L));
+        resultActions.andExpect(jsonPath("$.data.teamName").value("마케팅팀"));
+        resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithMockAdmin
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        Long teamId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(delete("/auth/admin/teams/{id}", teamId));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 

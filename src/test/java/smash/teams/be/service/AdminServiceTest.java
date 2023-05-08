@@ -38,25 +38,6 @@ public class AdminServiceTest extends DummyEntity {
     private UserQueryRepository userQueryRepository;
 
     @Test
-    public void add_test() {
-        // given
-        AddInDTO addInDTO = new AddInDTO();
-        addInDTO.setTeamName("회계팀");
-
-        // stub
-        Mockito.when(teamRepository.findByTeamName(any())).thenReturn(Optional.empty());
-        Mockito.when(teamRepository.save(any())).thenReturn(newMockTeam(4L, "회계팀"));
-
-        // when
-        AddOutDTO addOutDTO = adminService.add(addInDTO);
-
-        // then
-        assertThat(addOutDTO.getTeamId()).isEqualTo(4L);
-        assertThat(addOutDTO.getTeamName()).isEqualTo("회계팀");
-        assertThat(addOutDTO.getTeamCount()).isEqualTo(0);
-    }
-
-    @Test
     public void getAdminPage_test() {
         // given
         String teamName = "개발팀";
@@ -145,4 +126,23 @@ public class AdminServiceTest extends DummyEntity {
 //        assertThat(testUpdateAuthAndTeamOutDTO.getUser().getTeam().getTeamName()).isEqualTo(team2.getTeamName());
 //        assertThat(testUpdateAuthAndTeamOutDTO.getUser().getRole()).isEqualTo(Role.MANAGER.getRole());
 //    }
+
+    @Test
+    public void add_test() {
+        // given
+        AddInDTO addInDTO = new AddInDTO();
+        addInDTO.setTeamName("회계팀");
+
+        // stub
+        Mockito.when(teamRepository.findByTeamName(any())).thenReturn(Optional.empty());
+        Mockito.when(teamRepository.save(any())).thenReturn(newMockTeam(4L, "회계팀"));
+
+        // when
+        AddOutDTO addOutDTO = adminService.add(addInDTO);
+
+        // then
+        assertThat(addOutDTO.getTeamId()).isEqualTo(4L);
+        assertThat(addOutDTO.getTeamName()).isEqualTo("회계팀");
+        assertThat(addOutDTO.getTeamCount()).isEqualTo(0);
+    }
 }
