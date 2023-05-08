@@ -100,6 +100,7 @@ public class DummyEntity {
                 .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
+                .profileImage(name + "의 프로필 사진")
                 .remain(20)
                 .role(Role.USER.getRole())
                 .status(Status.ACTIVE.getStatus())

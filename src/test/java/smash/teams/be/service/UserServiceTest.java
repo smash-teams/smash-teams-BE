@@ -1,44 +1,59 @@
 package smash.teams.be.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.dto.user.UserResponse;
+import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
+
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class UserServiceTest extends DummyEntity {
 
-    // 진짜 userService 객체를 만들고 Mock로 Load된 모든 객체를 userService에 주입
     @InjectMocks
     private UserService userService;
-
-    // 진짜 객체를 만들어서 Mockito 환경에 Load(userService에 주입)
     @Mock
     private UserRepository userRepository;
-
-    // 가짜 객체를 만들어서 Mockito 환경에 Load(userService에 주입)
     @Mock
     private AuthenticationManager authenticationManager;
-
-    // 진짜 객체를 만들어서 Mockito 환경에 Load
     @Spy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Spy
+    private ObjectMapper om;
 
     @Test
     public void findMyId_test() throws Exception {
         // given
+        Long id = 1L;
 
+        // stub
+        User cos = newMockUser(1L, "cos");
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(cos));
 
         // when
-
+        UserResponse.findMyInfoOutDTO findMyInfoOutDTO = userService.findMyId(id);
+        String responseBody = om.writeValueAsString(findMyInfoOutDTO);
+        System.out.println("테스트2 : " + responseBody);
 
         // then
+        Assertions.assertThat(findMyInfoOutDTO.getId()).isEqualTo(1L);
+        Assertions.assertThat(findMyInfoOutDTO.getName()).isEqualTo("cos");
+        Assertions.assertThat(findMyInfoOutDTO.getEmail()).isEqualTo("cos@gmail.com");
+        Assertions.assertThat(findMyInfoOutDTO.getProfileImage()).isEqualTo("cos의 프로필 사진");
     }
 }
