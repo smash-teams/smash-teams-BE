@@ -100,6 +100,7 @@ public class ScheduleResponse {
             public static class UserDto {
                 private Long userId;
                 private String name;
+                private String email;
                 private String teamName;
                 private String role;
                 private String profileImage;
@@ -107,6 +108,7 @@ public class ScheduleResponse {
                 public UserDto(User user) { // 1) User -> UserDto
                     this.userId = user.getId();
                     this.name = user.getName();
+                    this.email = user.getEmail();
                     this.teamName = user.getTeam().getTeamName();
                     this.role = user.getRole();
                     this.profileImage = user.getProfileImage();
