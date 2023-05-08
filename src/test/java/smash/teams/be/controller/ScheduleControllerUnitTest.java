@@ -122,7 +122,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         Mockito.when(scheduleService.getScheduleListForManage(userId,role,teamName)).thenReturn(scheduleListDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/suser/schedule"));
+        ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
