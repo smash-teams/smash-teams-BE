@@ -62,9 +62,9 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @Test
     public void getScheduleList_test() throws Exception {
         // given
-        Schedule schedule1 = newScheduleForTest(1L,1L,"USER","kimuser",2L,"개발팀","LAST","병가");
-        Schedule schedule2 = newScheduleForTest(2L,1L,"USER","kimuser",2L,"개발팀","REJECTED","여행");
-        Schedule schedule3 = newScheduleForTest(3L,1L,"USER","kimuser",2L,"개발팀","FIRST","여행");
+        Schedule schedule1 = newScheduleForTest(1L, 1L, "USER", "kimuser", 2L, "개발팀", "LAST", "병가");
+        Schedule schedule2 = newScheduleForTest(2L, 1L, "USER", "kimuser", 2L, "개발팀", "REJECTED", "여행");
+        Schedule schedule3 = newScheduleForTest(3L, 1L, "USER", "kimuser", 2L, "개발팀", "FIRST", "여행");
 
         List<ScheduleResponse.ScheduleOutDTO> scheduleOutList = new ArrayList<>();
         scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule1, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule1.getUser())));
@@ -95,7 +95,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(status().isOk());
     }
 
-    @WithMockUser(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamId = 1L, teamName = "개발팀")
+    @WithMockUser(id = 2L, username = "kimmanager@gmail.com", role = "MANAGER", teamId = 1L, teamName = "개발팀")
     @Test
     public void getScheduleListForManage_test() throws Exception {
         // given
@@ -108,9 +108,9 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         String teamName = "개발팀";
 
 
-        Schedule schedule1 = newScheduleForTest(1L,3L,"USER","kimuser",2L,"개발팀","LAST","병가");
-        Schedule schedule2 = newScheduleForTest(2L,3L,"USER","kimuser",2L,"개발팀","REJECTED","여행");
-        Schedule schedule3 = newScheduleForTest(3L,3L,"USER","kimuser",2L,"개발팀","FIRST","여행");
+        Schedule schedule1 = newScheduleForTest(1L, 3L, "USER", "kimuser", 2L, "개발팀", "LAST", "병가");
+        Schedule schedule2 = newScheduleForTest(2L, 3L, "USER", "kimuser", 2L, "개발팀", "REJECTED", "여행");
+        Schedule schedule3 = newScheduleForTest(3L, 3L, "USER", "kimuser", 2L, "개발팀", "FIRST", "여행");
 
         List<ScheduleResponse.ScheduleOutDTO> scheduleOutList = new ArrayList<>();
         scheduleOutList.add(new ScheduleResponse.ScheduleOutDTO(schedule1, new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule1.getUser())));
@@ -119,7 +119,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         ScheduleResponse.ScheduleListDTO scheduleListDTO = new ScheduleResponse.ScheduleListDTO(scheduleOutList);
 
-        Mockito.when(scheduleService.getScheduleListForManage(userId,role,teamName)).thenReturn(scheduleListDTO);
+        Mockito.when(scheduleService.getScheduleListForManage(userId, role, teamName)).thenReturn(scheduleListDTO);
 
         // when
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
