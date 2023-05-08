@@ -33,7 +33,7 @@ public class AdminRequest {
         @NotEmpty
         private String teamName;
 
-        @Pattern(regexp = "^(USER|CEO|MANAGER|ADMIN)$") // ADMIN("ADMIN"), CEO("CEO"), MANAGER("MANAGER"), USER("USER")
+        @Pattern(regexp = "^(USER|CEO|MANAGER|ADMIN)$", message = "USER, CEO, MANAGER, ADMIN 중 하나의 형태로 요청해주세요.")
         @NotEmpty
         private String role;
     }
