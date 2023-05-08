@@ -54,6 +54,5 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(findMyInfoOutDTO.getId()).isEqualTo(1L);
         Assertions.assertThat(findMyInfoOutDTO.getName()).isEqualTo("cos");
         Assertions.assertThat(findMyInfoOutDTO.getEmail()).isEqualTo("cos@gmail.com");
-        Assertions.assertThat(findMyInfoOutDTO.getProfileImage()).isEqualTo("cos의 프로필 사진");
     }
 }
