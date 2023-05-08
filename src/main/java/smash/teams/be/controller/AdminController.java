@@ -30,7 +30,7 @@ public class AdminController {
     }
 
     @Log
-    @PatchMapping("/users")
+    @PatchMapping("/info")
     public ResponseEntity<?> updateAuthAndTeam(@RequestBody @Valid AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO, Errors errors) {
         adminService.updateAuthAndTeam(updateAuthAndTeamInDTO);
 
@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     @Log
-    @PostMapping("/teams")
+    @PostMapping("/team")
     public ResponseEntity<?> add(@RequestBody @Valid AdminRequest.AddInDTO addInDTO, Errors errors) {
         AdminResponse.AddOutDTO addOutDTO = adminService.add(addInDTO); // OSIV = false, 비영속
 
@@ -48,7 +48,7 @@ public class AdminController {
     }
 
     @Log
-    @DeleteMapping("/teams/{id}")
+    @DeleteMapping("/team/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         adminService.delete(id);
 

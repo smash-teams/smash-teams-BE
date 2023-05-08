@@ -157,7 +157,7 @@ public class AdminControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(patch("/auth/admin/users")
+                .perform(patch("/auth/admin/info")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -181,7 +181,7 @@ public class AdminControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/admin/teams").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/admin/team").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -200,7 +200,7 @@ public class AdminControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(delete("/auth/admin/teams/{id}", teamId));
+                .perform(delete("/auth/admin/team/{id}", teamId));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
