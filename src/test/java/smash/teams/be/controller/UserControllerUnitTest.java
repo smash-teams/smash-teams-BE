@@ -1,8 +1,6 @@
 package smash.teams.be.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,29 +8,26 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import smash.teams.be.core.MyWithMockUser;
 import smash.teams.be.core.advice.LogAdvice;
 import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.schedule.ScheduleResponse;
+import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
-import smash.teams.be.service.AdminService;
 import smash.teams.be.service.UserService;
-
-import javax.persistence.EntityManager;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,6 +76,38 @@ public class UserControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
         resultActions.andExpect(jsonPath("$.data.name").value("cos"));
         resultActions.andExpect(jsonPath("$.data.email").value("cos@gmail.com"));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @MyWithMockUser(id = 1L, name = "cos", role = "USER", status = "ACTIVE")
+    @Test
+    public void update_test() throws Exception {
+        // given
+        Long id = 1L;
+        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
+        updateInDto.setCurPassword("1234");
+        updateInDto.setNewPassword("5678");
+        updateInDto.setPhoneNumber("010-1234-5678");
+        updateInDto.setStartWork("2023-05-09");
+        updateInDto.setProfileImage("사진 2");
+
+        String requestBody = om.writeValueAsString(updateInDto);
+        System.out.println("테스트1 : " + requestBody);
+
+        // stub
+        User ssar = newMockUserUpdate(1L, "cos");
+        UserResponse.UpdateOutDTO updateOutDTO = new UserResponse.UpdateOutDTO(ssar);
+        Mockito.when(userService.update(any(), any(), any())).thenReturn(updateOutDTO);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/auth/user/" + id + "/upload").
+                content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트2 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-1234-5678"));
+        resultActions.andExpect(jsonPath("$.data.profileImage").value("사진 2"));
         resultActions.andExpect(status().isOk());
     }
 }
