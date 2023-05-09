@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.dto.ResponseDTO;
+import smash.teams.be.dto.schedule.ScheduleRequest;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.schedule.Schedule;
+import smash.teams.be.model.schedule.Status;
+import smash.teams.be.model.user.User;
 import smash.teams.be.service.ScheduleService;
 
 import javax.validation.Valid;
@@ -37,16 +41,16 @@ public class ScheduleController {
     }
 
     @GetMapping("/auth/super/schedule")
-    public ResponseEntity<?> getScheduleListForManage(@AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Long userId = myUserDetails.getUser().getId();
-        String role = myUserDetails.getUser().getRole();
-        String teamName = myUserDetails.getUser().getTeam().getTeamName();
+    public ResponseEntity<?> getScheduleListForManage(@AuthenticationPrincipal MyUserDetails myUserDetails){
 
-        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
+        User user = myUserDetails.getUser();
+
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(user);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
         return ResponseEntity.ok(responseDTO);
     }
+
 
     @GetMapping("/auth/user/main")
     public ResponseEntity<?> loadScheduleList() throws JsonProcessingException {
@@ -67,4 +71,15 @@ public class ScheduleController {
         ResponseDTO<?> responseDTO = new ResponseDTO<>();
         return ResponseEntity.ok(responseDTO);
     }
+
+    @PostMapping("/auth/super/schedule/order")
+    public ResponseEntity<?> orderSchedule(@RequestBody @Valid ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO,
+                                           @AuthenticationPrincipal MyUserDetails myUserDetails) {
+
+        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutDTO = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(orderScheduleOutDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
 }

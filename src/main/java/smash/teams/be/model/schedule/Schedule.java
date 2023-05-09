@@ -62,4 +62,8 @@ public class Schedule {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public void changeStatus(String status){
+        this.status = status;
+    }
 }

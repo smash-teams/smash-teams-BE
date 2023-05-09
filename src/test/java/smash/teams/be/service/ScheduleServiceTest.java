@@ -1,6 +1,7 @@
 package smash.teams.be.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,9 +13,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.core.exception.*;
+import smash.teams.be.dto.schedule.ScheduleRequest;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.ScheduleRepository;
+import smash.teams.be.model.team.Team;
+import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
 import java.time.format.DateTimeFormatter;
@@ -22,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -86,16 +93,11 @@ public class ScheduleServiceTest extends DummyEntity {
         assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
     }
 
+    @DisplayName("스케쥴 관리페이지 : 팀원 권한 조회 (같은 팀원 스케쥴)")
     @Test
-    public void getScheduleListForManage_test() {
+    public void getScheduleListForManage_case1_test() {
         // given
-        Long userId = 1L;
-        String role = "CEO";
-        String teamName = null;
-
-//        Long userId = 2L;
-//        String role = "MANAGER";
-//        String teamName = "개발팀";
+        User user = User.builder().id(1L).role("MANAGER").team(Team.builder().teamName("개발팀").build()).build();
 
         Schedule schedule1 = newScheduleForTest(1L, 1L, "CEO", "kimuceo", null, null, "APPROVED", "병가");
         Schedule schedule2 = newScheduleForTest(2L, 2L, "MANAGER", "kimmanager", 1L, "개발팀", "APPROVED", "휴가");
@@ -115,62 +117,86 @@ public class ScheduleServiceTest extends DummyEntity {
         schedules.add(schedule7);
 
         List<Schedule> schedulesManager = new ArrayList<>();
-        if (role.equals("MANAGER")) {
-            for (Schedule schedule : schedules) {
-                if (teamName.equals(schedule.getUser().getTeam().getTeamName())) {
-                    schedulesManager.add(schedule);
-                }
+
+        for (Schedule schedule : schedules) {
+            if (user.getTeam().getTeamName().equals(schedule.getUser().getTeam().getTeamName())) {
+                schedulesManager.add(schedule);
             }
-            Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
         }
-        if (role.equals("CEO")) {
-            Mockito.when(scheduleRepository.findSchedulesWithName()).thenReturn(schedules);
-        }
+
+        Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
 
         // when
-        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(user);
 
         // Then
-        if (role.equals("CEO")) {
-            assertThat(scheduleListDTO).isNotNull();
-            assertThat(scheduleListDTO.getScheduleList()).isNotNull();
-            assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedules.get(0).getUser().getId());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedules.get(0).getId());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedules.get(0).getType());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedules.get(0).getReason());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedules.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedules.get(0).getStatus());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedules.get(1).getUser().getId());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedules.get(1).getUser().getName());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedules.get(1).getUser().getEmail());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedules.get(1).getUser().getPhoneNumber());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedules.get(2).getUser().getRole());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedules.get(2).getUser().getTeam().getTeamName());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
-        }
-
-        if (role.equals("MANAGER")) {
-            assertThat(scheduleListDTO).isNotNull();
-            assertThat(scheduleListDTO.getScheduleList()).isNotNull();
-            assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedulesManager.size());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedulesManager.get(0).getUser().getId());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedulesManager.get(0).getId());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedulesManager.get(0).getType());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedulesManager.get(0).getReason());
-            assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedulesManager.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedulesManager.get(0).getStatus());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedulesManager.get(1).getUser().getId());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedulesManager.get(1).getUser().getName());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedulesManager.get(1).getUser().getEmail());
-            assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedulesManager.get(1).getUser().getPhoneNumber());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedulesManager.get(2).getUser().getRole());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedulesManager.get(2).getUser().getTeam().getTeamName());
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedulesManager.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
-            assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedulesManager.get(2).getUser().getProfileImage());
-        }
+        assertThat(scheduleListDTO).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList()).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedulesManager.size());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedulesManager.get(0).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedulesManager.get(0).getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedulesManager.get(0).getType());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedulesManager.get(0).getReason());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedulesManager.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedulesManager.get(0).getStatus());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedulesManager.get(1).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedulesManager.get(1).getUser().getName());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedulesManager.get(1).getUser().getEmail());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedulesManager.get(1).getUser().getPhoneNumber());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedulesManager.get(2).getUser().getRole());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedulesManager.get(2).getUser().getTeam().getTeamName());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedulesManager.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedulesManager.get(2).getUser().getProfileImage());
     }
+
+    @DisplayName("스케쥴 관리페이지 : CEO권한 스케쥴조회")
+    @Test
+    public void getScheduleListForManage_case2_test() {
+        // given
+        User user = User.builder().id(1L).role("CEO").team(null).build();
+
+        Schedule schedule1 = newScheduleForTest(1L, 1L, "CEO", "kimuceo", null, null, "APPROVED", "병가");
+        Schedule schedule2 = newScheduleForTest(2L, 2L, "MANAGER", "kimmanager", 1L, "개발팀", "APPROVED", "휴가");
+        Schedule schedule3 = newScheduleForTest(3L, 3L, "USER", "kimuser", 1L, "개발팀", "APPROVED", "병가");
+        Schedule schedule4 = newScheduleForTest(4L, 3L, "USER", "kimuser", 1L, "개발팀", "REJECTED", "휴가");
+        Schedule schedule5 = newScheduleForTest(5L, 2L, "MANAGER", "kimmanager", 1L, "개발팀", "FIRST", "휴가");
+        Schedule schedule6 = newScheduleForTest(6L, 1L, "CEO", "kimceo", null, null, "APPROVED", "휴가");
+        Schedule schedule7 = newScheduleForTest(7L, 3L, "USER", "kimuser", 1L, "개발팀", "LAST", "휴가");
+
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(schedule1);
+        schedules.add(schedule2);
+        schedules.add(schedule3);
+        schedules.add(schedule4);
+        schedules.add(schedule5);
+        schedules.add(schedule6);
+        schedules.add(schedule7);
+
+        Mockito.when(scheduleRepository.findSchedules()).thenReturn(schedules);
+
+        // when
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(user);
+
+        // Then
+        assertThat(scheduleListDTO).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList()).isNotNull();
+        assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getUser().getUserId()).isEqualTo(schedules.get(0).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getScheduleId()).isEqualTo(schedules.get(0).getId());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getType()).isEqualTo(schedules.get(0).getType());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getReason()).isEqualTo(schedules.get(0).getReason());
+        assertThat(scheduleListDTO.getScheduleList().get(0).getEndDate()).isEqualTo(schedules.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        assertThat(scheduleListDTO.getScheduleList().get(0).getStatus()).isEqualTo(schedules.get(0).getStatus());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getUserId()).isEqualTo(schedules.get(1).getUser().getId());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getName()).isEqualTo(schedules.get(1).getUser().getName());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getEmail()).isEqualTo(schedules.get(1).getUser().getEmail());
+        assertThat(scheduleListDTO.getScheduleList().get(1).getUser().getPhoneNumber()).isEqualTo(schedules.get(1).getUser().getPhoneNumber());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getRole()).isEqualTo(schedules.get(2).getUser().getRole());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getTeamName()).isEqualTo(schedules.get(2).getUser().getTeam().getTeamName());
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getStartWork()).isEqualTo(schedules.get(2).getUser().getStartWork().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
+    }
+
 
     @Test
     public void findByScheduleList_test() throws Exception {
@@ -227,4 +253,231 @@ public class ScheduleServiceTest extends DummyEntity {
 //        assertThat(schedule.getReason()).isEqualTo(makeScheduleRequestInDTO.getReason());
 //        assertThat(schedule.getUser().getId()).isEqualTo(userId);
 //    }
+
+    @DisplayName("연차승인 : FIRST-to-LAST")
+    @Test
+    public void orderSchedule_case1_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("DAYOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(20);
+        assertThat(result.getStatus()).isEqualTo("LAST");
+    }
+
+    @DisplayName("연차승인 : LAST-to-APPROVED")
+    @Test
+    public void orderSchedule_case2_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(19);
+        assertThat(result.getStatus()).isEqualTo("APPROVED");
+    }
+
+    @DisplayName("반차승인 : FIRST-to-LAST")
+    @Test
+    public void orderSchedule_case3_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("HALFOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(20);
+        assertThat(result.getStatus()).isEqualTo("LAST");
+    }
+
+    @DisplayName("반차승인 : LAST-to-APPROVED")
+    @Test
+    public void orderSchedule_case4_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("HALFOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(19.5);
+        assertThat(result.getStatus()).isEqualTo("APPROVED");
+    }
+
+    @DisplayName("당직승인 : FIRST-to-LAST")
+    @Test
+    public void orderSchedule_case5_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("SHIFT").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(20);
+        assertThat(result.getStatus()).isEqualTo("LAST");
+    }
+
+    @DisplayName("당직승인 : LAST-to-APPROVED")
+    @Test
+    public void orderSchedule_case6_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("SHIFT").build();
+        Schedule updatedSchedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("SHIFT").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(updatedSchedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(20);
+        assertThat(result.getStatus()).isEqualTo("APPROVED");
+    }
+
+    @DisplayName("거절하기 : FIRST & LAST to REJECTED")
+    @Test
+    public void orderSchedule_case7_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "REJECTED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+        Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
+
+        // when
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getRemain()).isEqualTo(20);
+        assertThat(result.getStatus()).isEqualTo("REJECTED");
+    }
+
+    @DisplayName("예외발생 테스트 : 이미 승인되었거나 거절된 스케쥴")
+    @Test
+    public void orderSchedule_case8_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "APPROVED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("DAYOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+
+        // when, then
+        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(orderScheduleInDTO));
+
+    }
+
+    @DisplayName("예외발생 테스트 : 이미 승인되었거나 거절된 스케쥴")
+    @Test
+    public void orderSchedule_case9_test () {
+        // given
+        Long scheduleId = 1L;
+        String status = "REJECTED";
+
+        ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO = new ScheduleRequest.OrderScheduleInDTO();
+        orderScheduleInDTO.setScheduleId(scheduleId);
+        orderScheduleInDTO.setStatus(status);
+
+        User user = User.builder().remain(20).build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("DAYOFF").build();
+
+        Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
+
+        // when, then
+        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(orderScheduleInDTO));
+
+    }
+
 }
+

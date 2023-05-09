@@ -116,4 +116,17 @@ public class ScheduleResponse {
             }
         }
     }
+
+    @Getter @Setter
+    public static class OrderScheduleOutWithRemainDTO {
+        private Long scheduleId;
+        private String status;
+        private double remain;
+        public OrderScheduleOutWithRemainDTO(Schedule schedule) {
+            this.scheduleId = schedule.getId();
+            this.status = schedule.getStatus();
+            this.remain = schedule.getUser().getRemain();
+
+        }
+    }
 }

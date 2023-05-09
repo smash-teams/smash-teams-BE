@@ -2,6 +2,7 @@ package smash.teams.be.model.schedule;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -161,5 +162,19 @@ public class ScheduleRepositoryTest extends DummyEntity {
         // then
         assertEquals(10, schedulesListPS.size());
         assertTrue(schedulesListPS.stream().allMatch(schedule -> schedule.getUser() != null));
+    }
+
+    @Test
+    public void findScheduleByScheduleId_test(){
+        // given
+//        Schedule schedule8 = newScheduleForRepoTest(kimhalfoff, "DAYOFF","LAST","휴가");
+        // when
+        Schedule schedule = scheduleRepository.findScheduleByScheduleId(8L);
+        // then
+        assertThat(schedule.getId()).isEqualTo(8L);
+        assertThat(schedule.getType()).isEqualTo(Type.DAYOFF.getType());
+        assertThat(schedule.getStatus()).isEqualTo(Status.LAST.getStatus());
+        assertThat(schedule.getUser().getName()).isEqualTo("kimhalf");
+        assertThat(schedule.getUser().getRemain()).isEqualTo(20);
     }
 }

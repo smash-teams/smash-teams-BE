@@ -11,12 +11,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockUserFactory.class)
 public @interface WithMockUser {
-    long id() default 3L;
-
-    String username() default "kimuser@gmail.com";
-
+    long id() default 1L;
+    String name() default "cos";
     String role() default "USER";
-
-    long teamId() default 1L;
-    String teamName() default "개발팀";
+    String status() default "ACTIVE";
 }

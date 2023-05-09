@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select count(*) from User u where u.team.id = :id")
     int calculateCountByTeamId(@Param("id") Long id);
+
+    @Query("select u from User u where u.id = :id")
+    User findUserById(@Param("id") Long id);
 }
