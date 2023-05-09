@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,8 +28,10 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static smash.teams.be.dto.admin.AdminRequest.UpdateAuthAndTeamInDTO;
 
 @DisplayName("관리자 권한 API")
 @AutoConfigureRestDocs(uriScheme = "http", uriHost = "localhost", uriPort = 8080)
@@ -235,10 +238,10 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("사용자 권한 설정 페이지 조회 권한 실패")
+    @DisplayName("사용자 권한 설정 페이지 조회 실패(403)")
     @WithUserDetails(value = "이승민@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getAdminPage_fail_test() throws Exception {
+    public void getAdminPage_fail_forbidden_test() throws Exception {
         // given
         String teamName = "";
         String keyword = "이";
@@ -259,5 +262,57 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
         resultActions.andExpect(status().isForbidden());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("사용자 권한/팀 변경 성공")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void updateAuthAndTeam_test() throws Exception {
+        // given
+        UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
+        updateAuthAndTeamInDTO.setUserId(2L);
+        updateAuthAndTeamInDTO.setTeamName("회계팀");
+        updateAuthAndTeamInDTO.setRole(Role.USER.getRole());
+        String requestBody = om.writeValueAsString(updateAuthAndTeamInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(patch("/auth/admin/user")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data").isEmpty());
+        resultActions.andExpect(status().isOk());
+    }
+
+    @DisplayName("사용자 권한/팀 변경 실패(404)")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void updateAuthAndTeam_fail_not_found_test() throws Exception {
+        // given
+        UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
+        updateAuthAndTeamInDTO.setUserId(2L);
+        updateAuthAndTeamInDTO.setTeamName("영업팀");
+        updateAuthAndTeamInDTO.setRole(Role.USER.getRole());
+        String requestBody = om.writeValueAsString(updateAuthAndTeamInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(patch("/auth/admin/user")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(404));
+        resultActions.andExpect(jsonPath("$.msg").value("notFound"));
+        resultActions.andExpect(jsonPath("$.data").value("존재하지 않는 팀입니다."));
+        resultActions.andExpect(status().isNotFound());
     }
 }
