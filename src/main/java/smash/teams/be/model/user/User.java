@@ -58,6 +58,22 @@ public class User {
         this.role = role;
     }
 
+    public void updatePassword(String password) { // 비밀번호 변경
+        this.password = password;
+    }
+
+    public void updateProfileImage(String profileImage) { // 프로필 변경
+        this.profileImage = profileImage;
+    }
+
+    public void updatePhoneNumber(String phoneNumber) { // 폰번호 변경
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updateStartWork(LocalDateTime startWork) { // 입사날 변경(고정 또는 null)
+        this.startWork = startWork;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
