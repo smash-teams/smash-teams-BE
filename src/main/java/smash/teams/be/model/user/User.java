@@ -41,7 +41,7 @@ public class User {
     private String status;
 
     @Column(nullable = false, length = 10)
-    private Integer remain;
+    private double remain;
 
     @Column(nullable = false)
     private LocalDateTime startWork;
@@ -69,7 +69,7 @@ public class User {
     }
 
     @Builder
-    public User(Long id, Team team, String name, String password, String email, String phoneNumber, String profileImage, String role, String status, Integer remain, LocalDateTime startWork, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long id, Team team, String name, String password, String email, String phoneNumber, String profileImage, String role, String status, double remain, LocalDateTime startWork, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.team = team;
         this.name = name;
@@ -83,5 +83,9 @@ public class User {
         this.startWork = startWork;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void changeRemain(double remain){
+        this.remain = remain;
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import smash.teams.be.core.MyWithMockUser;
 import smash.teams.be.core.WithMockUser;
+import smash.teams.be.core.WithMockUserWithTeam;
 import smash.teams.be.core.advice.LogAdvice;
 import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
@@ -24,6 +24,7 @@ import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.Type;
+import smash.teams.be.model.user.User;
 import smash.teams.be.service.ScheduleService;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @MockBean
     private ErrorLogRepository errorLogRepository;
 
-    @WithMockUser
+    @WithMockUserWithTeam
     @Test
     public void getScheduleList_test() throws Exception {
         // given
@@ -99,17 +100,13 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(status().isOk());
     }
 
-    @WithMockUser(id = 2L, username = "kimmanager@gmail.com", role = "MANAGER", teamId = 1L, teamName = "개발팀")
+    @WithMockUserWithTeam(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamName = "개발팀")
     @Test
     public void getScheduleListForManage_test() throws Exception {
         // given
 //        Long userId = 1L;
 //        String role = "CEO";
 //        String teamName = null;
-
-        Long userId = 2L;
-        String role = "MANAGER";
-        String teamName = "개발팀";
 
 
         Schedule schedule1 = newScheduleForTest(1L, 3L, "USER", "kimuser", 2L, "개발팀", "LAST", "병가");
@@ -123,7 +120,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         ScheduleResponse.ScheduleListDTO scheduleListDTO = new ScheduleResponse.ScheduleListDTO(scheduleOutList);
 
-        Mockito.when(scheduleService.getScheduleListForManage(userId, role, teamName)).thenReturn(scheduleListDTO);
+        Mockito.when(scheduleService.getScheduleListForManage(any())).thenReturn(scheduleListDTO);
 
         // when
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
@@ -145,7 +142,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(status().isOk());
     }
 
-    @MyWithMockUser(id = 1L, name = "ssar", role = "USER", status = "ACTIVE")
+    @WithMockUser(id = 1L, name = "ssar", role = "USER", status = "ACTIVE")
     @Test
     public void loadScheduleList_test() throws Exception {
         // given
@@ -161,14 +158,32 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc.perform(get("/auth/user/main"));
+    }
+
+    @WithMockUserWithTeam(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamName = "개발팀")
+    @Test
+    public void orderSchedule_test() throws Exception {
+
+        User user = User.builder().remain(19.5).build();
+        Schedule schedule = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
+
+        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutWithRemainDTO
+                = new ScheduleResponse.OrderScheduleOutWithRemainDTO(schedule);
+
+        String requestBody = om.writeValueAsString(orderScheduleOutWithRemainDTO);
+
+        Mockito.when(scheduleService.orderSchedule(any())).thenReturn(orderScheduleOutWithRemainDTO);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/auth/super/schedule/order").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(4));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("유저A"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.teamName").value("C팀"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[3].reason").value("여행"));
+        resultActions.andExpect(jsonPath("$.data.scheduleId").value(1L));
+        resultActions.andExpect(jsonPath("$.data.status").value("LAST"));
+        resultActions.andExpect(jsonPath("$.data.remain").value(19.5));
+        resultActions.andExpect(status().isOk());
     }
 
     @WithMockUser
@@ -191,4 +206,5 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isOk());
     }
+
 }

@@ -1,8 +1,6 @@
 package smash.teams.be.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +11,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import smash.teams.be.core.MyWithMockUser;
+import smash.teams.be.core.WithMockUser;
 import smash.teams.be.core.advice.LogAdvice;
 import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
-import smash.teams.be.service.AdminService;
 import smash.teams.be.service.UserService;
-
-import javax.persistence.EntityManager;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -61,7 +53,7 @@ public class UserControllerUnitTest extends DummyEntity {
     @MockBean
     private ErrorLogRepository errorLogRepository;
 
-    @MyWithMockUser(id = 1L, name = "cos", role = "USER", status = "ACTIVE")
+    @WithMockUser(id = 1L, name = "cos", role = "USER", status = "ACTIVE")
     @Test
     public void findMyInfo_test() throws Exception {
         // given

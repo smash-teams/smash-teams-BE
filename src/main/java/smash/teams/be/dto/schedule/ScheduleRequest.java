@@ -9,6 +9,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class ScheduleRequest {
     @Getter
@@ -39,5 +41,14 @@ public class ScheduleRequest {
                     .reason(reason)
                     .build();
         }
+    }
+
+    @Getter @Setter
+    public static class OrderScheduleInDTO {
+        @NotNull
+        private Long scheduleId;
+        @NotNull
+        @Pattern(regexp = "APPROVED|REJECTED|FIRST|LAST")
+        private String status;
     }
 }
