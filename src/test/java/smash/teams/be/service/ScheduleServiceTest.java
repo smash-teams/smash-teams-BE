@@ -15,6 +15,7 @@ import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.ScheduleRepository;
+import smash.teams.be.model.user.UserRepository;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class ScheduleServiceTest extends DummyEntity {
     @Mock
     private ScheduleRepository scheduleRepository;
     @Mock
+    private UserRepository userRepository;
+    @Mock
     private AuthenticationManager authenticationManager;
     @Spy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -44,13 +47,13 @@ public class ScheduleServiceTest extends DummyEntity {
         Long userId = 3L;
 
         List<Schedule> schedules = new ArrayList<>();
-        Schedule schedule1 = newScheduleForTest(1L,1L,"CEO","kimuceo",null,null,"APPROVED","병가");
-        Schedule schedule2 = newScheduleForTest(2L,2L,"MANAGER","kimmanager",1L,"총무팀","APPROVED","휴가");
-        Schedule schedule3 = newScheduleForTest(3L,3L,"USER","kimuser",2L,"개발팀","APPROVED","병가");
-        Schedule schedule4 = newScheduleForTest(4L,3L,"USER","kimuser",2L,"개발팀","REJECTED","휴가");
-        Schedule schedule5 = newScheduleForTest(5L,2L,"MANAGER","kimmanager",1L,"총무팀","FIRST","휴가");
-        Schedule schedule6 = newScheduleForTest(6L,1L,"CEO","kimceo",null,null,"APPROVED","휴가");
-        Schedule schedule7 = newScheduleForTest(7L,3L,"USER","kimuser",2L,"개발팀","LAST","휴가");
+        Schedule schedule1 = newScheduleForTest(1L, 1L, "CEO", "kimuceo", null, null, "APPROVED", "병가");
+        Schedule schedule2 = newScheduleForTest(2L, 2L, "MANAGER", "kimmanager", 1L, "총무팀", "APPROVED", "휴가");
+        Schedule schedule3 = newScheduleForTest(3L, 3L, "USER", "kimuser", 2L, "개발팀", "APPROVED", "병가");
+        Schedule schedule4 = newScheduleForTest(4L, 3L, "USER", "kimuser", 2L, "개발팀", "REJECTED", "휴가");
+        Schedule schedule5 = newScheduleForTest(5L, 2L, "MANAGER", "kimmanager", 1L, "총무팀", "FIRST", "휴가");
+        Schedule schedule6 = newScheduleForTest(6L, 1L, "CEO", "kimceo", null, null, "APPROVED", "휴가");
+        Schedule schedule7 = newScheduleForTest(7L, 3L, "USER", "kimuser", 2L, "개발팀", "LAST", "휴가");
 
         schedules.add(schedule3);
         schedules.add(schedule4);
@@ -94,13 +97,13 @@ public class ScheduleServiceTest extends DummyEntity {
 //        String role = "MANAGER";
 //        String teamName = "개발팀";
 
-        Schedule schedule1 = newScheduleForTest(1L,1L,"CEO",    "kimuceo",   null,null,   "APPROVED","병가");
-        Schedule schedule2 = newScheduleForTest(2L,2L,"MANAGER","kimmanager",1L,  "개발팀","APPROVED","휴가");
-        Schedule schedule3 = newScheduleForTest(3L,3L,"USER",   "kimuser",   1L,  "개발팀","APPROVED","병가");
-        Schedule schedule4 = newScheduleForTest(4L,3L,"USER",   "kimuser",   1L,  "개발팀","REJECTED","휴가");
-        Schedule schedule5 = newScheduleForTest(5L,2L,"MANAGER","kimmanager",1L,  "개발팀","FIRST",   "휴가");
-        Schedule schedule6 = newScheduleForTest(6L,1L,"CEO",    "kimceo",    null,null,   "APPROVED","휴가");
-        Schedule schedule7 = newScheduleForTest(7L,3L,"USER",   "kimuser",   1L,  "개발팀","LAST",    "휴가");
+        Schedule schedule1 = newScheduleForTest(1L, 1L, "CEO", "kimuceo", null, null, "APPROVED", "병가");
+        Schedule schedule2 = newScheduleForTest(2L, 2L, "MANAGER", "kimmanager", 1L, "개발팀", "APPROVED", "휴가");
+        Schedule schedule3 = newScheduleForTest(3L, 3L, "USER", "kimuser", 1L, "개발팀", "APPROVED", "병가");
+        Schedule schedule4 = newScheduleForTest(4L, 3L, "USER", "kimuser", 1L, "개발팀", "REJECTED", "휴가");
+        Schedule schedule5 = newScheduleForTest(5L, 2L, "MANAGER", "kimmanager", 1L, "개발팀", "FIRST", "휴가");
+        Schedule schedule6 = newScheduleForTest(6L, 1L, "CEO", "kimceo", null, null, "APPROVED", "휴가");
+        Schedule schedule7 = newScheduleForTest(7L, 3L, "USER", "kimuser", 1L, "개발팀", "LAST", "휴가");
 
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(schedule1);
@@ -112,15 +115,15 @@ public class ScheduleServiceTest extends DummyEntity {
         schedules.add(schedule7);
 
         List<Schedule> schedulesManager = new ArrayList<>();
-        if(role.equals("MANAGER")) {
-            for(Schedule schedule : schedules){
-                if(teamName.equals(schedule.getUser().getTeam().getTeamName())){
+        if (role.equals("MANAGER")) {
+            for (Schedule schedule : schedules) {
+                if (teamName.equals(schedule.getUser().getTeam().getTeamName())) {
                     schedulesManager.add(schedule);
                 }
             }
             Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
         }
-        if(role.equals("CEO")) {
+        if (role.equals("CEO")) {
             Mockito.when(scheduleRepository.findSchedulesWithName()).thenReturn(schedules);
         }
 
@@ -128,7 +131,7 @@ public class ScheduleServiceTest extends DummyEntity {
         ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId, role, teamName);
 
         // Then
-        if(role.equals("CEO")) {
+        if (role.equals("CEO")) {
             assertThat(scheduleListDTO).isNotNull();
             assertThat(scheduleListDTO.getScheduleList()).isNotNull();
             assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedules.size());
@@ -148,7 +151,7 @@ public class ScheduleServiceTest extends DummyEntity {
             assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
         }
 
-        if(role.equals("MANAGER")){
+        if (role.equals("MANAGER")) {
             assertThat(scheduleListDTO).isNotNull();
             assertThat(scheduleListDTO.getScheduleList()).isNotNull();
             assertThat(scheduleListDTO.getScheduleList().size()).isEqualTo(schedulesManager.size());
@@ -191,4 +194,37 @@ public class ScheduleServiceTest extends DummyEntity {
         assertThat(listOutDto.getScheduleList().get(3).getUser().getTeamName()).isEqualTo("D팀");
         assertThat(listOutDto.getScheduleList().get(1).getEndDate()).isEqualTo("2022-01-01T09:00:00");
     }
+
+//    @Test
+//    public void makeScheduleRequest_test() {
+//        // given
+//        MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
+//        makeScheduleRequestInDTO.setStartDate("2023-03-03T09:00:00");
+//        makeScheduleRequestInDTO.setEndDate("2023-03-03T12:00:00");
+//        makeScheduleRequestInDTO.setType(Type.HALFOFF.getType());
+//        makeScheduleRequestInDTO.setReason("병원 예약");
+//
+//        // given2
+//        Long userId = 1L;
+//
+//        // stub
+//        User user = newMockUser(userId, "이승민");
+//        Mockito.when(userRepository.findById(anyLong()))
+//                .thenReturn(Optional.of(user));
+//
+//        Schedule schedulePS = newMockSchedule(user);
+//        Mockito.when(scheduleRepository.save(any()))
+//                .thenReturn(schedulePS);
+//
+//        // when
+//        Schedule schedule = scheduleService.makeScheduleRequest(makeScheduleRequestInDTO, userId);
+//
+//        // then
+//        assertThat(schedule.getId()).isEqualTo(1L);
+//        assertThat(schedule.getStartDate()).isEqualTo(makeScheduleRequestInDTO.getStartDate());
+//        assertThat(schedule.getEndDate()).isEqualTo(makeScheduleRequestInDTO.getEndDate());
+//        assertThat(schedule.getType()).isEqualTo(makeScheduleRequestInDTO.getType());
+//        assertThat(schedule.getReason()).isEqualTo(makeScheduleRequestInDTO.getReason());
+//        assertThat(schedule.getUser().getId()).isEqualTo(userId);
+//    }
 }

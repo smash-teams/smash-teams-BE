@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.Type;
-import smash.teams.be.dto.admin.AdminResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.Status;
@@ -155,7 +155,7 @@ public class DummyEntity {
                 .build();
     }
 
-    public Schedule newScheduleForTest(Long scheduleId, Long userId, String userRole, String userName, Long teamId, String teamName, String scheduleStatus, String scheduleReason){
+    public Schedule newScheduleForTest(Long scheduleId, Long userId, String userRole, String userName, Long teamId, String teamName, String scheduleStatus, String scheduleReason) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return Schedule.builder()
                 .id(scheduleId)
@@ -177,8 +177,8 @@ public class DummyEntity {
                                 .build())
                         .name(userName)
                         .password(passwordEncoder.encode("1234"))
-                        .email(userName+"@gmail.com")
-                        .phoneNumber("010-"+userId+userId+userId+userId+"-"+userId+userId+userId+userId)
+                        .email(userName + "@gmail.com")
+                        .phoneNumber("010-" + userId + userId + userId + userId + "-" + userId + userId + userId + userId)
                         .role(userRole)
                         .status(Status.ACTIVE.getStatus())
                         .remain(20)
@@ -190,7 +190,7 @@ public class DummyEntity {
                 .build();
     }
 
-    public Schedule newScheduleForRepoTest(User user,String type, String status, String reason){
+    public Schedule newScheduleForRepoTest(User user, String type, String status, String reason) {
         return Schedule.builder()
                 .user(user)
                 .startDate(LocalDateTime.parse("2022-01-01T09:00:00"))
@@ -204,13 +204,13 @@ public class DummyEntity {
                 .build();
     }
 
-    public User newUserForRepoTest(Team team, String userName, String role){
+    public User newUserForRepoTest(Team team, String userName, String role) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .team(team)
                 .name(userName)
                 .password(passwordEncoder.encode("1234"))
-                .email(userName+"@gmail.com")
+                .email(userName + "@gmail.com")
                 .phoneNumber("010-1111-1111")
                 .role("USER")
                 .status("ACTIVATE")
@@ -268,7 +268,21 @@ public class DummyEntity {
         );
     }
 
-    public Schedule newMockScheduleWithUserWithTeam(Long scheduleId, Long userId, Long teamId, String userName, String teamName){
+    public Schedule newMockSchedule(User user) {
+        return Schedule.builder()
+                .id(1L)
+                .user(user)
+                .startDate(LocalDateTime.parse("2023-03-03T09:00:00"))
+                .endDate(LocalDateTime.parse("2023-03-03T12:00:00"))
+                .type(Type.HALFOFF.getType())
+                .status(smash.teams.be.model.schedule.Status.LAST.getStatus())
+                .reason("병원 예약")
+                .createdAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .updatedAt(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .build();
+    }
+
+    public Schedule newMockScheduleWithUserWithTeam(Long scheduleId, Long userId, Long teamId, String userName, String teamName) {
         return Schedule.builder()
                 .id(scheduleId)
                 .user(User.builder()
@@ -280,7 +294,7 @@ public class DummyEntity {
                                 .updatedAt(LocalDateTime.now())
                                 .build())
                         .name(userName)
-                        .email(userName+"@gmail.com")
+                        .email(userName + "@gmail.com")
                         .phoneNumber("010-1111-1111")
                         .role("USER")
                         .status("ACTIVATE")
@@ -290,7 +304,7 @@ public class DummyEntity {
                         .updatedAt(LocalDateTime.now())
                         .profileImage(null)
                         .build())
-                .startDate(LocalDateTime.parse("2022-01-01T09:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))     )
+                .startDate(LocalDateTime.parse("2022-01-01T09:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
                 .endDate(LocalDateTime.parse("2022-01-01T09:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
                 .type("DAYOFF")
                 .status("APPROVED")

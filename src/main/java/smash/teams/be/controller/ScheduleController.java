@@ -14,6 +14,7 @@ import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.dto.ResponseDTO;
 import smash.teams.be.dto.schedule.ScheduleResponse;
+import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.service.ScheduleService;
 
 import javax.validation.Valid;
