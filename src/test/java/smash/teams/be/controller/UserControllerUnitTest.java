@@ -97,7 +97,7 @@ public class UserControllerUnitTest extends DummyEntity {
         // stub
         User ssar = newMockUserUpdate(1L, "cos");
         UserResponse.UpdateOutDTO updateOutDTO = new UserResponse.UpdateOutDTO(ssar);
-        Mockito.when(userService.update(any(), any(), any())).thenReturn(updateOutDTO);
+        Mockito.when(userService.update(any(), any())).thenReturn(updateOutDTO);
 
         // when
         ResultActions resultActions = mvc.perform(post("/auth/user/" + id + "/upload").

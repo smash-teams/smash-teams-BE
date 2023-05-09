@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
@@ -54,5 +55,35 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(findMyInfoOutDTO.getId()).isEqualTo(1L);
         Assertions.assertThat(findMyInfoOutDTO.getName()).isEqualTo("cos");
         Assertions.assertThat(findMyInfoOutDTO.getEmail()).isEqualTo("cos@gmail.com");
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
+        updateInDto.setCurPassword("1234");
+        updateInDto.setNewPassword("5678");
+        updateInDto.setPhoneNumber("010-8765-4321");
+        updateInDto.setStartWork("2023-05-10");
+        updateInDto.setProfileImage("사진 33"); // request
+
+        // stub
+        User ssar = newMockUserUpdate(1L, "ssar"); // DB
+        userRepository.save(ssar);
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.ofNullable(ssar));
+
+        String requestBody = om.writeValueAsString(updateInDto);
+        System.out.println("테스트1 : " + requestBody);
+
+        // when
+        UserResponse.UpdateOutDTO updateOutDTO = userService.update(id, updateInDto);
+        String responseBody = om.writeValueAsString(updateOutDTO);
+        System.out.println("테스트2 : " + responseBody);
+
+        // then
+        Assertions.assertThat(updateOutDTO.getPhoneNumber()).isEqualTo("010-8765-4321");
+        Assertions.assertThat(updateOutDTO.getProfileImage()).isEqualTo("사진 33");
     }
 }

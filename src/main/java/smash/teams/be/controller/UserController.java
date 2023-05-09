@@ -41,8 +41,11 @@ public class UserController {
                                     @RequestBody @Valid UserRequest.UpdateInDto updateInDto,
                                     Errors errors,
                                     @AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
+        if (id.longValue() != myUserDetails.getUser().getId()) {
+            throw new Exception403("권한이 없습니다.");
+        }
 
-        UserResponse.UpdateOutDTO updateOutDTO  = userService.update(id, myUserDetails.getUser().getId(), updateInDto);
+        UserResponse.UpdateOutDTO updateOutDTO  = userService.update(myUserDetails.getUser().getId(), updateInDto);
         System.out.println(new ObjectMapper().writeValueAsString(updateOutDTO));
         ResponseDTO<?> responseDTO = new ResponseDTO<>(updateOutDTO);
         return ResponseEntity.ok().body(responseDTO);
