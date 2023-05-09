@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.exception.Exception400;
+import smash.teams.be.core.exception.Exception404;
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.dto.admin.AdminResponse;
@@ -31,7 +32,7 @@ public class AdminService {
         Team teamPS = null;
         if (!teamName.isBlank()) {
             teamPS = teamRepository.findByTeamName(teamName).orElseThrow(
-                    () -> new Exception400(teamName, "존재하지 않는 팀입니다.")
+                    () -> new Exception404("존재하지 않는 팀입니다.")
             );
         }
         Page<User> userPGPS = null;
@@ -83,10 +84,10 @@ public class AdminService {
     @Transactional
     public void updateAuthAndTeam(AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO) {
         User userPS = userRepository.findById(updateAuthAndTeamInDTO.getUserId()).orElseThrow(
-                () -> new Exception400(String.valueOf(updateAuthAndTeamInDTO.getUserId()), "존재하지 않는 사용자입니다.")
+                () -> new Exception404("존재하지 않는 사용자입니다.")
         );
         Team teamPS = teamRepository.findByTeamName(updateAuthAndTeamInDTO.getTeamName()).orElseThrow(
-                () -> new Exception400(updateAuthAndTeamInDTO.getTeamName(), "존재하지 않는 팀입니다.")
+                () -> new Exception404("존재하지 않는 팀입니다.")
         );
         try {
             // 권한 변경
@@ -120,7 +121,7 @@ public class AdminService {
     @Transactional
     public void delete(Long id) {
         Team teamPS = teamRepository.findById(id).orElseThrow(
-                () -> new Exception400(String.valueOf(id), "존재하지 않는 팀입니다.")
+                () -> new Exception404("존재하지 않는 팀입니다.")
         );
         // 팀에 소속된 인원이 1명이라도 있을 경우 팀 삭제 불가
         int count = userRepository.calculateCountByTeamId(teamPS.getId());

@@ -87,7 +87,7 @@ public class ScheduleService {
     @Transactional
     public void makeScheduleRequest(MakeScheduleRequestInDTO makeScheduleRequestInDTO, Long userId) {
         User userPS = userRepository.findById(userId).orElseThrow(
-                () -> new Exception400(String.valueOf(userId), "존재하지 않는 사용자입니다.")
+                () -> new Exception404("존재하지 않는 사용자입니다.")
         );
         String role = userPS.getRole();
         if (role.equals(Role.ADMIN.getRole())) {
