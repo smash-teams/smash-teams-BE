@@ -24,4 +24,18 @@ public class UserResponse {
             this.profileImage = user.getProfileImage();
         }
     }
+
+    @Getter
+    @Setter
+    public static class UpdateOutDTO {
+        private String phoneNumber;
+        private String startWork;
+        private String profileImage;
+
+        public UpdateOutDTO(User user) {
+            this.phoneNumber = user.getPhoneNumber();
+            this.startWork = DateUtil.toStringFormat(user.getStartWork());
+            this.profileImage = user.getProfileImage();
+        }
+    }
 }

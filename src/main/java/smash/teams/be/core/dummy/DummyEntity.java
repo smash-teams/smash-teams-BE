@@ -330,4 +330,21 @@ public class DummyEntity {
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
+
+    public User newMockUserUpdate(Long id, String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .id(id)
+                .name(name)
+                .password(passwordEncoder.encode("5678"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.USER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .profileImage("사진 2")
+                .startWork(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }
