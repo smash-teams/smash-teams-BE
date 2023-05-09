@@ -104,6 +104,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.teamList[2].teamId").value(3L));
         resultActions.andExpect(jsonPath("$.data.teamList[2].teamName").value("마케팅팀"));
         resultActions.andExpect(jsonPath("$.data.teamList[2].teamCount").value(1));
+
         resultActions.andExpect(jsonPath("$.data.userList[0].userId").value(1L));
         resultActions.andExpect(jsonPath("$.data.userList[0].profileImage").isEmpty());
         resultActions.andExpect(jsonPath("$.data.userList[0].name").value("이승민"));
@@ -112,6 +113,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.userList[0].startWork").value(LocalDateTime.now().toLocalDate().toString()));
         resultActions.andExpect(jsonPath("$.data.userList[0].teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.userList[0].role").value(Role.USER.getRole()));
+
         resultActions.andExpect(jsonPath("$.data.userList[1].userId").value(2L));
         resultActions.andExpect(jsonPath("$.data.userList[1].profileImage").isEmpty());
         resultActions.andExpect(jsonPath("$.data.userList[1].name").value("이윤경"));
@@ -120,6 +122,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.userList[1].startWork").value(LocalDateTime.now().toLocalDate().toString()));
         resultActions.andExpect(jsonPath("$.data.userList[1].teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.userList[1].role").value(Role.USER.getRole()));
+
         resultActions.andExpect(jsonPath("$.data.userList[2].userId").value(3L));
         resultActions.andExpect(jsonPath("$.data.userList[2].profileImage").isEmpty());
         resultActions.andExpect(jsonPath("$.data.userList[2].name").value("이한울"));
@@ -128,6 +131,7 @@ public class AdminControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.userList[2].startWork").value(LocalDateTime.now().toLocalDate().toString()));
         resultActions.andExpect(jsonPath("$.data.userList[2].teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.userList[2].role").value(Role.USER.getRole()));
+
         resultActions.andExpect(jsonPath("$.data.size").value(12));
         resultActions.andExpect(jsonPath("$.data.totalElements").value(3L));
         resultActions.andExpect(jsonPath("$.data.totalPages").value(1));
@@ -157,7 +161,7 @@ public class AdminControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(patch("/auth/admin/info")
+                .perform(patch("/auth/admin/user")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
