@@ -333,10 +333,11 @@ public class DummyEntity {
 
     public User newMockUserUpdate(Long id, String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         return User.builder()
                 .id(id)
                 .name(name)
-                .password(passwordEncoder.encode("5678"))
+                .password(passwordEncoder.encode("1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
