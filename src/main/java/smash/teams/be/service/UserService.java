@@ -17,14 +17,19 @@ import smash.teams.be.model.user.UserRepository;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Log
     public UserResponse.findMyInfoOutDTO findMyId(Long id) {
-        User userPS = userRepository.findById(id).orElseThrow(
-                () -> new Exception400("id", "해당 유저를 찾을 수 없습니다")
-        );
-        return new UserResponse.findMyInfoOutDTO(userPS);
+        try {
+            User userPS = userRepository.findById(id).orElseThrow(
+                    () -> new Exception400("id", "해당 유저를 찾을 수 없습니다")
+            );
+            return new UserResponse.findMyInfoOutDTO(userPS);
+        } catch (Exception e) {
+            throw new Exception500("내 정보 조회 실패 : " + e.getMessage());
+        }
     }
 
     @Log
