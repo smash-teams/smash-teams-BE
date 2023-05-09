@@ -92,6 +92,22 @@ public class DummyEntity {
                 .build();
     }
 
+    public User newManagerWithTeam(String name, Team team) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .team(team)
+                .name(name)
+                .password(passwordEncoder.encode("1234"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.MANAGER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
+                .build();
+    }
+
+
     public User newMockUser(Long id, String name) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()

@@ -30,7 +30,7 @@ public class AdminController {
     }
 
     @Log
-    @PatchMapping("/info")
+    @PatchMapping("/user")
     public ResponseEntity<?> updateAuthAndTeam(@RequestBody @Valid AdminRequest.UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO, Errors errors) {
         adminService.updateAuthAndTeam(updateAuthAndTeamInDTO);
 

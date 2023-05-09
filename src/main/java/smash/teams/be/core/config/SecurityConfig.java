@@ -68,25 +68,24 @@ public class SecurityConfig {
 
         // 8. 인증 실패 처리
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-            log.warn("인증되지 않은 사용자가 자원에 접근하려 합니다 : " + authException.getMessage());
-            FilterResponseUtil.unAuthorized(response, new Exception401("인증되지 않았습니다"));
+            log.warn("인증되지 않은 사용자가 자원에 접근하려 합니다. : " + authException.getMessage());
+            FilterResponseUtil.unAuthorized(response, new Exception401("인증되지 않았습니다."));
         });
 
         // 10. 권한 실패 처리
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
-            log.warn("권한이 없는 사용자가 자원에 접근하려 합니다 : " + accessDeniedException.getMessage());
-            FilterResponseUtil.forbidden(response, new Exception403("권한이 없습니다"));
+            log.warn("권한이 없는 사용자가 자원에 접근하려 합니다. : " + accessDeniedException.getMessage());
+            FilterResponseUtil.forbidden(response, new Exception403("권한이 없습니다."));
         });
 
         // 11. 인증, 권한 필터 설정
         http.authorizeRequests(
-                authorize -> authorize.antMatchers("/auth/**").authenticated()
-                        .antMatchers("/user/**")
-                        .access("hasRole('CEO') or hasRole('MANAGER') or hasRole('USER')")
-                        .antMatchers("/super/**")
-                        .access("hasRole('CEO') or hasRole('MANAGER')")
-                        .antMatchers("/admin/**")
-                        .access("hasRole('ADMIN')")
+                authorize -> authorize
+                        .antMatchers("/auth/user**").access("hasRole('CEO') or hasRole('MANAGER') or hasRole('USER')")
+                        .antMatchers("/auth/super**").access("hasRole('CEO') or hasRole('MANAGER')")
+                        .antMatchers("/auth/admin**").access("hasRole('ADMIN')")
+                        .antMatchers("/auth/**").authenticated()
+                        .anyRequest().permitAll()
         );
 
         return http.build();
