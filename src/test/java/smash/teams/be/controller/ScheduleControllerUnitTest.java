@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -18,9 +19,11 @@ import smash.teams.be.core.advice.ValidAdvice;
 import smash.teams.be.core.config.FilterRegisterConfig;
 import smash.teams.be.core.config.SecurityConfig;
 import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.dto.schedule.ScheduleRequest.MakeScheduleRequestInDTO;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
 import smash.teams.be.model.schedule.Schedule;
+import smash.teams.be.model.schedule.Type;
 import smash.teams.be.service.ScheduleService;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -165,5 +169,26 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("유저A"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.teamName").value("C팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[3].reason").value("여행"));
+    }
+
+    @WithMockUser
+    @Test
+    public void makeScheduleRequest_test() throws Exception {
+        // given
+        MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
+        makeScheduleRequestInDTO.setStartDate("2023-03-03T09:00:00");
+        makeScheduleRequestInDTO.setEndDate("2023-03-03T12:00:00");
+        makeScheduleRequestInDTO.setType(Type.HALFOFF.getType());
+        makeScheduleRequestInDTO.setReason("병원 예약");
+        String requestBody = om.writeValueAsString(makeScheduleRequestInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
     }
 }
