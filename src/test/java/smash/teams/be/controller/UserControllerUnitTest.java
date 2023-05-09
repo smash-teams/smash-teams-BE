@@ -44,7 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         controllers = {UserController.class}
 )
 public class UserControllerUnitTest extends DummyEntity {
-
     @Autowired
     private MockMvc mvc;
     @Autowired
