@@ -288,6 +288,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("성공"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("사용자 권한/팀 변경 실패(404)")
@@ -314,5 +315,6 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("notFound"));
         resultActions.andExpect(jsonPath("$.data").value("존재하지 않는 팀입니다."));
         resultActions.andExpect(status().isNotFound());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
