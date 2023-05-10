@@ -1,6 +1,7 @@
 package smash.teams.be.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,15 @@ import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.errorLog.ErrorLogRepository;
+import smash.teams.be.model.team.Team;
+import smash.teams.be.model.user.Role;
+import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 import smash.teams.be.service.UserService;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -108,6 +115,44 @@ public class UserControllerUnitTest extends DummyEntity {
         // then
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-1234-5678"));
         resultActions.andExpect(jsonPath("$.data.profileImage").value("사진 2"));
+        resultActions.andExpect(status().isOk());
+    }
+
+    @DisplayName("join 성공")
+    @Test
+    public void join_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("1234");
+        joinInDTO.setEmail("user7@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        Team 개발팀 = Team.builder().teamName("개발팀").id(1L)
+                .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+
+        User 권으뜸 = User.builder().id(1L).name("권으뜸").email("user7@gmail.com")
+                .status(Status.ACTIVE.getStatus()).team(개발팀)
+                .startWork(LocalDateTime.now())
+                .phoneNumber("010-1111-1111").role(Role.USER.getRole()).remain(20).profileImage(null).build();
+
+        UserResponse.JoinOutDTO joinOutDTO = new UserResponse.JoinOutDTO(권으뜸);
+        Mockito.when(userService.join(any())).thenReturn(joinOutDTO);
+
+        // 테스트진행
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // 검증해볼께
+        resultActions.andExpect(jsonPath("$.data.id").value(1L));
+        resultActions.andExpect(jsonPath("$.data.name").value("권으뜸"));
+        resultActions.andExpect(jsonPath("$.data.email").value("user7@gmail.com"));
         resultActions.andExpect(status().isOk());
     }
 }
