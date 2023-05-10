@@ -88,6 +88,7 @@ public class ScheduleService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public ScheduleResponse.ListOutDto findByScheduleList() {
         List<Schedule> scheduleListPS = scheduleRepository.findSchedulesWithName();
         if (scheduleListPS == null) {
