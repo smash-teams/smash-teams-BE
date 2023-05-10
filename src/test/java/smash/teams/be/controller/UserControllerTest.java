@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
@@ -81,6 +82,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.id").value(5));
         resultActions.andExpect(jsonPath("$.data.name").value("Ceo"));
         resultActions.andExpect(jsonPath("$.data.email").value("Ceo@gmail.com"));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("내 정보 조회 실패")
@@ -99,6 +101,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(403));
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("개인정보 수정 성공")
@@ -130,6 +133,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
         resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13T00:00:00"));
         resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("개인정보 수정 실패")
@@ -159,5 +163,6 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(403));
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
