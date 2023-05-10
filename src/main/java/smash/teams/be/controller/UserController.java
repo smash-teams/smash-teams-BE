@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import smash.teams.be.core.annotation.ErrorLog;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
@@ -27,12 +28,22 @@ public class UserController {
 
     private final UserService userService;
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserRequest.LoginInDTO loginInDTO, Errors errors) {
         UserResponse.LoginOutDTO loginOutDTO = userService.login(loginInDTO);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(loginOutDTO.getLoginInfoOutDTO());
         return ResponseEntity.ok().header(JwtProvider.HEADER, loginOutDTO.getJwt()).body(responseDTO);
+    }
+
+    @ErrorLog
+    @Log
+    @PostMapping("/join")
+    public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinInDTO joinInDTO, Errors errors) {
+        UserResponse.JoinOutDTO joinOutDTO = userService.join(joinInDTO);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>();
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/auth/user/{id}")

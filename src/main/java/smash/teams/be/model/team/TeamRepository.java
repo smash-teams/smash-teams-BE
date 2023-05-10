@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("select t from Team t where t.teamName = :teamName")
     Optional<Team> findByTeamName(@Param("teamName") String teamName);
+
+    @Query("select t from Team t where t.teamName = :teamName")
+    Team findTeamByTeamName(@Param("teamName") String teamName);
 }

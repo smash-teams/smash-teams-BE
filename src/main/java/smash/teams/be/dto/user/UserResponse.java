@@ -17,6 +17,20 @@ public class UserResponse {
         }
     }
 
+    @Setter
+    @Getter
+    public static class JoinOutDTO {
+        private Long id;
+        private String name;
+        private String email;
+
+        public JoinOutDTO(User user) {
+            this.id = user.getId();
+            this.name = user.getName();
+            this.email = user.getEmail();
+        }
+    }
+
     @Getter
     @Setter
     public static class LoginInfoOutDTO {

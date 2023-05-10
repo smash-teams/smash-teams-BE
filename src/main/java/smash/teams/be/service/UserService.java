@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,23 +15,33 @@ import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.exception.Exception400;
+
 import smash.teams.be.core.exception.Exception401;
+
+import smash.teams.be.core.exception.Exception404;
+
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
+
+import smash.teams.be.model.team.Team;
+
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
+
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
+    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthenticationManager authenticationManager;
+
 
     @Value("${file.path}")
     private String uploadFolder;
@@ -46,6 +58,34 @@ public class UserService {
             return new UserResponse.LoginOutDTO(new UserResponse.LoginInfoOutDTO(myUserDetails.getUser()), jwt);
         } catch (Exception e) {
             throw new Exception401("인증되지 않았습니다.");
+        }
+    }
+
+    @Log
+    @Transactional
+    public UserResponse.JoinOutDTO join(UserRequest.JoinInDTO joinInDTO){
+        Optional<User> userOP = userRepository.findByName(joinInDTO.getName());
+        Team teamOP = teamRepository.findTeamByTeamName(joinInDTO.getTeamName());
+
+        if(userOP.isPresent()){
+            // 이 부분이 try catch 안에 있으면 Exception500에게 제어권을 뺏긴다.
+            throw new Exception400("name", "이름이 존재합니다");
+        }
+
+        if(teamOP==null){
+            throw new Exception404(joinInDTO.getTeamName()+"이 존재하지 않습니다");
+        }
+
+        String encPassword = bCryptPasswordEncoder.encode(joinInDTO.getPassword()); // 60Byte
+        joinInDTO.setPassword(encPassword);
+        System.out.println("encPassword : "+encPassword);
+
+        // 디비 save 되는 쪽만 try catch로 처리하자.
+        try {
+            User userPS = userRepository.save(joinInDTO.toEntity(teamOP));
+            return new UserResponse.JoinOutDTO(userPS);
+        }catch (Exception e){
+            throw new Exception500("회원가입 실패 : "+e.getMessage());
         }
     }
 
