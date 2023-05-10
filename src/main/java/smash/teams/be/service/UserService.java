@@ -21,6 +21,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Log
+    @Transactional(readOnly = true)
     public UserResponse.findMyInfoOutDTO findMyId(Long id) {
         try {
             User userPS = userRepository.findById(id).orElseThrow(

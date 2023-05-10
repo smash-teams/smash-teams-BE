@@ -66,4 +66,8 @@ public class Schedule {
     public void changeStatus(String status){
         this.status = status;
     }
+
+    public void onApprove(){
+        this.finishedAt = LocalDateTime.now();
+    }
 }
