@@ -10,17 +10,23 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
+import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static smash.teams.be.dto.user.UserRequest.LoginInDTO;
+import static smash.teams.be.dto.user.UserRequest.UpdateInDTO;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +53,7 @@ public class UserServiceTest extends DummyEntity {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(cos));
 
         // when
-        UserResponse.findMyInfoOutDTO findMyInfoOutDTO = userService.findMyId(id);
+        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = userService.findMyId(id);
         String responseBody = om.writeValueAsString(findMyInfoOutDTO);
         System.out.println("테스트2 : " + responseBody);
 
@@ -62,23 +68,23 @@ public class UserServiceTest extends DummyEntity {
         // given
         Long id = 1L;
 
-        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
-        updateInDto.setCurPassword("1234");
-        updateInDto.setNewPassword("5678");
-        updateInDto.setPhoneNumber("010-8765-4321");
-        updateInDto.setStartWork("2023-05-10");
-        updateInDto.setProfileImage("사진 33"); // request
+        UpdateInDTO updateInDTO = new UpdateInDTO();
+        updateInDTO.setCurPassword("dltmdals1234");
+        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setPhoneNumber("010-8765-4321");
+        updateInDTO.setStartWork("2023-05-10");
+        updateInDTO.setProfileImage("사진 33"); // request
 
         // stub
         User ssar = newMockUserUpdate(1L, "ssar"); // DB
         userRepository.save(ssar);
         Mockito.when(userRepository.findById(id)).thenReturn(Optional.ofNullable(ssar));
 
-        String requestBody = om.writeValueAsString(updateInDto);
+        String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
 
         // when
-        UserResponse.UpdateOutDTO updateOutDTO = userService.update(id, updateInDto);
+        UserResponse.UpdateOutDTO updateOutDTO = userService.update(id, updateInDTO);
         String responseBody = om.writeValueAsString(updateOutDTO);
         System.out.println("테스트2 : " + responseBody);
 

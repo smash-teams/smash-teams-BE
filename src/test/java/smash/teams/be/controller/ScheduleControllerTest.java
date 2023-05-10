@@ -245,7 +245,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
 
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(1));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.teamName").value("개발팀"));
@@ -321,7 +321,7 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다"));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 //        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+//        resultActions.andExpect(jsonPath("$.msg").value("ok"));
 //
 //        resultActions.andExpect(jsonPath("$.data.id").value(5));
 //        resultActions.andExpect(jsonPath("$.data.name").value("Ceo"));
@@ -351,7 +351,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }

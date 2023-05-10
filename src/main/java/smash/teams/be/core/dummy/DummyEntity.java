@@ -82,7 +82,7 @@ public class DummyEntity {
         return User.builder()
                 .team(team)
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("seungmin1234"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)

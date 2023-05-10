@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
-import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.UserQueryRepository;
 import smash.teams.be.model.user.UserRepository;
 
@@ -77,7 +76,7 @@ public class UserControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
 
         resultActions.andExpect(jsonPath("$.data.id").value(5));
         resultActions.andExpect(jsonPath("$.data.name").value("Ceo"));
@@ -104,20 +103,20 @@ public class UserControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("개인정보 수정 성공")
+    @DisplayName("개인정보 수정 ok")
     @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void update_test() throws Exception {
         // given
         Long id = 1L;
-        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
-        updateInDto.setCurPassword("1234");
-        updateInDto.setNewPassword("5678");
-        updateInDto.setPhoneNumber("010-8765-4321");
-        updateInDto.setStartWork("2023-05-13");
-        updateInDto.setProfileImage("User1의 사진!!");
+        UserRequest.UpdateInDTO updateInDTO = new UserRequest.UpdateInDTO();
+        updateInDTO.setCurPassword("dltmdals1234");
+        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setPhoneNumber("010-8765-4321");
+        updateInDTO.setStartWork("2023-05-13");
+        updateInDTO.setProfileImage("User1의 사진!!");
 
-        String requestBody = om.writeValueAsString(updateInDto);
+        String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
 
         // when
@@ -129,7 +128,7 @@ public class UserControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
         resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13T00:00:00"));
         resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
@@ -142,14 +141,14 @@ public class UserControllerTest extends RestDoc {
     public void update_fail_test() throws Exception {
         // given
         Long id = 2L;
-        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
-        updateInDto.setCurPassword("1234");
-        updateInDto.setNewPassword("5678");
-        updateInDto.setPhoneNumber("010-8765-4321");
-        updateInDto.setStartWork("2023-05-13");
-        updateInDto.setProfileImage("User1의 사진!!");
+        UserRequest.UpdateInDTO updateInDTO = new UserRequest.UpdateInDTO();
+        updateInDTO.setCurPassword("dltmdals1234");
+        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setPhoneNumber("010-8765-4321");
+        updateInDTO.setStartWork("2023-05-13");
+        updateInDTO.setProfileImage("User1의 사진!!");
 
-        String requestBody = om.writeValueAsString(updateInDto);
+        String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
 
         // when

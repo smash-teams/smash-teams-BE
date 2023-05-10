@@ -108,7 +108,7 @@ public class AdminControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
 
         resultActions.andExpect(jsonPath("$.data.teamList[0].teamId").value(1L));
         resultActions.andExpect(jsonPath("$.data.teamList[0].teamName").value("개발팀"));
@@ -286,7 +286,7 @@ public class AdminControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -338,7 +338,7 @@ public class AdminControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data.teamId").value(5L));
         resultActions.andExpect(jsonPath("$.data.teamName").value("영업팀"));
         resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
@@ -387,7 +387,7 @@ public class AdminControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);

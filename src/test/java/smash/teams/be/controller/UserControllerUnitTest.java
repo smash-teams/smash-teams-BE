@@ -63,7 +63,7 @@ public class UserControllerUnitTest extends DummyEntity {
         Long id = 1L;
         User cosPS = newMockUser(1L, "cos");
 
-        UserResponse.findMyInfoOutDTO findMyInfoOutDTO = new UserResponse.findMyInfoOutDTO(cosPS);
+        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = new UserResponse.FindMyInfoOutDTO(cosPS);
         System.out.println("테스트1 : " + findMyInfoOutDTO);
         Mockito.when(userService.findMyId(any())).thenReturn(findMyInfoOutDTO);
 
@@ -84,14 +84,14 @@ public class UserControllerUnitTest extends DummyEntity {
     public void update_test() throws Exception {
         // given
         Long id = 1L;
-        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
-        updateInDto.setCurPassword("1234");
-        updateInDto.setNewPassword("5678");
-        updateInDto.setPhoneNumber("010-1234-5678");
-        updateInDto.setStartWork("2023-05-09");
-        updateInDto.setProfileImage("사진 2");
+        UserRequest.UpdateInDTO updateInDTO = new UserRequest.UpdateInDTO();
+        updateInDTO.setCurPassword("dltmdals1234");
+        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setPhoneNumber("010-1234-5678");
+        updateInDTO.setStartWork("2023-05-09");
+        updateInDTO.setProfileImage("사진 2");
 
-        String requestBody = om.writeValueAsString(updateInDto);
+        String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
 
         // stub
