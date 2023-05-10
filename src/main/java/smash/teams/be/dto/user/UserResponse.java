@@ -2,25 +2,59 @@ package smash.teams.be.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import smash.teams.be.core.util.DateUtil;
 import smash.teams.be.model.user.User;
 
 public class UserResponse {
+    @Getter
+    @Setter
+    public static class LoginOutDTO {
+        private LoginInfoOutDTO loginInfoOutDTO;
+        private String jwt;
+
+        public LoginOutDTO(LoginInfoOutDTO loginInfoOutDTO, String jwt) {
+            this.loginInfoOutDTO = loginInfoOutDTO;
+            this.jwt = jwt;
+        }
+    }
 
     @Getter
     @Setter
-    public static class findMyInfoOutDTO {
+    public static class LoginInfoOutDTO {
+        private String name;
+        private String email;
+        private String phoneNumber;
+        private String profileImage;
+        private String startWork;
+        private Double remain;
+        private String teamName;
+        private String role;
+
+        public LoginInfoOutDTO(User user) {
+            this.name = user.getName();
+            this.email = user.getEmail();
+            this.phoneNumber = user.getPhoneNumber();
+            this.profileImage = user.getProfileImage();
+            this.startWork = user.getStartWork().toLocalDate().toString();
+            this.remain = user.getRemain();
+            this.teamName = user.getTeam().getTeamName();
+            this.role = user.getRole();
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class FindMyInfoOutDTO {
         private Long id;
         private String name;
         private String email;
         private String startWork;
         private String profileImage;
 
-        public findMyInfoOutDTO(User user) {
+        public FindMyInfoOutDTO(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.email = user.getEmail();
-            this.startWork = DateUtil.toStringFormat(user.getStartWork());
+            this.startWork = user.getStartWork().toLocalDate().toString();
             this.profileImage = user.getProfileImage();
         }
     }
@@ -34,7 +68,7 @@ public class UserResponse {
 
         public UpdateOutDTO(User user) {
             this.phoneNumber = user.getPhoneNumber();
-            this.startWork = DateUtil.toStringFormat(user.getStartWork());
+            this.startWork = user.getStartWork().toLocalDate().toString();
             this.profileImage = user.getProfileImage();
         }
     }

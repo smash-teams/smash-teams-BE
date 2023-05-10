@@ -41,7 +41,7 @@ public class User {
     private String status;
 
     @Column(nullable = false, length = 10)
-    private double remain;
+    private Double remain;
 
     @Column(nullable = false)
     private LocalDateTime startWork;

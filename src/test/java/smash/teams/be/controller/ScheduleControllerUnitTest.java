@@ -164,7 +164,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
     }
 
     @WithMockUserWithTeam(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamName = "개발팀")
