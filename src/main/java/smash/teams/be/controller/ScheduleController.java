@@ -72,7 +72,7 @@ public class ScheduleController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping("/auth/super/schedule/order")
+    @PostMapping("/auth/super/schedule")
     public ResponseEntity<?> orderSchedule(@RequestBody @Valid ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO,
                                            @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
