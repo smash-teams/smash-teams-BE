@@ -32,7 +32,7 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     @Log
-    @Transactional
+    @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleListDTO getScheduleList(Long userId) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
         if (schedules.isEmpty()) {
@@ -47,7 +47,7 @@ public class ScheduleService {
         return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleListDTO getScheduleListForManage(User user) {
 
         if(user.getRole().equals(Role.USER.getRole()) || user.getRole().equals(Role.ADMIN.getRole())){
@@ -211,6 +211,7 @@ public class ScheduleService {
                     if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
                         try {
                             schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            schedulePS.onApprove();
                             schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-1);
                             Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
                             return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
@@ -229,6 +230,7 @@ public class ScheduleService {
                     if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
                         try {
                             schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            schedulePS.onApprove();
                             schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-0.5);
                             Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
                             return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
@@ -247,6 +249,7 @@ public class ScheduleService {
                     if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
                         try {
                             schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            schedulePS.onApprove();
                             Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
                             return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
                         } catch (Exception e) {
@@ -265,6 +268,7 @@ public class ScheduleService {
                 if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
                     try {
                         schedulePS.changeStatus(Status.REJECTED.getStatus());
+                        schedulePS.onApprove();
                         Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
                         return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
                     }catch (Exception e){
