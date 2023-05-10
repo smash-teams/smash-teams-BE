@@ -2,6 +2,7 @@ package smash.teams.be.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,34 +10,62 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
+
+import org.springframework.http.MediaType;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+
 import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
+
+import org.springframework.test.web.servlet.ResultActions;
+
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.core.util.FileUtil;
+import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
+
 import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
 import java.time.LocalDateTime;
+
+import smash.teams.be.model.team.Team;
+import smash.teams.be.model.team.TeamRepository;
+import smash.teams.be.model.user.Role;
+import smash.teams.be.model.user.Status;
+import smash.teams.be.model.user.User;
+import smash.teams.be.model.user.UserRepository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static smash.teams.be.core.auth.jwt.JwtProvider.verify;
 import static smash.teams.be.dto.user.UserRequest.LoginInDTO;
 import static smash.teams.be.dto.user.UserRequest.UpdateInDTO;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -46,6 +75,8 @@ public class UserServiceTest extends DummyEntity {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private TeamRepository teamRepository;
     @Mock
     private AuthenticationManager authenticationManager;
     @Spy
@@ -134,6 +165,7 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(updateOutDTO.getProfileImage()).isEqualTo("사진 33");
     }
 
+
 //    @Test
 //    public void uploadImage_test() {
 //        // given
@@ -155,4 +187,43 @@ public class UserServiceTest extends DummyEntity {
 //        assertThat(result.getId()).isEqualTo(1L);
 //        assertThat(result.getProfileImage()).isNotNull();
 //    }
+
+
+    @DisplayName("회원가입 성공")
+    @Test
+    public void join_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("1234");
+        joinInDTO.setEmail("user7777777@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        Team 개발팀 = Team.builder().teamName("개발팀").id(1L)
+                .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+
+        User 권으뜸 = User.builder().id(1L).name("권으뜸").email("user7777777@gmail.com")
+                .status(Status.ACTIVE.getStatus()).team(개발팀)
+                .startWork(LocalDate.parse("2020-05-01", DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay())
+                .phoneNumber("010-1111-1111").role(Role.USER.getRole()).remain(20).profileImage(null).build();
+
+        // stub 1
+        Mockito.when(userRepository.findByName(any())).thenReturn(Optional.empty());
+        Mockito.when(teamRepository.findTeamByTeamName(any())).thenReturn(개발팀);
+
+        // stub 2
+        Mockito.when(userRepository.save(any())).thenReturn(권으뜸);
+
+        // when
+        UserResponse.JoinOutDTO joinOutDTO = userService.join(joinInDTO);
+
+        // then
+        Assertions.assertThat(joinOutDTO.getId()).isEqualTo(1L);
+        Assertions.assertThat(joinOutDTO.getName()).isEqualTo("권으뜸");
+        Assertions.assertThat(joinOutDTO.getEmail()).isEqualTo("user7777777@gmail.com");
+    }
+
 }
