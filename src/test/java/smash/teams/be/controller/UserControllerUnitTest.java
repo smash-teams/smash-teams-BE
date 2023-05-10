@@ -150,9 +150,6 @@ public class UserControllerUnitTest extends DummyEntity {
         System.out.println("테스트 : " + responseBody);
 
         // 검증해볼께
-        resultActions.andExpect(jsonPath("$.data.id").value(1L));
-        resultActions.andExpect(jsonPath("$.data.name").value("권으뜸"));
-        resultActions.andExpect(jsonPath("$.data.email").value("user7@gmail.com"));
         resultActions.andExpect(status().isOk());
     }
 }

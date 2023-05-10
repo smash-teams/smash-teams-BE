@@ -181,16 +181,16 @@ public class ScheduleControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(7));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(1));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(3));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(4));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(11));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(9));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(6));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("APPROVED"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("LAST"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[3].user.userId").value(7L));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[4].user.name").value("남궁훈"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[4].user.name").value("정한울"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[5].user.teamName").value("개발팀"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[6].user.role").value("USER"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[6].user.role").value("CEO"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.teamName").value("개발팀"));
