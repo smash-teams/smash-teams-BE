@@ -11,9 +11,7 @@ import smash.teams.be.core.exception.Exception404;
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.dto.schedule.ScheduleRequest.MakeScheduleRequestInDTO;
 import smash.teams.be.dto.schedule.ScheduleResponse;
-import smash.teams.be.model.schedule.Schedule;
-import smash.teams.be.model.schedule.ScheduleRepository;
-import smash.teams.be.model.schedule.Status;
+import smash.teams.be.model.schedule.*;
 import smash.teams.be.model.user.Role;
 import smash.teams.be.dto.schedule.ScheduleRequest;
 import smash.teams.be.dto.schedule.ScheduleResponse;
@@ -34,7 +32,7 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     @Log
-    @Transactional(readOnly = true)
+    @Transactional
     public ScheduleResponse.ScheduleListDTO getScheduleList(Long userId) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
         if (schedules.isEmpty()) {
@@ -49,8 +47,15 @@ public class ScheduleService {
         return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
     }
 
+    @Transactional
     public ScheduleResponse.ScheduleListDTO getScheduleListForManage(User user) {
-        if(user.getRole().equals("CEO")){
+
+        if(user.getRole().equals(Role.USER.getRole()) || user.getRole().equals(Role.ADMIN.getRole())){
+            throw new Exception403("권한이 없습니다");
+        }
+
+        if (user.getRole().equals(Role.CEO.getRole())) {
+
             List<Schedule> schedules = scheduleRepository.findSchedules();
 
             if (schedules.isEmpty()) {
@@ -66,8 +71,8 @@ public class ScheduleService {
             return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
         }
 
-        if(user.getRole().equals("MANAGER")){
-            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamName(user.getTeam().getTeamName());
+        if (user.getRole().equals(Role.MANAGER.getRole())) {
+            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamId(user.getTeam().getId());
 
             if (schedules.isEmpty()) {
                 throw new Exception404("스케쥴을 찾을 수 없습니다.");
@@ -78,10 +83,8 @@ public class ScheduleService {
                 ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
                 scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
             }
-
             return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
         }
-
         return null;
     }
 
@@ -117,7 +120,8 @@ public class ScheduleService {
         }
     }
 
-    public ScheduleResponse.OrderScheduleOutWithRemainDTO orderSchedule(ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO) {
+    @Transactional
+    public ScheduleResponse.OrderScheduleOutWithRemainDTO orderSchedule(User user, ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO) {
         Long scheduleId = orderScheduleInDTO.getScheduleId();
         String status = orderScheduleInDTO.getStatus();
 
@@ -127,89 +131,154 @@ public class ScheduleService {
             throw new Exception404("스케쥴을 찾을 수 없습니다.");
         }
 
-        if (status.equals("APPROVED")) {
-            if (schedulePS.getType().equals("DAYOFF")) {
-                if (schedulePS.getStatus().equals("FIRST")) {
-                    try {
-                        schedulePS.changeStatus("LAST");
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
+        if(user.getRole().equals(Role.MANAGER.getRole())){
+            if (status.equals(Status.APPROVED.getStatus())) {
+                if (schedulePS.getType().equals(Type.DAYOFF.getType())) {
+                    if (schedulePS.getStatus().equals(Status.FIRST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.LAST.getStatus());
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
+                    }
+                    if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
+                    }
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
-                if (schedulePS.getStatus().equals("LAST")) {
-                    try {
-                        schedulePS.changeStatus("APPROVED");
-                        schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-1);
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
+                if (schedulePS.getType().equals(Type.HALFOFF.getType())) {
+                    if (schedulePS.getStatus().equals(Status.FIRST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.LAST.getStatus());
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
+                    }
+                    if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
+                    }
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
-            }
-            if (schedulePS.getType().equals("HALFOFF")) {
-                if (schedulePS.getStatus().equals("FIRST")) {
-                    try {
-                        schedulePS.changeStatus("LAST");
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
+                if (schedulePS.getType().equals(Type.SHIFT.getType())) {
+                    if (schedulePS.getStatus().equals(Status.FIRST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.LAST.getStatus());
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
                     }
-                }
-                if (schedulePS.getStatus().equals("LAST")) {
-                    try {
-                        schedulePS.changeStatus("APPROVED");
-                        schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-0.5);
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
+                    if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
                     }
-                }
-            }
-            if (schedulePS.getType().equals("SHIFT")) {
-                if (schedulePS.getStatus().equals("FIRST")) {
-                    try {
-                        schedulePS.changeStatus("LAST");
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
-                    }
-                }
-                if (schedulePS.getStatus().equals("LAST")) {
-                    try {
-                        schedulePS.changeStatus("APPROVED");
-                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                    } catch (Exception e) {
-                        throw new Exception500("승인 실패 : " + e.getMessage());
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
             }
-            if(schedulePS.getStatus().equals("APPROVED") || schedulePS.getStatus().equals("REJECTED")){
-                throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
-            }
-        }
-        if(status.equals("REJECTED")){
-            if(schedulePS.getStatus().equals("FIRST") || schedulePS.getStatus().equals("LAST")){
-                try {
-                    schedulePS.changeStatus("REJECTED");
-                    Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
-                    return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
-                }catch (Exception e){
-                    throw new Exception500("거절 실패 : "+e.getMessage());
+            if(status.equals(Status.REJECTED.getStatus())){
+                if(schedulePS.getStatus().equals(Status.FIRST.getStatus())){
+                    try {
+                        schedulePS.changeStatus(Status.REJECTED.getStatus());
+                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                    }catch (Exception e){
+                        throw new Exception500("거절 실패 : "+e.getMessage());
+                    }
                 }
-            }
-            if(schedulePS.getStatus().equals("APPROVED") || schedulePS.getStatus().equals("REJECTED")){
-                throw new Exception400("스케쥴 승인 요청","이미 승인되었거나 거절된 스케쥴입니다");
+                if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
+                    throw new Exception403("권한이 없습니다");
+                }
+                if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                    throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                }
             }
         }
 
-        return null;
+        if(user.getRole().equals(Role.CEO.getRole())){
+            if (status.equals(Status.APPROVED.getStatus())) {
+                if (schedulePS.getType().equals(Type.DAYOFF.getType())) {
+                    if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-1);
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
+                    }
+                    if(schedulePS.getStatus().equals(Status.FIRST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
+                    }
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                    }
+                }
+                if (schedulePS.getType().equals(Type.HALFOFF.getType())) {
+                    if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            schedulePS.getUser().changeRemain(schedulePS.getUser().getRemain()-0.5);
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
+                    }
+                    if(schedulePS.getStatus().equals(Status.FIRST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
+                    }
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                    }
+                }
+                if (schedulePS.getType().equals(Type.SHIFT.getType())) {
+                    if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
+                        try {
+                            schedulePS.changeStatus(Status.APPROVED.getStatus());
+                            Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                            return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                        } catch (Exception e) {
+                            throw new Exception500("승인 실패 : " + e.getMessage());
+                        }
+                    }
+                    if(schedulePS.getStatus().equals(Status.FIRST.getStatus())){
+                        throw new Exception403("권한이 없습니다");
+                    }
+                    if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                    }
+                }
+            }
+            if(status.equals(Status.REJECTED.getStatus())){
+                if(schedulePS.getStatus().equals(Status.LAST.getStatus())){
+                    try {
+                        schedulePS.changeStatus(Status.REJECTED.getStatus());
+                        Schedule updatedSchedulePS = scheduleRepository.save(schedulePS);
+                        return new ScheduleResponse.OrderScheduleOutWithRemainDTO(updatedSchedulePS);
+                    }catch (Exception e){
+                        throw new Exception500("거절 실패 : "+e.getMessage());
+                    }
+                }
+                if(schedulePS.getStatus().equals(Status.FIRST.getStatus())){
+                    throw new Exception403("권한이 없습니다");
+                }
+                if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
+                    throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                }
+            }
+        }
+
+        throw new Exception403("권한이 없습니다");
     }
-
 }

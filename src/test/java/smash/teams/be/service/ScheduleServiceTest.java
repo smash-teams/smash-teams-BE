@@ -18,7 +18,10 @@ import smash.teams.be.dto.schedule.ScheduleRequest;
 import smash.teams.be.dto.schedule.ScheduleResponse;
 import smash.teams.be.model.schedule.Schedule;
 import smash.teams.be.model.schedule.ScheduleRepository;
+import smash.teams.be.model.schedule.Status;
+import smash.teams.be.model.schedule.Type;
 import smash.teams.be.model.team.Team;
+import smash.teams.be.model.user.Role;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
@@ -48,6 +51,7 @@ public class ScheduleServiceTest extends DummyEntity {
     @Spy
     private ObjectMapper om;
 
+    @DisplayName("개인 스케쥴 내역")
     @Test
     public void getScheduleList_test() {
         // given
@@ -93,7 +97,7 @@ public class ScheduleServiceTest extends DummyEntity {
         assertThat(scheduleListDTO.getScheduleList().get(2).getUser().getProfileImage()).isEqualTo(schedules.get(2).getUser().getProfileImage());
     }
 
-    @DisplayName("스케쥴 관리페이지 : 팀원 권한 조회 (같은 팀원 스케쥴)")
+    @DisplayName("스케쥴 관리페이지 : 팀장 권한 조회 (같은 팀원 스케쥴)")
     @Test
     public void getScheduleListForManage_case1_test() {
         // given
@@ -124,7 +128,7 @@ public class ScheduleServiceTest extends DummyEntity {
             }
         }
 
-        Mockito.when(scheduleRepository.findSchedulesByTeamName(any())).thenReturn(schedulesManager);
+        Mockito.when(scheduleRepository.findSchedulesByTeamId(any())).thenReturn(schedulesManager);
 
         // when
         ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(user);
@@ -265,14 +269,15 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User manager = User.builder().role(Role.MANAGER.getRole()).build();
         User user = User.builder().remain(20).build();
-        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("DAYOFF").build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status(Status.FIRST.getStatus()).type(Type.DAYOFF.getType()).build();
 
         Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(manager, orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -291,14 +296,15 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User ceo = User.builder().role(Role.CEO.getRole()).build();
         User user = User.builder().remain(20).build();
-        Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
+        Schedule schedulePS = Schedule.builder().id(1L).user(user).status(Status.LAST.getStatus()).type(Type.DAYOFF.getType()).build();
 
         Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(ceo, orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -317,6 +323,7 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User manager = User.builder().role(Role.MANAGER.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("HALFOFF").build();
 
@@ -324,7 +331,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(manager,orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -343,6 +350,7 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User ceo = User.builder().role(Role.CEO.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("HALFOFF").build();
 
@@ -350,7 +358,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(ceo, orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -369,6 +377,7 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User manager = User.builder().role(Role.MANAGER.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("FIRST").type("SHIFT").build();
 
@@ -376,7 +385,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(manager,orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -395,6 +404,7 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User ceo = User.builder().role(Role.CEO.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("SHIFT").build();
         Schedule updatedSchedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("SHIFT").build();
@@ -403,7 +413,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Mockito.when(scheduleRepository.save(any())).thenReturn(updatedSchedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(ceo,orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -422,6 +432,7 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User ceo = User.builder().role(Role.CEO.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
 
@@ -429,7 +440,7 @@ public class ScheduleServiceTest extends DummyEntity {
         Mockito.when(scheduleRepository.save(any())).thenReturn(schedulePS);
 
         // when
-        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO result = scheduleService.orderSchedule(ceo, orderScheduleInDTO);
 
         // then
         assertThat(result).isNotNull();
@@ -448,13 +459,14 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User manager = User.builder().role(Role.MANAGER.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("DAYOFF").build();
 
         Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
 
         // when, then
-        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(orderScheduleInDTO));
+        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(manager,orderScheduleInDTO));
 
     }
 
@@ -469,13 +481,14 @@ public class ScheduleServiceTest extends DummyEntity {
         orderScheduleInDTO.setScheduleId(scheduleId);
         orderScheduleInDTO.setStatus(status);
 
+        User ceo = User.builder().role(Role.CEO.getRole()).build();
         User user = User.builder().remain(20).build();
         Schedule schedulePS = Schedule.builder().id(1L).user(user).status("APPROVED").type("DAYOFF").build();
 
         Mockito.when(scheduleRepository.findScheduleByScheduleId(scheduleId)).thenReturn(schedulePS);
 
         // when, then
-        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(orderScheduleInDTO));
+        assertThrows(Exception400.class, () -> scheduleService.orderSchedule(ceo,orderScheduleInDTO));
 
     }
 

@@ -44,6 +44,7 @@ public class ScheduleRepositoryTest extends DummyEntity {
         teamRepository.save(team1);
         teamRepository.save(team2);
 
+
         User kimceo = newUserForRepoTest(null,"kimceo", "CEO");
         User kimmanager = newUserForRepoTest(team1,"kimmanager", "MANAGER");
         User kimdayoff = newUserForRepoTest(team2,"kimday","USER");
@@ -128,10 +129,9 @@ public class ScheduleRepositoryTest extends DummyEntity {
     @Test
     public void findSchedulesByTeamName_test(){
         // given
-        String teamName = "개발팀";
 
         // when
-        List<Schedule> schedules = scheduleRepository.findSchedulesByTeamName(teamName);
+        List<Schedule> schedules = scheduleRepository.findSchedulesByTeamId(1L);
 
         // then
         assertThat(schedules.size()).isEqualTo(3);

@@ -51,4 +51,5 @@ public class ScheduleRequest {
         @Pattern(regexp = "APPROVED|REJECTED|FIRST|LAST")
         private String status;
     }
+
 }

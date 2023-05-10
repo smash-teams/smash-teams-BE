@@ -76,7 +76,7 @@ public class ScheduleController {
     public ResponseEntity<?> orderSchedule(@RequestBody @Valid ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO,
                                            @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
-        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutDTO = scheduleService.orderSchedule(orderScheduleInDTO);
+        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutDTO = scheduleService.orderSchedule(myUserDetails.getUser(), orderScheduleInDTO);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(orderScheduleOutDTO);
         return ResponseEntity.ok(responseDTO);
