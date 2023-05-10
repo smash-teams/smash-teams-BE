@@ -370,4 +370,47 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(status().isBadRequest());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
+
+    @DisplayName("팀 삭제 성공")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        Long teamId = 4L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(delete("/auth/admin/team/{id}", teamId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data").isEmpty());
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("팀 삭제 실패")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void delete_fail_test() throws Exception {
+        // given
+        Long teamId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(delete("/auth/admin/team/{id}", teamId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value(String.valueOf(teamId)));
+        resultActions.andExpect(jsonPath("$.data.value").value("팀에 소속된 인원이 1명 이상입니다."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
 }
