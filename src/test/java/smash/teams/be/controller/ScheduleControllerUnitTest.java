@@ -155,9 +155,16 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         // stub
         ScheduleResponse.ListOutDto listOutDto = new ScheduleResponse.ListOutDto(scheduleListPS);
         Mockito.when(scheduleService.findByScheduleList()).thenReturn(listOutDto);
+        System.out.println("테스트2 : " + listOutDto);
 
         // when
         ResultActions resultActions = mvc.perform(get("/auth/user/main"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트2 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
     }
 
     @WithMockUserWithTeam(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamName = "개발팀")
