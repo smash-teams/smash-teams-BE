@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.UserQueryRepository;
 import smash.teams.be.model.user.UserRepository;
@@ -23,6 +25,7 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @DisplayName("회원 API")
@@ -91,6 +94,66 @@ public class UserControllerTest extends RestDoc {
         ResultActions resultActions = mvc.perform(get("/auth/user/" + id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(403));
+        resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
+        resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
+    }
+
+    @DisplayName("개인정보 수정 성공")
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void update_test() throws Exception {
+        // given
+        Long id = 1L;
+        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
+        updateInDto.setCurPassword("1234");
+        updateInDto.setNewPassword("5678");
+        updateInDto.setPhoneNumber("010-8765-4321");
+        updateInDto.setStartWork("2023-05-13");
+        updateInDto.setProfileImage("User1의 사진!!");
+
+        String requestBody = om.writeValueAsString(updateInDto);
+        System.out.println("테스트1 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/"+ id + "/upload").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트2 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
+        resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13T00:00:00"));
+        resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
+    }
+
+    @DisplayName("개인정보 수정 실패")
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void update_fail_test() throws Exception {
+        // given
+        Long id = 2L;
+        UserRequest.UpdateInDto updateInDto = new UserRequest.UpdateInDto();
+        updateInDto.setCurPassword("1234");
+        updateInDto.setNewPassword("5678");
+        updateInDto.setPhoneNumber("010-8765-4321");
+        updateInDto.setStartWork("2023-05-13");
+        updateInDto.setProfileImage("User1의 사진!!");
+
+        String requestBody = om.writeValueAsString(updateInDto);
+        System.out.println("테스트1 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/"+ id + "/upload").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트2 : " + responseBody);
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(403));
