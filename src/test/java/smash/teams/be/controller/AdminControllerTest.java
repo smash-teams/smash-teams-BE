@@ -61,6 +61,7 @@ public class AdminControllerTest extends RestDoc {
         Team teamPS = teamRepository.save(dummy.newTeam("개발팀"));
         Team teamPS2 = teamRepository.save(dummy.newTeam("회계팀"));
         Team teamPS3 = teamRepository.save(dummy.newTeam("마케팅팀"));
+        Team teamPS4 = teamRepository.save(dummy.newTeam("기획팀"));
 
         userRepository.save(dummy.newAdmin("admin"));
         userRepository.save(dummy.newManagerWithTeam("이승민", teamPS));
@@ -338,7 +339,7 @@ public class AdminControllerTest extends RestDoc {
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("성공"));
-        resultActions.andExpect(jsonPath("$.data.teamId").value(4L));
+        resultActions.andExpect(jsonPath("$.data.teamId").value(5L));
         resultActions.andExpect(jsonPath("$.data.teamName").value("영업팀"));
         resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
         resultActions.andExpect(status().isOk());
