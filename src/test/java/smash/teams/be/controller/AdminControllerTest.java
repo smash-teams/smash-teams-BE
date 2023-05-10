@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.dummy.DummyEntity;
+import smash.teams.be.dto.admin.AdminRequest;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.Role;
@@ -27,8 +28,7 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static smash.teams.be.dto.admin.AdminRequest.UpdateAuthAndTeamInDTO;
@@ -238,10 +238,10 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("사용자 권한 설정 페이지 조회 실패(403)")
+    @DisplayName("사용자 권한 설정 페이지 조회 실패")
     @WithUserDetails(value = "이승민@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getAdminPage_fail_forbidden_test() throws Exception {
+    public void getAdminPage_fail_test() throws Exception {
         // given
         String teamName = "";
         String keyword = "이";
@@ -291,10 +291,10 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("사용자 권한/팀 변경 실패(404)")
+    @DisplayName("사용자 권한/팀 변경 실패")
     @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void updateAuthAndTeam_fail_not_found_test() throws Exception {
+    public void updateAuthAndTeam_fail_test() throws Exception {
         // given
         UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
         updateAuthAndTeamInDTO.setUserId(2L);
@@ -315,6 +315,59 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("notFound"));
         resultActions.andExpect(jsonPath("$.data").value("존재하지 않는 팀입니다."));
         resultActions.andExpect(status().isNotFound());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("팀 추가 성공")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void add_test() throws Exception {
+        // given
+        AdminRequest.AddInDTO addInDTO = new AdminRequest.AddInDTO();
+        addInDTO.setTeamName("영업팀");
+        String requestBody = om.writeValueAsString(addInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/admin/team")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data.teamId").value(4L));
+        resultActions.andExpect(jsonPath("$.data.teamName").value("영업팀"));
+        resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("팀 추가 실패")
+    @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void add_fail_test() throws Exception {
+        // given
+        AdminRequest.AddInDTO addInDTO = new AdminRequest.AddInDTO();
+        addInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(addInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/admin/team")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("개발팀"));
+        resultActions.andExpect(jsonPath("$.data.value").value("이미 존재하는 팀입니다."));
+        resultActions.andExpect(status().isBadRequest());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
