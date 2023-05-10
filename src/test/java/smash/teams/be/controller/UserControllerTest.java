@@ -27,6 +27,7 @@ import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
+import smash.teams.be.model.user.UserQueryRepository;
 import smash.teams.be.model.user.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -54,11 +55,16 @@ public class UserControllerTest extends RestDoc {
     private UserRepository userRepository;
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private UserQueryRepository userQueryRepository;
+
     @Autowired
     private EntityManager em;
 
     @BeforeEach
     public void setUp() {
+
         Team teamPS = teamRepository.save(dummy.newTeam("개발팀"));
         Team teamPS2 = teamRepository.save(dummy.newTeam("회계팀"));
         Team teamPS3 = teamRepository.save(dummy.newTeam("마케팅팀"));
@@ -72,6 +78,16 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newCeoWithTeam("Ceo", teamPS5)); // 5
         userRepository.save(dummy.newManagerWithTeam("Manager1", teamPS5)); // 6
         userRepository.save(dummy.newManagerWithTeam("Manager2", teamPS5)); // 7
+
+        teamRepository.save(Team.builder().teamName("개발팀").build());
+        userRepository.save(dummy.newUser("User1")); // 1
+        userRepository.save(dummy.newUser("User2")); // 2
+        userRepository.save(dummy.newAdmin("Admin1")); // 3
+        userRepository.save(dummy.newAdmin("Admin2")); // 4
+        userRepository.save(dummy.newCeo("Ceo")); // 5
+        userRepository.save(dummy.newManager("Manager1")); // 6
+        userRepository.save(dummy.newManager("Manager2")); // 7
+
 
         em.clear();
     }
@@ -238,6 +254,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
+
 //    @DisplayName("이미지 업로드 성공")
 //    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
 //    @Test
@@ -288,4 +305,32 @@ public class UserControllerTest extends RestDoc {
 //        resultActions.andExpect(jsonPath("$.data").value(null));
 //        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 //    }
+
+    @DisplayName("회원가입 성공")
+    @Test
+    public void join_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("12345678");
+        joinInDTO.setEmail("user7777@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+//        resultActions.andExpect(jsonPath("$.status").value(200));
+//        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+//        resultActions.andExpect(jsonPath("$.data").value(null));
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
 }
