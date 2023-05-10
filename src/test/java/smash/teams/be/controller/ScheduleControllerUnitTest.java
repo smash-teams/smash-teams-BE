@@ -172,7 +172,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         String requestBody = om.writeValueAsString(orderScheduleOutWithRemainDTO);
 
-        Mockito.when(scheduleService.orderSchedule(any())).thenReturn(orderScheduleOutWithRemainDTO);
+        Mockito.when(scheduleService.orderSchedule(any(),any())).thenReturn(orderScheduleOutWithRemainDTO);
 
         // when
         ResultActions resultActions = mvc.perform(post("/auth/super/schedule/order").content(requestBody).contentType(MediaType.APPLICATION_JSON));

@@ -348,4 +348,23 @@ public class DummyEntity {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public User newUserForIntergratingTest(String name, Team team, String role, String email){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder().name(name).team(team).role(role)
+                .remain(20).email(email+"@gmail.com").password(passwordEncoder.encode("1234"))
+                .phoneNumber("010-1111-1111").status(Status.ACTIVE.getStatus()).startWork(LocalDateTime.now())
+                .profileImage(null).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+    }
+
+    public Schedule newScheduleForIntergratingTest(User user, String type, String status){
+        return Schedule.builder().user(user).type(type).status(status)
+                .reason("쉬고싶음").startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).finishedAt(LocalDateTime.now()).build();
+    }
+
+    public Team newTeamForIntergratingTest(String teamName){
+        return Team.builder().teamName(teamName)
+                .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+    }
 }
