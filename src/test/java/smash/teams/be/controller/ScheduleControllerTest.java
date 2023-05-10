@@ -231,7 +231,7 @@ public class ScheduleControllerTest extends RestDoc {
         String requestBody = om.writeValueAsString(orderScheduleInDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/auth/super/schedule/order").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/auth/super/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -254,7 +254,7 @@ public class ScheduleControllerTest extends RestDoc {
         String requestBody = om.writeValueAsString(orderScheduleInDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/auth/super/schedule/order").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/auth/super/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -276,7 +276,7 @@ public class ScheduleControllerTest extends RestDoc {
         String requestBody = om.writeValueAsString(orderScheduleInDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/auth/super/schedule/order").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/auth/super/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
