@@ -386,7 +386,11 @@ public class DummyEntity {
     public User newUserForIntergratingTest(String name, Team team, String role, String email) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder().name(name).team(team).role(role)
+<<<<<<< HEAD
                 .remain(20).email(email + "@gmail.com").password(passwordEncoder.encode("1234"))
+=======
+                .remain(20).email(email+"@gmail.com").password(passwordEncoder.encode("smash1234"))
+>>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
                 .phoneNumber("010-1111-1111").status(Status.ACTIVE.getStatus()).startWork(LocalDateTime.now())
                 .profileImage(null).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
     }

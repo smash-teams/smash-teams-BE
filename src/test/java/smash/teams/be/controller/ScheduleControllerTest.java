@@ -33,6 +33,7 @@ import smash.teams.be.model.user.UserRepository;
 
 import javax.persistence.EntityManager;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,9 +104,9 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void getScheduleList_test() throws Exception {
         // given
-
+        Long id = 7L;
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/schedule"));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"+id+"/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -150,6 +151,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void getScheduleListForManage_ceo_test() throws Exception {
         // when
+        Long id = 1L;
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -174,6 +176,8 @@ public class ScheduleControllerTest extends RestDoc {
     @WithUserDetails(value = "manager2@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void getScheduleListForManage_manager_test() throws Exception {
+        // given
+        Long id = 2L;
         // when
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -206,6 +210,8 @@ public class ScheduleControllerTest extends RestDoc {
     @WithUserDetails(value = "user7@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void getScheduleListForManage_fail_test() throws Exception {
+        // given
+        Long id = 7L;
         // when
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -237,7 +243,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void loadScheduleList_test() throws Exception {
         // given
-
+        Long id = 1L;
         // when
         ResultActions resultActions = mvc.perform(get("/auth/user/main"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -283,6 +289,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void orderSchedule_role_fail1_test() throws Exception {
         // given
+        Long id = 2L;
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
         orderScheduleInDTO.setScheduleId(7L);
         orderScheduleInDTO.setStatus("APPROVED");
@@ -305,6 +312,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void orderSchedule_role_fail2_test() throws Exception {
         // given
+        Long id = 3L;
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
         orderScheduleInDTO.setScheduleId(7L);
         orderScheduleInDTO.setStatus("APPROVED");
@@ -334,6 +342,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void makeScheduleRequest_test() throws Exception {
         // given
+        Long id = 3L;
         MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
         makeScheduleRequestInDTO.setStartDate("2023-03-03T09:00:00");
         makeScheduleRequestInDTO.setEndDate("2023-03-03T12:00:00");
@@ -343,7 +352,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/schedule")
+                .perform(post("/auth/user/"+id+"/schedule")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -361,6 +370,7 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void makeScheduleRequest_fail_test() throws Exception {
         // given
+        Long id = 5L;
         MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
         makeScheduleRequestInDTO.setStartDate("2023-03-03T09:00:00");
         makeScheduleRequestInDTO.setEndDate("2023-03-03T12:00:00");
@@ -375,7 +385,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/schedule")
+                .perform(post("/auth/user/"+id+"/schedule")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();

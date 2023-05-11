@@ -19,7 +19,11 @@ import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.exception.Exception400;
 
+
 import smash.teams.be.core.exception.Exception401;
+
+
+import smash.teams.be.core.exception.Exception403;
 
 import smash.teams.be.core.exception.Exception404;
 
@@ -31,6 +35,7 @@ import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.team.Team;
 
 import smash.teams.be.model.team.TeamRepository;
+import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
@@ -66,29 +71,29 @@ public class UserService {
 
     @Log
     @Transactional
-    public UserResponse.JoinOutDTO join(UserRequest.JoinInDTO joinInDTO){
+    public UserResponse.JoinOutDTO join(UserRequest.JoinInDTO joinInDTO) {
         Optional<User> userOP = userRepository.findByName(joinInDTO.getName());
         Team teamOP = teamRepository.findTeamByTeamName(joinInDTO.getTeamName());
 
-        if(userOP.isPresent()){
+        if (userOP.isPresent()) {
             // 이 부분이 try catch 안에 있으면 Exception500에게 제어권을 뺏긴다.
             throw new Exception400("name", "이름이 존재합니다");
         }
 
-        if(teamOP==null){
-            throw new Exception404(joinInDTO.getTeamName()+"이 존재하지 않습니다");
+        if (teamOP == null) {
+            throw new Exception404(joinInDTO.getTeamName() + "이 존재하지 않습니다");
         }
 
         String encPassword = bCryptPasswordEncoder.encode(joinInDTO.getPassword()); // 60Byte
         joinInDTO.setPassword(encPassword);
-        System.out.println("encPassword : "+encPassword);
+        System.out.println("encPassword : " + encPassword);
 
         // 디비 save 되는 쪽만 try catch로 처리하자.
         try {
             User userPS = userRepository.save(joinInDTO.toEntity(teamOP));
             return new UserResponse.JoinOutDTO(userPS);
-        }catch (Exception e){
-            throw new Exception500("회원가입 실패 : "+e.getMessage());
+        } catch (Exception e) {
+            throw new Exception500("회원가입 실패 : " + e.getMessage());
         }
     }
 
@@ -154,7 +159,7 @@ public class UserService {
     public boolean checkDuplicateEmail(UserRequest.CheckInDTO checkInDTO) {
         Optional<User> userPS = userRepository.findByEmail(checkInDTO.getEmail());
 
-        if(userPS.isPresent()) {
+        if (userPS.isPresent()) {
             if (userPS.get().getEmail().equals(checkInDTO.getEmail()))
                 return true;
         }
@@ -163,21 +168,19 @@ public class UserService {
     }
 
     @Transactional
-    public void cancelUser(UserRequest.CancelUserInDTO cancelUserInDTO, MyUserDetails myUserDetails) {
-        if(cancelUserInDTO.getEmail().equals(myUserDetails.getUser().getEmail())){
-            if(bCryptPasswordEncoder.encode(cancelUserInDTO.getPassword()).equals(myUserDetails.getPassword())){
-                Optional<User> userOP = userRepository.findByEmail(cancelUserInDTO.getEmail());
-                if(userOP.get().getEmail().equals(myUserDetails.getUser().getEmail())){
-                    if(userOP.get().getPassword().equals(myUserDetails.getPassword())){
-                        userRepository.deleteById(userOP.get().getId());
-                    }
-                }
-            }else{
-                throw new Exception400("password","비밀번호가 다릅니다");
+    public void withdraw(UserRequest.CancelUserInDTO cancelUserInDTO, Long id) {
+
+        User userOP = userRepository.findUserById(id);
+        if (bCryptPasswordEncoder.matches(cancelUserInDTO.getPassword(), userOP.getPassword())) {
+            try {
+                userOP.changeStatus(Status.INACTIVE.getStatus());
+                userRepository.save(userOP);
+            } catch (Exception e) {
+                throw new Exception500("탈퇴 실패 : " + e.getMessage());
             }
         }else{
-            throw new Exception400("email","이메일주소가 다릅니다.");
-
+            throw new Exception403("비밀번호가 맞지 않습니다");
         }
     }
 }
+

@@ -111,4 +111,8 @@ public class User {
     public void uploadImage(String profileImage) {
         this.profileImage = profileImage;
     }
+
+    public void changeStatus(String status){
+        this.status = Status.INACTIVE.getStatus();
+    }
 }

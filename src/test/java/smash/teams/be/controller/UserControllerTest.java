@@ -5,27 +5,36 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.mock.web.MockMultipartFile;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.RestDoc;
+
 import smash.teams.be.core.auth.jwt.JwtProvider;
+
+import smash.teams.be.core.auth.session.MyUserDetails;
+
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
-import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
@@ -423,7 +432,7 @@ public class UserControllerTest extends RestDoc {
         System.out.println("테스트 : " + responseBody);
 
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").value(false));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
@@ -444,8 +453,57 @@ public class UserControllerTest extends RestDoc {
         System.out.println("테스트 : " + responseBody);
 
         resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").value(true));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
+    }
+
+
+    @DisplayName("회원탈퇴 성공")
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void withdraw_test() throws Exception{
+        // given
+        Long id = 1L;
+        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
+        cancelUserInDTO.setEmail("User1@gmail.com");
+        cancelUserInDTO.setPassword("1234");
+        String requestBody = om.writeValueAsString(cancelUserInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
+//        resultActions.andExpect(jsonPath("$.data").value(null));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
+    }
+
+    @DisplayName("회원탈퇴 실패")
+    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void cancelUser_fail_test() throws Exception{
+        // given
+        Long id = 8L;
+        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
+        cancelUserInDTO.setEmail("user1234@gmail.com");
+        cancelUserInDTO.setPassword("smash1234");
+        String requestBody = om.writeValueAsString(cancelUserInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
+//        resultActions.andExpect(jsonPath("$.data").value(null));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }

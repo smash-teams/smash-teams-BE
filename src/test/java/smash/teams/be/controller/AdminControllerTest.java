@@ -340,7 +340,11 @@ public class AdminControllerTest extends RestDoc {
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
+
         resultActions.andExpect(jsonPath("$.data.teamId").value(6L));
+
+        resultActions.andExpect(jsonPath("$.data.teamId").value(5L));
+
         resultActions.andExpect(jsonPath("$.data.teamName").value("영업팀"));
         resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
         resultActions.andExpect(status().isOk());

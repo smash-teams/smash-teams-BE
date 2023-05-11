@@ -109,8 +109,8 @@ public class UserController {
             throw new Exception403("권한이 없습니다");
         }
 
-        userService.cancelUser(cancelUserInDTO, myUserDetails);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>();
+        userService.withdraw(cancelUserInDTO,id);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(null);
         return ResponseEntity.ok().body(responseDTO);
     }
 }
