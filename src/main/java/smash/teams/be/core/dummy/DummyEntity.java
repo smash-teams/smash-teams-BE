@@ -401,4 +401,23 @@ public class DummyEntity {
         return Team.builder().teamName(teamName)
                 .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
     }
+
+    public User newMockImage(Long id, String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        return User.builder()
+                .id(id)
+                .team(newTeam("개발팀"))
+                .name(name)
+                .password(passwordEncoder.encode("dltmdals123!"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.USER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .profileImage("사진 2")
+                .startWork(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }
