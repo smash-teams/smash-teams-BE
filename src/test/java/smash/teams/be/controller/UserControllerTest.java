@@ -164,7 +164,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("내 정보 조회 성공")
     @WithUserDetails(value = "Ceo@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void findMyInfo_test() throws Exception {
+    public void find_My_Info_test() throws Exception {
         // given
         Long id = 5L;
 
@@ -186,7 +186,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("내 정보 조회 실패")
     @WithUserDetails(value = "Ceo@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void findMyInfo_fail_test() throws Exception {
+    public void find_My_Info_fail_test() throws Exception {
         // given
         Long id = 2L;
 
@@ -404,7 +404,7 @@ public class UserControllerTest extends RestDoc {
 
     @DisplayName("이메일 중복화인 : 중복된 이메일이 아닙니다")
     @Test
-    public void checkDuplicateEmail_false_test() throws Exception{
+    public void check_duplicate_email_false_test() throws Exception{
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user7777777@gmail.com");
@@ -425,7 +425,7 @@ public class UserControllerTest extends RestDoc {
 
     @DisplayName("이메일 중복화인 : 현재 사용중인 이메일입니다.")
     @Test
-    public void checkDuplicateEmail_true_test() throws Exception{
+    public void check_duplicate_email_true_test() throws Exception{
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user1234@gmail.com");
@@ -472,7 +472,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("회원탈퇴 실패")
     @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void cancelUser_fail_test() throws Exception{
+    public void withdraw_fail_test() throws Exception{
         // given
         Long id = 8L;
         UserRequest.WithdrawInDTO cancelUserInDTO = new UserRequest.WithdrawInDTO();

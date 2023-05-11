@@ -1,0 +1,44 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+:user: user-controller-test
+
+= REST API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+
+== 회원
+=== 회원가입 (성공)
+===== Request Example
+include::{snippets}/{user}/join_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/join_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{user}/join_test/curl-request.adoc[]
+
+
+=== 회원가입 (이름 유효성 검사 실패)
+===== Request Example
+include::{snippets}/{user}/join_fail_name_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/join_fail_name_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{user}/join_fail_name_test/curl-request.adoc[]
+
+=== 로그인 (성공)
+===== Request Example
+include::{snippets}/{user}/login_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/login_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{user}/login_test/curl-request.adoc[]
+
