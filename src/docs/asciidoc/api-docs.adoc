@@ -3,6 +3,8 @@ ifndef::snippets[]
 endif::[]
 
 :user: user-controller-test
+:admin: admin-controller-test
+:schedule: schedule-controller-test
 
 = REST API
 :toc: left
@@ -151,3 +153,92 @@ include::{snippets}/{user}/update_fail_test/http-response.adoc[]
 
 ===== Curl
 include::{snippets}/{user}/update_fail_test/curl-request.adoc[]
+
+
+== 관리자
+=== 사용자 권한 설정 페이지 조회 (성공)
+===== Request Example
+include::{snippets}/{admin}/get_admin_page_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/get_admin_page_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/get_admin_page_test/curl-request.adoc[]
+
+
+=== 사용자 권한 설정 페이지 조회 (실패)
+===== Request Example
+include::{snippets}/{admin}/get_admin_page_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/get_admin_page_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/get_admin_page_fail_test/curl-request.adoc[]
+
+
+=== 사용자 권한/팀 변경 (성공)
+===== Request Example
+include::{snippets}/{admin}/update_auth_and_team_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/update_auth_and_team_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/update_auth_and_team_test/curl-request.adoc[]
+
+
+=== 사용자 권한/팀 변경 (실패)
+===== Request Example
+include::{snippets}/{admin}/update_auth_and_team_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/update_auth_and_team_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/update_auth_and_team_fail_test/curl-request.adoc[]
+
+
+=== 팀 추가 (성공)
+===== Request Example
+include::{snippets}/{admin}/add_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/add_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/add_test/curl-request.adoc[]
+
+
+=== 팀 추가 (실패)
+===== Request Example
+include::{snippets}/{admin}/add_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/add_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/add_fail_test/curl-request.adoc[]
+
+
+=== 팀 삭제 (성공)
+===== Request Example
+include::{snippets}/{admin}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/delete_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/delete_test/curl-request.adoc[]
+
+
+=== 팀 삭제 (실패)
+===== Request Example
+include::{snippets}/{admin}/delete_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{admin}/delete_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{admin}/delete_fail_test/curl-request.adoc[]
