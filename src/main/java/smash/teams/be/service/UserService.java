@@ -40,6 +40,7 @@ import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -157,29 +158,33 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateEmail(UserRequest.CheckInDTO checkInDTO) {
-        Optional<User> userPS = userRepository.findByEmail(checkInDTO.getEmail());
+        User userPS = userRepository.findUserByEmail(checkInDTO.getEmail());
 
-        if (userPS.isPresent()) {
-            if (userPS.get().getEmail().equals(checkInDTO.getEmail()))
-                return true;
+        if (userPS == null) {
+            return false;
+        }else {
+            return true;
         }
-
-        return false;
     }
 
     @Transactional
     public void withdraw(UserRequest.WithdrawInDTO withdrawInDTO, Long id) {
 
-        User userOP = userRepository.findUserById(id);
-        if (bCryptPasswordEncoder.matches(withdrawInDTO.getPassword(), userOP.getPassword())) {
+        User userPS = userRepository.findUserById(id);
+        System.out.println(userPS.getEmail());
+        System.out.println(withdrawInDTO.getEmail());
+        if(!Objects.equals(userPS.getEmail(), withdrawInDTO.getEmail())){
+            throw new Exception400("email","이메일이 틀렸습니다");
+        }
+        if (bCryptPasswordEncoder.matches(withdrawInDTO.getPassword(), userPS.getPassword())) {
             try {
-                userOP.changeStatus(Status.INACTIVE.getStatus());
-                userRepository.save(userOP);
+                userPS.changeStatus(Status.INACTIVE.getStatus());
+                userRepository.save(userPS);
             } catch (Exception e) {
                 throw new Exception500("탈퇴 실패 : " + e.getMessage());
             }
         }else{
-            throw new Exception400("password","비밀번호가 맞지 않습니다");
+            throw new Exception400("password","비밀번호가 틀렸습니다");
         }
     }
 }

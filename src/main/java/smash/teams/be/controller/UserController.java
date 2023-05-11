@@ -102,9 +102,9 @@ public class UserController {
     }
 
     @PostMapping("/auth/user/{id}/delete")
-    public ResponseEntity<?> cancelUser(@PathVariable Long id,
-                                        @RequestBody @Valid UserRequest.WithdrawInDTO withdrawInDTO,
-                                        @AuthenticationPrincipal MyUserDetails myUserDetails) {
+    public ResponseEntity<?> withdraw(@PathVariable Long id,
+                                      @RequestBody @Valid UserRequest.WithdrawInDTO withdrawInDTO,
+                                      @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
         if(id.longValue() != myUserDetails.getUser().getId()){
             throw new Exception403("권한이 없습니다");

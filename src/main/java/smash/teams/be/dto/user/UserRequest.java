@@ -70,8 +70,9 @@ public class UserRequest {
                     .role(Role.USER.getRole())
                     .status(Status.ACTIVE.getStatus())
                     .phoneNumber(phoneNumber)
-                    .startWork(LocalDate.parse("2020-05-01",DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay())
+                    .startWork(LocalDate.parse(startWork,DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay())
                     .team(team)
+                    .remain(20)
                     .build();
         }
     }
