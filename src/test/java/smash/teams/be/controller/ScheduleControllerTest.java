@@ -102,7 +102,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("개인 스케쥴 내역 조회")
     @WithUserDetails(value = "user7@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getScheduleList_test() throws Exception {
+    public void get_schedule_list_test() throws Exception {
         // given
         Long id = 7L;
         // when
@@ -129,7 +129,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("개인 스케쥴 내역 조회 : unAuthorized")
 //    @WithUserDetails(value = "user20@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getScheduleList_fail_test() throws Exception {
+    public void get_schedule_list_fail_test() throws Exception {
         // given
 
         // when
@@ -149,7 +149,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("스케쥴 관리 페이지(CEO)")
     @WithUserDetails(value = "ceo1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getScheduleListForManage_ceo_test() throws Exception {
+    public void get_schedule_list_for_manage_ceo_test() throws Exception {
         // when
         Long id = 1L;
         ResultActions resultActions = mvc.perform(get("/auth/super/schedule"));
@@ -175,7 +175,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("스케쥴 관리 페이지(manager)")
     @WithUserDetails(value = "manager2@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getScheduleListForManage_manager_test() throws Exception {
+    public void get_schedule_list_for_manage_manager_test() throws Exception {
         // given
         Long id = 2L;
         // when
@@ -209,7 +209,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("스케쥴 관리 페이지 : 권한 실패")
     @WithUserDetails(value = "user7@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getScheduleListForManage_fail_test() throws Exception {
+    public void get_schedule_list_for_manage_fail_test() throws Exception {
         // given
         Long id = 7L;
         // when
@@ -227,7 +227,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("승인 및 거절하기")
     @WithUserDetails(value = "ceo1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void orderSchedule_test() throws Exception {
+    public void order_schedule_test() throws Exception {
         // given
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
         orderScheduleInDTO.setScheduleId(7L);
@@ -242,7 +242,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("메인 페이지 조회 성공") // 로그인 O
     @WithUserDetails(value = "ceo1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void loadScheduleList_test() throws Exception {
+    public void load_schedule_list_test() throws Exception {
         // given
         Long id = 1L;
         // when
@@ -270,7 +270,7 @@ public class ScheduleControllerTest extends RestDoc {
 
     @DisplayName("메인 페이지 조회 실패") // 로그인 X
     @Test
-    public void loadScheduleList_fail_test() throws Exception {
+    public void load_schedule_list_fail_test() throws Exception {
         // given
 
         // when
@@ -288,7 +288,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("승인 및 거절하기 : 권한 문제")
     @WithUserDetails(value = "manager2@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void orderSchedule_role_fail1_test() throws Exception {
+    public void order_schedule_role_fail1_test() throws Exception {
         // given
         Long id = 2L;
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
@@ -311,7 +311,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("승인 및 거절하기 : 권한 문제")
     @WithUserDetails(value = "user3@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void orderSchedule_role_fail2_test() throws Exception {
+    public void order_schedule_role_fail2_test() throws Exception {
         // given
         Long id = 3L;
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
@@ -341,7 +341,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("승인 요청 성공")
     @WithUserDetails(value = "user3@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void makeScheduleRequest_test() throws Exception {
+    public void make_schedule_request_test() throws Exception {
         // given
         Long id = 3L;
         MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
@@ -369,7 +369,7 @@ public class ScheduleControllerTest extends RestDoc {
     @DisplayName("승인 요청 실패")
     @WithUserDetails(value = "admin5@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void makeScheduleRequest_fail_test() throws Exception {
+    public void make_schedule_request_fail_test() throws Exception {
         // given
         Long id = 5L;
         MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();

@@ -92,7 +92,7 @@ public class AdminControllerTest extends RestDoc {
     @DisplayName("사용자 권한 설정 페이지 조회 성공")
     @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getAdminPage_test() throws Exception {
+    public void get_admin_page_test() throws Exception {
         // given
         String teamName = "";
         String keyword = "이";
@@ -243,7 +243,7 @@ public class AdminControllerTest extends RestDoc {
     @DisplayName("사용자 권한 설정 페이지 조회 실패")
     @WithUserDetails(value = "이승민@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getAdminPage_fail_test() throws Exception {
+    public void get_admin_page_fail_test() throws Exception {
         // given
         String teamName = "";
         String keyword = "이";
@@ -269,7 +269,7 @@ public class AdminControllerTest extends RestDoc {
     @DisplayName("사용자 권한/팀 변경 성공")
     @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void updateAuthAndTeam_test() throws Exception {
+    public void update_auth_and_team_test() throws Exception {
         // given
         UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
         updateAuthAndTeamInDTO.setUserId(2L);
@@ -296,7 +296,7 @@ public class AdminControllerTest extends RestDoc {
     @DisplayName("사용자 권한/팀 변경 실패")
     @WithUserDetails(value = "admin@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void updateAuthAndTeam_fail_test() throws Exception {
+    public void update_auth_and_team_fail_test() throws Exception {
         // given
         UpdateAuthAndTeamInDTO updateAuthAndTeamInDTO = new UpdateAuthAndTeamInDTO();
         updateAuthAndTeamInDTO.setUserId(2L);
