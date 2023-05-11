@@ -164,7 +164,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("내 정보 조회 성공")
     @WithUserDetails(value = "Ceo@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void find_My_Info_test() throws Exception {
+    public void find_my_info_test() throws Exception {
         // given
         Long id = 5L;
 
@@ -186,7 +186,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("내 정보 조회 실패")
     @WithUserDetails(value = "Ceo@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void find_My_Info_fail_test() throws Exception {
+    public void find_my_info_fail_test() throws Exception {
         // given
         Long id = 2L;
 
