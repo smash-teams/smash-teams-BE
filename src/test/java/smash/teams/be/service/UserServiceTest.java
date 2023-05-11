@@ -27,7 +27,11 @@ import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
 
 import org.springframework.test.web.servlet.ResultActions;
+<<<<<<< HEAD
 
+=======
+import smash.teams.be.core.auth.session.MyUserDetails;
+>>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
@@ -50,6 +54,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+<<<<<<< HEAD
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,6 +67,12 @@ import static smash.teams.be.core.auth.jwt.JwtProvider.verify;
 import static smash.teams.be.dto.user.UserRequest.LoginInDTO;
 import static smash.teams.be.dto.user.UserRequest.UpdateInDTO;
 
+=======
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+>>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -206,6 +217,7 @@ public class UserServiceTest extends DummyEntity {
                 .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
 
         User 권으뜸 = User.builder().id(1L).name("권으뜸").email("user7777777@gmail.com")
+                .password(bCryptPasswordEncoder.encode("1234"))
                 .status(Status.ACTIVE.getStatus()).team(개발팀)
                 .startWork(LocalDate.parse("2020-05-01", DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay())
                 .phoneNumber("010-1111-1111").role(Role.USER.getRole()).remain(20).profileImage(null).build();
@@ -243,5 +255,31 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(checkOutDTO).isEqualTo(true);
     }
 
+<<<<<<< HEAD
 >>>>>>> 2ed0c4c (Feat: 이메일 중복확인 및 회원탈퇴 구현)
+=======
+    @Test
+    public void cancelUser_test() throws Exception{
+        // given
+        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
+        cancelUserInDTO.setEmail("user1234@gmail.com");
+        cancelUserInDTO.setPassword("1234");
+
+        Long id = 7L;
+
+        String loginEmail = "user1234@gmail.com";
+        String loginPassword = bCryptPasswordEncoder.encode("1234");
+        User userOP = User.builder().email("user1234@gmail.com").password(bCryptPasswordEncoder.encode("1234")).build();
+
+        // stub
+        Mockito.when(userRepository.findUserById(any())).thenReturn(userOP);
+//        doNothing().when(userRepository).deleteById(any());
+
+        // when
+        userService.withdraw(cancelUserInDTO,id);
+
+        // then
+
+    }
+>>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
 }

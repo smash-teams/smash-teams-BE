@@ -67,6 +67,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @Test
     public void getScheduleList_test() throws Exception {
         // given
+        Long id = 3L;
         Schedule schedule1 = newScheduleForTest(1L, 1L, "USER", "kimuser", 2L, "개발팀", "LAST", "병가");
         Schedule schedule2 = newScheduleForTest(2L, 1L, "USER", "kimuser", 2L, "개발팀", "REJECTED", "여행");
         Schedule schedule3 = newScheduleForTest(3L, 1L, "USER", "kimuser", 2L, "개발팀", "FIRST", "여행");
@@ -81,7 +82,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
         Mockito.when(scheduleService.getScheduleList(any())).thenReturn(scheduleListDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/schedule"));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"+id+"/schedule"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -107,7 +108,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 //        Long userId = 1L;
 //        String role = "CEO";
 //        String teamName = null;
-
+        Long id = 2L;
 
         Schedule schedule1 = newScheduleForTest(1L, 3L, "USER", "kimuser", 2L, "개발팀", "LAST", "병가");
         Schedule schedule2 = newScheduleForTest(2L, 3L, "USER", "kimuser", 2L, "개발팀", "REJECTED", "여행");
@@ -146,6 +147,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @Test
     public void loadScheduleList_test() throws Exception {
         // given
+        Long id = 1L;
         List<Schedule> scheduleListPS = new ArrayList<>();
         scheduleListPS.add(newMockScheduleWithUserWithTeam(1L, 11L, 111L, "유저A", "A팀"));
         scheduleListPS.add(newMockScheduleWithUserWithTeam(2L, 22L, 222L, "유저B", "B팀"));
@@ -170,7 +172,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @WithMockUserWithTeam(id=2L, username="kimmanager@gmail.com", role = "MANAGER", teamName = "개발팀")
     @Test
     public void orderSchedule_test() throws Exception {
-
+        Long id = 2L;
         User user = User.builder().remain(19.5).build();
         Schedule schedule = Schedule.builder().id(1L).user(user).status("LAST").type("DAYOFF").build();
 
@@ -197,6 +199,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
     @Test
     public void makeScheduleRequest_test() throws Exception {
         // given
+        Long id = 1L;
         MakeScheduleRequestInDTO makeScheduleRequestInDTO = new MakeScheduleRequestInDTO();
         makeScheduleRequestInDTO.setStartDate("2023-03-03T09:00:00");
         makeScheduleRequestInDTO.setEndDate("2023-03-03T12:00:00");
@@ -206,7 +209,7 @@ public class ScheduleControllerUnitTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/user/"+id+"/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 

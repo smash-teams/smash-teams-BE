@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.session.MyUserDetails;
+import smash.teams.be.core.exception.Exception403;
 import smash.teams.be.dto.ResponseDTO;
 import smash.teams.be.dto.schedule.ScheduleRequest;
 import smash.teams.be.dto.schedule.ScheduleResponse;
@@ -32,10 +33,12 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @Log
-    @GetMapping("/auth/user/schedule")
-    public ResponseEntity<?> getScheduleList(@AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Long userId = myUserDetails.getUser().getId();
-        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleList(userId);
+    @GetMapping("/auth/user/{id}/schedule")
+    public ResponseEntity<?> getScheduleList(@PathVariable Long id, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if(id.longValue() != myUserDetails.getUser().getId()){
+            throw new Exception403("권한이 없습니다");
+        }
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleList(id);
         ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
         return ResponseEntity.ok(responseDTO);
     }
@@ -54,6 +57,7 @@ public class ScheduleController {
 
     @GetMapping("/auth/user/main")
     public ResponseEntity<?> loadScheduleList() throws JsonProcessingException {
+
         ScheduleResponse.ListOutDto listOutDto = scheduleService.findByScheduleList();
         System.out.println(new ObjectMapper().writeValueAsString(listOutDto));
         ResponseDTO<?> responseDTO = new ResponseDTO<>(listOutDto);
@@ -61,11 +65,14 @@ public class ScheduleController {
     }
 
     @Log
-    @PostMapping("/auth/user/schedule")
-    public ResponseEntity<?> makeScheduleRequest(@RequestBody @Valid MakeScheduleRequestInDTO makeScheduleRequestInDTO,
+    @PostMapping("/auth/user/{id}/schedule")
+    public ResponseEntity<?> makeScheduleRequest(@PathVariable Long id,
+                                                 @RequestBody @Valid MakeScheduleRequestInDTO makeScheduleRequestInDTO,
                                                  Errors errors,
                                                  @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        // check - id 대조
+        if(id.longValue() != myUserDetails.getUser().getId()){
+            throw new Exception403("권한이 없습니다");
+        }
         scheduleService.makeScheduleRequest(makeScheduleRequestInDTO, myUserDetails.getUser().getId());
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>();
