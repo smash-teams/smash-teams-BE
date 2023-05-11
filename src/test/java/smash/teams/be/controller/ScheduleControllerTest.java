@@ -236,6 +236,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc.perform(post("/auth/super/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("메인 페이지 조회 성공") // 로그인 O
