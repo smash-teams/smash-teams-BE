@@ -15,8 +15,10 @@ public class DataInit extends DummyEntity {
     @Bean
     CommandLineRunner init(UserRepository userRepository, TeamRepository teamRepository) {
         return args -> {
+
             Team admin = teamRepository.save(newTeam("admin")); // admin 소속팀 db에 추가
             userRepository.save(newAdminWithTeam("admin", admin)); // admin db에 추가
+
         };
     }
 }

@@ -226,4 +226,22 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(joinOutDTO.getEmail()).isEqualTo("user7777777@gmail.com");
     }
 
+<<<<<<< HEAD
+=======
+    @Test
+    public void check_test() throws Exception{
+        // given
+        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
+        checkInDTO.setEmail("user1234@gmail.com");
+
+        User userPS = User.builder().email("user1234@gmail.com").build();
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(userPS));
+
+        boolean checkOutDTO = userService.checkDuplicateEmail(checkInDTO);
+
+        Assertions.assertThat(checkOutDTO).isNotNull();
+        Assertions.assertThat(checkOutDTO).isEqualTo(true);
+    }
+
+>>>>>>> 2ed0c4c (Feat: 이메일 중복확인 및 회원탈퇴 구현)
 }

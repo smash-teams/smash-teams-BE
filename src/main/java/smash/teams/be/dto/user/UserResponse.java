@@ -86,4 +86,14 @@ public class UserResponse {
             this.profileImage = user.getProfileImage();
         }
     }
+
+    @Getter @Setter
+    public static class CheckOutDTO {
+        private boolean checkEmail;
+
+        public CheckOutDTO(boolean check) {
+            this.checkEmail = check;
+        }
+    }
+
 }
