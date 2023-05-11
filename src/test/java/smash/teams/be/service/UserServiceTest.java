@@ -240,23 +240,27 @@ public class UserServiceTest extends DummyEntity {
 
 
     @Test
-    public void check_test() throws Exception{
+    public void check_duplicate_email_test() throws Exception{
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user1234@gmail.com");
 
         User userPS = User.builder().email("user1234@gmail.com").build();
-        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(userPS));
 
+        // stub
+        Mockito.when(userRepository.findUserByEmail(any())).thenReturn(userPS);
+
+        // when
         boolean checkOutDTO = userService.checkDuplicateEmail(checkInDTO);
 
+        // then
         Assertions.assertThat(checkOutDTO).isNotNull();
         Assertions.assertThat(checkOutDTO).isEqualTo(true);
     }
 
 
     @Test
-    public void cancelUser_test() throws Exception{
+    public void withdraw_test() throws Exception{
         // given
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
         withdrawInDTO.setEmail("user1234@gmail.com");
@@ -264,18 +268,17 @@ public class UserServiceTest extends DummyEntity {
 
         Long id = 7L;
 
-        String loginEmail = "user1234@gmail.com";
-        String loginPassword = bCryptPasswordEncoder.encode("1234");
-        User userOP = User.builder().email("user1234@gmail.com").password(bCryptPasswordEncoder.encode("1234")).build();
+        User userPS = User.builder().status(Status.ACTIVE.getStatus())
+                .email("user1234@gmail.com").password(bCryptPasswordEncoder.encode("1234")).build();
 
         // stub
-        Mockito.when(userRepository.findUserById(any())).thenReturn(userOP);
-//        doNothing().when(userRepository).deleteById(any());
+        Mockito.when(userRepository.findUserById(any())).thenReturn(userPS);
+        Mockito.when(userRepository.save(any())).thenReturn(userPS);
 
         // when
         userService.withdraw(withdrawInDTO,id);
 
         // then
-
+        Assertions.assertThat(userPS.getStatus()).isEqualTo("INACTIVE");
     }
 }
