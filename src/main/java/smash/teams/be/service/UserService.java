@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.annotation.Log;
+
 import smash.teams.be.core.auth.jwt.JwtProvider;
+
+
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.exception.Exception400;
 
@@ -131,6 +134,7 @@ public class UserService {
         }
     }
 
+
     @Log
     @Transactional
     public User uploadImage(MultipartFile profileImage, Long id) {
@@ -143,6 +147,37 @@ public class UserService {
             return userPS;
         } catch (Exception e) {
             throw new Exception500("프로필 사진 등록 실패 : " + e.getMessage());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkDuplicateEmail(UserRequest.CheckInDTO checkInDTO) {
+        Optional<User> userPS = userRepository.findByEmail(checkInDTO.getEmail());
+
+        if(userPS.isPresent()) {
+            if (userPS.get().getEmail().equals(checkInDTO.getEmail()))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public void cancelUser(UserRequest.CancelUserInDTO cancelUserInDTO, MyUserDetails myUserDetails) {
+        if(cancelUserInDTO.getEmail().equals(myUserDetails.getUser().getEmail())){
+            if(bCryptPasswordEncoder.encode(cancelUserInDTO.getPassword()).equals(myUserDetails.getPassword())){
+                Optional<User> userOP = userRepository.findByEmail(cancelUserInDTO.getEmail());
+                if(userOP.get().getEmail().equals(myUserDetails.getUser().getEmail())){
+                    if(userOP.get().getPassword().equals(myUserDetails.getPassword())){
+                        userRepository.deleteById(userOP.get().getId());
+                    }
+                }
+            }else{
+                throw new Exception400("password","비밀번호가 다릅니다");
+            }
+        }else{
+            throw new Exception400("email","이메일주소가 다릅니다.");
+
         }
     }
 }

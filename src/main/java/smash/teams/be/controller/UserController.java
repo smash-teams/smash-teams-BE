@@ -73,6 +73,7 @@ public class UserController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+<<<<<<< HEAD
     @Log
     @PostMapping("/auth/user/{id}/image")
     public ResponseEntity<?> uploadImage(@PathVariable Long id,
@@ -91,6 +92,25 @@ public class UserController {
         myUserDetails.setUser(userPS); // 동기화
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(null);
+
+    @PostMapping("/join/check")
+    public ResponseEntity<?> checkDuplicateEmail(@RequestBody UserRequest.CheckInDTO checkInDTO) {
+        boolean isDuplicated = userService.checkDuplicateEmail(checkInDTO);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(isDuplicated);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @PostMapping("/auth/user/{id}/delete")
+    public ResponseEntity<?> cancelUser(@PathVariable Long id,
+                                        @RequestBody UserRequest.CancelUserInDTO cancelUserInDTO,
+                                        @AuthenticationPrincipal MyUserDetails myUserDetails) {
+
+        if(id.longValue() != myUserDetails.getUser().getId()){
+            throw new Exception403("권한이 없습니다");
+        }
+
+        userService.cancelUser(cancelUserInDTO, myUserDetails);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>();
         return ResponseEntity.ok().body(responseDTO);
     }
 }

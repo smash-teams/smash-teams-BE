@@ -115,4 +115,16 @@ public class UserRequest {
                     .build();
         }
     }
+
+    @Getter @Setter
+    public static class CheckInDTO {
+        private String email;
+    }
+
+    @Getter @Setter
+    public static class CancelUserInDTO {
+        private String email;
+        private String password;
+    }
+
 }

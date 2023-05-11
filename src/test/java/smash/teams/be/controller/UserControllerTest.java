@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +25,7 @@ import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
+import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
@@ -33,7 +35,13 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,6 +73,7 @@ public class UserControllerTest extends RestDoc {
     @BeforeEach
     public void setUp() {
 
+
         Team teamPS = teamRepository.save(dummy.newTeam("개발팀"));
         Team teamPS2 = teamRepository.save(dummy.newTeam("회계팀"));
         Team teamPS3 = teamRepository.save(dummy.newTeam("마케팅팀"));
@@ -80,6 +89,10 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newManagerWithTeam("Manager2", teamPS5)); // 7
 
         teamRepository.save(Team.builder().teamName("개발팀").build());
+
+        Team 개발팀 = teamRepository.save(Team.builder().teamName("개발팀").build());
+
+
         userRepository.save(dummy.newUser("User1")); // 1
         userRepository.save(dummy.newUser("User2")); // 2
         userRepository.save(dummy.newAdmin("Admin1")); // 3
@@ -87,6 +100,9 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newCeo("Ceo")); // 5
         userRepository.save(dummy.newManager("Manager1")); // 6
         userRepository.save(dummy.newManager("Manager2")); // 7
+
+
+        userRepository.save(dummy.newUserForIntergratingTest("권으뜸",개발팀,"USER","user1234"));
 
 
         em.clear();
@@ -311,7 +327,7 @@ public class UserControllerTest extends RestDoc {
     public void join_test() throws Exception {
         // given
         UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
-        joinInDTO.setName("권으뜸");
+        joinInDTO.setName("권민수");
         joinInDTO.setPassword("12345678");
         joinInDTO.setEmail("user7777@gmail.com");
         joinInDTO.setPhoneNumber("010-1111-1111");
@@ -331,6 +347,107 @@ public class UserControllerTest extends RestDoc {
 //        resultActions.andExpect(jsonPath("$.data").value(null));
         resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+
+    @DisplayName("회원가입 실패 : 이름이 이미 존재할 때")
+    @Test
+    public void join_fail_name_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("12345678");
+        joinInDTO.setEmail("user7777@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("name"));
+        resultActions.andExpect(jsonPath("$.data.value").value("이름이 존재합니다"));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("회원가입 실패 : 이메일 형식을 지키지 않았을 때")
+    @Test
+    public void join_fail_email_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("12345678");
+        joinInDTO.setEmail("user7777@gmail.c");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+//        resultActions.andExpect(jsonPath("$.status").value(200));
+//        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+//        resultActions.andExpect(jsonPath("$.data").value(null));
+//        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("email"));
+        resultActions.andExpect(jsonPath("$.data.value").value("이메일 형식으로 작성해주세요"));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("이메일 중복화인 : 중복된 이메일이 아닙니다")
+    @Test
+    public void checkDuplicateEmail_false_test() throws Exception{
+        // given
+        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
+        checkInDTO.setEmail("user7777777@gmail.com");
+        String requestBody = om.writeValueAsString(checkInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data").value(false));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
+    }
+
+    @DisplayName("이메일 중복화인 : 현재 사용중인 이메일입니다.")
+    @Test
+    public void checkDuplicateEmail_true_test() throws Exception{
+        // given
+        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
+        checkInDTO.setEmail("user1234@gmail.com");
+        String requestBody = om.writeValueAsString(checkInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("성공"));
+        resultActions.andExpect(jsonPath("$.data").value(true));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
     }
 
 }

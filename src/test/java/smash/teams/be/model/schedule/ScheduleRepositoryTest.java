@@ -133,15 +133,15 @@ public class ScheduleRepositoryTest extends DummyEntity {
 
         // then
         assertThat(schedules.size()).isEqualTo(3);
-        assertThat(schedules.get(0).getId()).isEqualTo(2L);
+        assertThat(schedules.get(0).getId()).isEqualTo(10L);
         assertThat(schedules.get(1).getId()).isEqualTo(9L);
-        assertThat(schedules.get(2).getId()).isEqualTo(10L);
-        assertThat(schedules.get(0).getUser().getId()).isEqualTo(2L);
+        assertThat(schedules.get(2).getId()).isEqualTo(2L);
+        assertThat(schedules.get(0).getUser().getId()).isEqualTo(5L);
         assertThat(schedules.get(1).getUser().getId()).isEqualTo(2L);
-        assertThat(schedules.get(2).getUser().getId()).isEqualTo(5L);
-        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimmanager");
+        assertThat(schedules.get(2).getUser().getId()).isEqualTo(2L);
+        assertThat(schedules.get(0).getUser().getName()).isEqualTo("kimshift");
         assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimmanager");
-        assertThat(schedules.get(2).getUser().getName()).isEqualTo("kimshift");
+        assertThat(schedules.get(2).getUser().getName()).isEqualTo("kimmanager");
         assertThat(schedules.get(0).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
         assertThat(schedules.get(1).getUser().getTeam().getTeamName()).isEqualTo("개발팀");
         assertThat(schedules.get(2).getUser().getTeam().getTeamName()).isEqualTo("개발팀");

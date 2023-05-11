@@ -152,4 +152,6 @@ public class UserControllerUnitTest extends DummyEntity {
         // 검증해볼께
         resultActions.andExpect(status().isOk());
     }
+
+
 }
