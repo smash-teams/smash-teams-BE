@@ -20,8 +20,8 @@ public class UserRequest {
                 message = "50자가 넘지 않도록 이메일 형식에 맞춰 작성해주세요.")
         private String email;
 
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\\d~!@#$%^&*()_+]{8,20}$",
-                message = "영문 대소문자, 숫자, 특수문자만 사용하여 8~20자 이내로 작성해주세요.")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$",
+                message = "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요.")
         @NotEmpty
         private String password;
     }
@@ -29,17 +29,17 @@ public class UserRequest {
     @Getter
     @Setter
     public static class UpdateInDTO {
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\\d~!@#$%^&*()_+]{8,20}$",
-                message = "영문 대소문자, 숫자, 특수문자만 사용하여 8~20자 이내로 작성해주세요.")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$",
+                message = "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요.")
         @NotEmpty
         private String curPassword;
 
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\\d~!@#$%^&*()_+]{8,20}$",
-                message = "영문 대소문자, 숫자, 특수문자만 사용하여 8~20자 이내로 작성해주세요.")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$",
+                message = "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요..")
         @NotEmpty
         private String newPassword;
 
-        @Pattern(regexp = "^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$",
+        @Pattern(regexp = "^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$",
                 message = "휴대폰 번호(010-1234-5678)의 형태로 작성해주세요.")
         @NotEmpty
         private String phoneNumber;

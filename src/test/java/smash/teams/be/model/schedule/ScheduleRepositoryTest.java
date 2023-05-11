@@ -2,7 +2,6 @@ package smash.teams.be.model.schedule;
 
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -45,9 +44,9 @@ public class ScheduleRepositoryTest extends DummyEntity {
         teamRepository.save(team2);
 
 
-        User kimceo = newUserForRepoTest(null,"kimceo", "CEO");
-        User kimmanager = newUserForRepoTest(team1,"kimmanager", "MANAGER");
-        User kimdayoff = newUserForRepoTest(team2,"kimday","USER");
+        User kimceo = newUserForRepoTest(null, "kimceo", "CEO");
+        User kimmanager = newUserForRepoTest(team1, "kimmanager", "MANAGER");
+        User kimdayoff = newUserForRepoTest(team2, "kimday", "USER");
         User kimhalfoff = newUserForRepoTest(team2, "kimhalf", "USER");
         User kimshift = newUserForRepoTest(team1, "kimshift", "USER");
         userRepository.save(kimceo);
@@ -56,16 +55,16 @@ public class ScheduleRepositoryTest extends DummyEntity {
         userRepository.save(kimhalfoff);
         userRepository.save(kimshift);
 
-        Schedule schedule1 = newScheduleForRepoTest(kimceo, "DAYOFF","APPROVED","휴가");
-        Schedule schedule2 = newScheduleForRepoTest(kimmanager, "HALFOFF","APPROVED","병가");
-        Schedule schedule3 = newScheduleForRepoTest(kimdayoff,"DAYOFF","REJECTED","휴가");
-        Schedule schedule4 = newScheduleForRepoTest(kimceo, "HALFOFF","APPROVED","개인사정");
-        Schedule schedule5 = newScheduleForRepoTest(kimdayoff, "HALFOFF","APPROVED","개인사정");
-        Schedule schedule6 = newScheduleForRepoTest(kimdayoff,"SHIFT","APPROVED","당직");
-        Schedule schedule7 = newScheduleForRepoTest(kimhalfoff, "SHIFT","LAST","당직");
-        Schedule schedule8 = newScheduleForRepoTest(kimhalfoff, "DAYOFF","LAST","휴가");
-        Schedule schedule9 = newScheduleForRepoTest(kimmanager,"DAYOFF", "LAST","휴가");
-        Schedule schedule10 = newScheduleForRepoTest(kimshift,"SHIFT", "LAST","당직");
+        Schedule schedule1 = newScheduleForRepoTest(kimceo, "DAYOFF", "APPROVED", "휴가");
+        Schedule schedule2 = newScheduleForRepoTest(kimmanager, "HALFOFF", "APPROVED", "병가");
+        Schedule schedule3 = newScheduleForRepoTest(kimdayoff, "DAYOFF", "REJECTED", "휴가");
+        Schedule schedule4 = newScheduleForRepoTest(kimceo, "HALFOFF", "APPROVED", "개인사정");
+        Schedule schedule5 = newScheduleForRepoTest(kimdayoff, "HALFOFF", "APPROVED", "개인사정");
+        Schedule schedule6 = newScheduleForRepoTest(kimdayoff, "SHIFT", "APPROVED", "당직");
+        Schedule schedule7 = newScheduleForRepoTest(kimhalfoff, "SHIFT", "LAST", "당직");
+        Schedule schedule8 = newScheduleForRepoTest(kimhalfoff, "DAYOFF", "LAST", "휴가");
+        Schedule schedule9 = newScheduleForRepoTest(kimmanager, "DAYOFF", "LAST", "휴가");
+        Schedule schedule10 = newScheduleForRepoTest(kimshift, "SHIFT", "LAST", "당직");
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         scheduleRepository.save(schedule3);
@@ -81,13 +80,12 @@ public class ScheduleRepositoryTest extends DummyEntity {
     }
 
     @Test
-    public void find_Schedules_By_User_Id_test() {
+    public void findSchedulesByUserId_test() {
         // given
         Long userId = 3L;
 
         // when
         List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
-
 
         // then
         assertThat(schedules.size()).isEqualTo(3);
@@ -127,7 +125,7 @@ public class ScheduleRepositoryTest extends DummyEntity {
     }
 
     @Test
-    public void findSchedulesByTeamName_test(){
+    public void findSchedulesByTeamName_test() {
         // given
 
         // when
@@ -165,7 +163,7 @@ public class ScheduleRepositoryTest extends DummyEntity {
     }
 
     @Test
-    public void findScheduleByScheduleId_test(){
+    public void findScheduleByScheduleId_test() {
         // given
 //        Schedule schedule8 = newScheduleForRepoTest(kimhalfoff, "DAYOFF","LAST","휴가");
         // when

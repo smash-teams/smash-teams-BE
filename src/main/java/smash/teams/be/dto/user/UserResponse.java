@@ -25,7 +25,7 @@ public class UserResponse {
         private String phoneNumber;
         private String profileImage;
         private String startWork;
-        private Double remain;
+        private double remain;
         private String teamName;
         private String role;
 

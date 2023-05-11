@@ -13,7 +13,6 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    private static final String SUBJECT = "jwtstudy";
     private static final int EXP = 1000 * 60 * 60* 24; // 24시간
     public static final String TOKEN_PREFIX = "Bearer "; // 스페이스 필요함
     public static final String HEADER = "Authorization";
@@ -22,7 +21,6 @@ public class JwtProvider {
 
     public static String create(User user) {
         String jwt = JWT.create()
-                .withSubject(SUBJECT)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXP))
                 .withClaim("id", user.getId())
                 .withClaim("role", user.getRole())

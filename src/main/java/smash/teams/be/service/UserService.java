@@ -15,6 +15,7 @@ import smash.teams.be.core.exception.Exception401;
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
+import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
@@ -23,11 +24,11 @@ import smash.teams.be.model.user.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
 
     @Log
-    @Transactional(readOnly = true)
     public UserResponse.LoginOutDTO login(UserRequest.LoginInDTO loginInDTO) {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
@@ -64,7 +65,7 @@ public class UserService {
 
         if (!bCryptPasswordEncoder.matches(updateInDTO.getCurPassword(), userPS.getPassword())) {
             throw new Exception400("password", "비밀번호가 일치하지 않습니다.");
-        } // 비밀번호 일치
+        }
 
         try {
             User userEntity = updateInDTO.toEntity();
