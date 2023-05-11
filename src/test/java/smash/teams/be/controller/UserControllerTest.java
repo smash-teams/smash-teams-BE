@@ -10,26 +10,29 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
+import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -234,4 +237,55 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
+
+//    @DisplayName("이미지 업로드 성공")
+//    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+//    @Test
+//    public void uploadImage_test() throws Exception {
+//        // given
+//        Long id = 1L;
+//        MockMultipartFile multipartFile = new MockMultipartFile("profileImage",
+//                "person.png", "multipart/form-data", "Hello, World!".getBytes());
+////        String requestBody = om.writeValueAsString(multipartFile);
+////        System.out.println("테스트1 : " + requestBody);
+//
+//        // when
+//        ResultActions resultActions = mvc.perform(
+//                post("/auth/user/" + id + "/image")
+//                        .contentType(MediaType.MULTIPART_FORM_DATA)
+//        );
+//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+//        System.out.println("테스트2 : " + responseBody);
+//
+//        // then
+//        resultActions.andExpect(jsonPath("$.status").value(200));
+//        resultActions.andExpect(jsonPath("$.msg").value("OK"));
+//        resultActions.andExpect(jsonPath("$.data").value("null"));
+//        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+//    }
+//
+//    @DisplayName("이미지 업로드 실패") //
+//    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+//    @Test
+//    public void uploadImage_fail_test() throws Exception {
+//        // given
+//        Long id = 1L;
+//        MockMultipartFile multipartFile = new MockMultipartFile("profileImage",
+//                "person.png", "multipart/form-data", "Hello, World!".getBytes());
+//
+//        // when
+//        ResultActions resultActions = mvc.perform(
+//                MockMvcRequestBuilders.multipart("/auth/user/" + id + "/image")
+//                        .file(multipartFile)
+//                        .contentType(MediaType.MULTIPART_FORM_DATA)
+//        );
+//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+//        System.out.println("테스트2 : " + responseBody);
+//
+//        // then
+//        resultActions.andExpect(jsonPath("$.status").value(200));
+//        resultActions.andExpect(jsonPath("$.msg").value("ok"));
+//        resultActions.andExpect(jsonPath("$.data").value(null));
+//        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+//    }
 }

@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @Log
-    @PutMapping ("/auth/user/{id}/image")
+    @PostMapping("/auth/user/{id}/image")
     public ResponseEntity<?> uploadImage(@PathVariable Long id,
                                          MultipartFile profileImage,
                                          @AuthenticationPrincipal MyUserDetails myUserDetails) {
