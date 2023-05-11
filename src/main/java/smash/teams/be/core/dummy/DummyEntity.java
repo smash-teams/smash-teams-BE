@@ -386,7 +386,6 @@ public class DummyEntity {
     public User newUserForIntergratingTest(String name, Team team, String role, String email) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder().name(name).team(team).role(role)
-                .remain(20).email(email + "@gmail.com").password(passwordEncoder.encode("1234"))
                 .remain(20).email(email+"@gmail.com").password(passwordEncoder.encode("##smash1234"))
                 .phoneNumber("010-1111-1111").status(Status.ACTIVE.getStatus()).startWork(LocalDateTime.now())
                 .profileImage(null).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();

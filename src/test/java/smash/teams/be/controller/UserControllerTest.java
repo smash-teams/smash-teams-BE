@@ -402,7 +402,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("이메일 중복화인 : 중복된 이메일이 아닙니다")
+    @DisplayName("이메일 중복확인 : 중복된 이메일이 아닙니다")
     @Test
     public void check_duplicate_email_false_test() throws Exception{
         // given
@@ -416,6 +416,7 @@ public class UserControllerTest extends RestDoc {
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
+        // then
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").value(false));
@@ -423,7 +424,7 @@ public class UserControllerTest extends RestDoc {
 
     }
 
-    @DisplayName("이메일 중복화인 : 현재 사용중인 이메일입니다.")
+    @DisplayName("이메일 중복화인 : 중복된 이메일입니다.")
     @Test
     public void check_duplicate_email_true_test() throws Exception{
         // given
@@ -437,6 +438,7 @@ public class UserControllerTest extends RestDoc {
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
+        // then
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").value(true));
@@ -446,14 +448,14 @@ public class UserControllerTest extends RestDoc {
 
 
     @DisplayName("회원탈퇴 성공")
-    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void withdraw_test() throws Exception{
         // given
-        Long id = 1L;
+        Long id = 8L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
-        withdrawInDTO.setEmail("User1@gmail.com");
-        withdrawInDTO.setPassword("dltmdals123!");
+        withdrawInDTO.setEmail("user1234@gmail.com");
+        withdrawInDTO.setPassword("##smash1234");
         String requestBody = om.writeValueAsString(withdrawInDTO);
 
         // when
@@ -464,21 +466,47 @@ public class UserControllerTest extends RestDoc {
 
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
-//        resultActions.andExpect(jsonPath("$.data").value(null));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
 
-    @DisplayName("회원탈퇴 실패")
+
+    @DisplayName("회원탈퇴 실패 : 이메일 틀림")
     @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void withdraw_fail_test() throws Exception{
+    public void withdraw_fail_email_test() throws Exception{
         // given
         Long id = 8L;
-        UserRequest.WithdrawInDTO cancelUserInDTO = new UserRequest.WithdrawInDTO();
-        cancelUserInDTO.setEmail("user1234@gmail.com");
-        cancelUserInDTO.setPassword("smash1234");
-        String requestBody = om.writeValueAsString(cancelUserInDTO);
+        UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
+        withdrawInDTO.setEmail("user1234567@gmail.com");
+        withdrawInDTO.setPassword("##smash1234");
+        String requestBody = om.writeValueAsString(withdrawInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("email"));
+        resultActions.andExpect(jsonPath("$.data.value").value("이메일이 틀렸습니다"));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
+    }
+
+
+    @DisplayName("회원탈퇴 실패 : 비밀번호 틀림")
+    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void withdraw_fail_password_test() throws Exception{
+        // given
+        Long id = 8L;
+        UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
+        withdrawInDTO.setEmail("user1234@gmail.com");
+        withdrawInDTO.setPassword("smash1234");
+        String requestBody = om.writeValueAsString(withdrawInDTO);
 
         // when
         ResultActions resultActions = mvc
@@ -489,9 +517,10 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(400));
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
         resultActions.andExpect(jsonPath("$.data.key").value("password"));
-        resultActions.andExpect(jsonPath("$.data.value").value("비밀번호가 맞지 않습니다"));
+        resultActions.andExpect(jsonPath("$.data.value").value("비밀번호가 틀렸습니다"));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
+
 
 }
