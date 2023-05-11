@@ -85,8 +85,8 @@ public class UserControllerUnitTest extends DummyEntity {
         // given
         Long id = 1L;
         UserRequest.UpdateInDTO updateInDTO = new UserRequest.UpdateInDTO();
-        updateInDTO.setCurPassword("dltmdals1234");
-        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setCurPassword("dltmdals123!");
+        updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-1234-5678");
         updateInDTO.setStartWork("2023-05-09");
         updateInDTO.setProfileImage("사진 2");

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserResponse;
@@ -44,6 +45,37 @@ public class UserServiceTest extends DummyEntity {
     private ObjectMapper om;
 
     @Test
+    public void login_test() throws Exception {
+        // given
+        LoginInDTO loginInDTO = new LoginInDTO();
+        loginInDTO.setEmail("seungmin@gmail.com");
+        loginInDTO.setPassword("dltmdals123!");
+
+        // stub
+        User user = newMockUserWithTeam(1L, "seungmin", newMockTeam(1L, "개발팀"));
+        MyUserDetails myUserDetails = new MyUserDetails(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                myUserDetails, myUserDetails.getPassword(), myUserDetails.getAuthorities()
+        );
+        Mockito.when(authenticationManager.authenticate(any())).thenReturn(authentication);
+
+        // when
+        UserResponse.LoginOutDTO loginOutDTO = userService.login(loginInDTO);
+        System.out.println(om.writeValueAsString(loginOutDTO));
+
+        // then
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getName()).isEqualTo("seungmin");
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getEmail()).isEqualTo("seungmin@gmail.com");
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getPhoneNumber()).isEqualTo("010-1234-5678");
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getProfileImage()).isNull();
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getStartWork()).isEqualTo(LocalDateTime.now().toLocalDate().toString());
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getRemain()).isEqualTo(20);
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getTeamName()).isEqualTo("개발팀");
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getRole()).isEqualTo(Role.USER.getRole());
+        Assertions.assertThat(loginOutDTO.getJwt().startsWith(JwtProvider.TOKEN_PREFIX)).isTrue();
+    }
+
+    @Test
     public void findMyId_test() throws Exception {
         // given
         Long id = 1L;
@@ -69,8 +101,8 @@ public class UserServiceTest extends DummyEntity {
         Long id = 1L;
 
         UpdateInDTO updateInDTO = new UpdateInDTO();
-        updateInDTO.setCurPassword("dltmdals1234");
-        updateInDTO.setNewPassword("dltmdals123!");
+        updateInDTO.setCurPassword("dltmdals123!");
+        updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-8765-4321");
         updateInDTO.setStartWork("2023-05-10");
         updateInDTO.setProfileImage("사진 33"); // request

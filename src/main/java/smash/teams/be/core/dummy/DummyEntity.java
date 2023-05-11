@@ -25,8 +25,8 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
-                .email(name + "@gmail.com")
+                .password(passwordEncoder.encode("dltmdals123!"))
+                .email(name + "@newUserWithTeam.newUserWithTeam")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
                 .role(Role.USER.getRole())
@@ -39,7 +39,7 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -53,7 +53,7 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -67,7 +67,7 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -82,7 +82,7 @@ public class DummyEntity {
         return User.builder()
                 .team(team)
                 .name(name)
-                .password(passwordEncoder.encode("seungmin1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -97,11 +97,42 @@ public class DummyEntity {
         return User.builder()
                 .team(team)
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
                 .role(Role.MANAGER.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
+                .build();
+    }
+
+    public User newCeoWithTeam(String name, Team team) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .team(team)
+                .name(name)
+                .password(passwordEncoder.encode("dltmdals123!"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.CEO.getRole())
+                .status(Status.ACTIVE.getStatus())
+                .startWork(LocalDateTime.now())
+                .build();
+    }
+
+
+    public User newAdminWithTeam(String name, Team team) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return User.builder()
+                .team(team)
+                .name(name)
+                .password(passwordEncoder.encode("dltmdals123!"))
+                .email(name + "@gmail.com")
+                .phoneNumber("010-1234-5678")
+                .remain(20)
+                .role(Role.ADMIN.getRole())
                 .status(Status.ACTIVE.getStatus())
                 .startWork(LocalDateTime.now())
                 .build();
@@ -112,8 +143,9 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .id(id)
+                .team(newTeam("개발팀"))
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -130,7 +162,7 @@ public class DummyEntity {
                 .id(id)
                 .team(team)
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -145,8 +177,9 @@ public class DummyEntity {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .id(id)
+                .team(newMockTeam(1L, "admin"))
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -336,8 +369,9 @@ public class DummyEntity {
 
         return User.builder()
                 .id(id)
+                .team(newTeam("개발팀"))
                 .name(name)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode("dltmdals123!"))
                 .email(name + "@gmail.com")
                 .phoneNumber("010-1234-5678")
                 .remain(20)
@@ -349,21 +383,21 @@ public class DummyEntity {
                 .build();
     }
 
-    public User newUserForIntergratingTest(String name, Team team, String role, String email){
+    public User newUserForIntergratingTest(String name, Team team, String role, String email) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder().name(name).team(team).role(role)
-                .remain(20).email(email+"@gmail.com").password(passwordEncoder.encode("1234"))
+                .remain(20).email(email + "@gmail.com").password(passwordEncoder.encode("1234"))
                 .phoneNumber("010-1111-1111").status(Status.ACTIVE.getStatus()).startWork(LocalDateTime.now())
                 .profileImage(null).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
     }
 
-    public Schedule newScheduleForIntergratingTest(User user, String type, String status){
+    public Schedule newScheduleForIntergratingTest(User user, String type, String status) {
         return Schedule.builder().user(user).type(type).status(status)
                 .reason("쉬고싶음").startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
                 .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).finishedAt(LocalDateTime.now()).build();
     }
 
-    public Team newTeamForIntergratingTest(String teamName){
+    public Team newTeamForIntergratingTest(String teamName) {
         return Team.builder().teamName(teamName)
                 .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
     }

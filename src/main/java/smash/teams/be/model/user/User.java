@@ -1,7 +1,10 @@
 package smash.teams.be.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import smash.teams.be.model.team.Team;
 
 import javax.persistence.*;
@@ -41,7 +44,7 @@ public class User {
     private String status;
 
     @Column(nullable = false, length = 10)
-    private Double remain;
+    private double remain;
 
     @Column(nullable = false)
     private LocalDateTime startWork;
@@ -68,6 +71,10 @@ public class User {
 
     public void updatePhoneNumber(String phoneNumber) { // 폰번호 변경
         this.phoneNumber = phoneNumber;
+    }
+
+    public void changeRemain(double remain) {
+        this.remain = remain;
     }
 
     public void updateStartWork(LocalDateTime startWork) { // 입사날 변경(고정 또는 null)
@@ -99,9 +106,5 @@ public class User {
         this.startWork = startWork;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public void changeRemain(double remain){
-        this.remain = remain;
     }
 }

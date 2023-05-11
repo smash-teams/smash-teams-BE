@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.core.exception.Exception400;
+import smash.teams.be.core.exception.Exception404;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 
@@ -35,43 +36,38 @@ public class UserRepositoryTest extends DummyEntity {
     public void setUp() {
         em.createNativeQuery("ALTER TABLE user_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
         em.createNativeQuery("ALTER TABLE team_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        userRepository.save(newUser("이승민"));
-        userRepository.save(newUser("송재근"));
+        Team teamPS = teamRepository.save(newTeam("개발팀"));
+        userRepository.save(newUserWithTeam("이승민", teamPS));
+        userRepository.save(newUserWithTeam("송재근", teamPS));
         em.clear();
     }
 
     @Test
-    public void find_by_email_test() {
+    public void findByEmail_test() {
         // given
         String email = "이승민@gmail.com";
 
         // when
-        Optional<User> userOP = userRepository.findByEmail(email);
-        if (userOP.isEmpty()) {
-            throw new Exception400(email, "사용자를 찾을 수 없습니다.");
-        }
-        User userPS = userOP.get();
+        User userPS = userRepository.findByEmail(email).orElseThrow();
 
         // then
         assertThat(userPS.getEmail()).isEqualTo("이승민@gmail.com");
     }
 
     @Test
-    public void calculate_count_by_team_id_test() {
+    public void calculateCountByTeamId_test() {
         // given
         Long teamId = 1L;
 
         // given2
-        Team team = teamRepository.save(Team.builder()
-                .teamName("개발팀")
-                .build());
-        userRepository.save(newUserWithTeam("이윤경", team));
-        userRepository.save(newUserWithTeam("최민식", team));
+        Team teamPS = teamRepository.findByTeamName("개발팀").orElseThrow();
+        userRepository.save(newUserWithTeam("이윤경", teamPS));
+        userRepository.save(newUserWithTeam("최민식", teamPS));
 
         // when
         int i = userRepository.calculateCountByTeamId(teamId);
 
         // then
-        assertThat(i).isEqualTo(2);
+        assertThat(i).isEqualTo(4);
     }
 }
