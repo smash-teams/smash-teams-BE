@@ -36,15 +36,11 @@ public class UserRepositoryTest extends DummyEntity {
     public void setUp() {
         em.createNativeQuery("ALTER TABLE user_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
         em.createNativeQuery("ALTER TABLE team_tb ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-<<<<<<< HEAD
+
         Team teamPS = teamRepository.save(newTeam("개발팀"));
         userRepository.save(newUserWithTeam("이승민", teamPS));
         userRepository.save(newUserWithTeam("송재근", teamPS));
-=======
-        userRepository.save(newUser("이승민"));
-        userRepository.save(newUser("송재근"));
 
->>>>>>> 2ed0c4c (Feat: 이메일 중복확인 및 회원탈퇴 구현)
         em.clear();
     }
 

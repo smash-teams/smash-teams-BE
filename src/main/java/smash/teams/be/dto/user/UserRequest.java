@@ -122,7 +122,7 @@ public class UserRequest {
     }
 
     @Getter @Setter
-    public static class CancelUserInDTO {
+    public static class WithdrawInDTO {
         private String email;
         private String password;
     }

@@ -96,22 +96,7 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newCeoWithTeam("Ceo", teamPS5)); // 5
         userRepository.save(dummy.newManagerWithTeam("Manager1", teamPS5)); // 6
         userRepository.save(dummy.newManagerWithTeam("Manager2", teamPS5)); // 7
-
-        teamRepository.save(Team.builder().teamName("개발팀").build());
-
-        Team 개발팀 = teamRepository.save(Team.builder().teamName("개발팀").build());
-
-
-        userRepository.save(dummy.newUser("User1")); // 1
-        userRepository.save(dummy.newUser("User2")); // 2
-        userRepository.save(dummy.newAdmin("Admin1")); // 3
-        userRepository.save(dummy.newAdmin("Admin2")); // 4
-        userRepository.save(dummy.newCeo("Ceo")); // 5
-        userRepository.save(dummy.newManager("Manager1")); // 6
-        userRepository.save(dummy.newManager("Manager2")); // 7
-
-
-        userRepository.save(dummy.newUserForIntergratingTest("권으뜸",개발팀,"USER","user1234"));
+        userRepository.save(dummy.newUserForIntergratingTest("권으뜸",teamPS,"USER","user1234")); //8
 
 
         em.clear();
@@ -337,7 +322,7 @@ public class UserControllerTest extends RestDoc {
         // given
         UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
         joinInDTO.setName("권민수");
-        joinInDTO.setPassword("12345678");
+        joinInDTO.setPassword("##234dkfid");
         joinInDTO.setEmail("user7777@gmail.com");
         joinInDTO.setPhoneNumber("010-1111-1111");
         joinInDTO.setStartWork("2020-05-01");
@@ -365,7 +350,7 @@ public class UserControllerTest extends RestDoc {
         // given
         UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
         joinInDTO.setName("권으뜸");
-        joinInDTO.setPassword("12345678");
+        joinInDTO.setPassword("##smash1234");
         joinInDTO.setEmail("user7777@gmail.com");
         joinInDTO.setPhoneNumber("010-1111-1111");
         joinInDTO.setStartWork("2020-05-01");
@@ -392,7 +377,7 @@ public class UserControllerTest extends RestDoc {
         // given
         UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
         joinInDTO.setName("권으뜸");
-        joinInDTO.setPassword("12345678");
+        joinInDTO.setPassword("##smash1234");
         joinInDTO.setEmail("user7777@gmail.c");
         joinInDTO.setPhoneNumber("010-1111-1111");
         joinInDTO.setStartWork("2020-05-01");
@@ -413,7 +398,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(400));
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
         resultActions.andExpect(jsonPath("$.data.key").value("email"));
-        resultActions.andExpect(jsonPath("$.data.value").value("이메일 형식으로 작성해주세요"));
+        resultActions.andExpect(jsonPath("$.data.value").value("50자가 넘지 않도록 이메일 형식에 맞춰 작성해주세요."));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -466,10 +451,10 @@ public class UserControllerTest extends RestDoc {
     public void withdraw_test() throws Exception{
         // given
         Long id = 1L;
-        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
-        cancelUserInDTO.setEmail("User1@gmail.com");
-        cancelUserInDTO.setPassword("1234");
-        String requestBody = om.writeValueAsString(cancelUserInDTO);
+        UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
+        withdrawInDTO.setEmail("User1@gmail.com");
+        withdrawInDTO.setPassword("dltmdals123!");
+        String requestBody = om.writeValueAsString(withdrawInDTO);
 
         // when
         ResultActions resultActions = mvc
@@ -490,7 +475,7 @@ public class UserControllerTest extends RestDoc {
     public void cancelUser_fail_test() throws Exception{
         // given
         Long id = 8L;
-        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
+        UserRequest.WithdrawInDTO cancelUserInDTO = new UserRequest.WithdrawInDTO();
         cancelUserInDTO.setEmail("user1234@gmail.com");
         cancelUserInDTO.setPassword("smash1234");
         String requestBody = om.writeValueAsString(cancelUserInDTO);
@@ -501,9 +486,10 @@ public class UserControllerTest extends RestDoc {
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
-        resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("ok"));
-//        resultActions.andExpect(jsonPath("$.data").value(null));
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("password"));
+        resultActions.andExpect(jsonPath("$.data.value").value("비밀번호가 맞지 않습니다"));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
