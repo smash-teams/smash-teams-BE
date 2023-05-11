@@ -107,4 +107,8 @@ public class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public void uploadImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

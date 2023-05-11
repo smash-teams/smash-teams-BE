@@ -7,13 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
+import smash.teams.be.core.exception.Exception400;
 import smash.teams.be.core.exception.Exception403;
 import smash.teams.be.dto.ResponseDTO;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
+import smash.teams.be.model.user.User;
 import smash.teams.be.service.UserService;
 
 import javax.validation.Valid;
@@ -56,6 +59,27 @@ public class UserController {
         UserResponse.UpdateOutDTO updateOutDTO  = userService.update(myUserDetails.getUser().getId(), updateInDTO);
         System.out.println(new ObjectMapper().writeValueAsString(updateOutDTO));
         ResponseDTO<?> responseDTO = new ResponseDTO<>(updateOutDTO);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @Log
+    @PutMapping ("/auth/user/{id}/image")
+    public ResponseEntity<?> uploadImage(@PathVariable Long id,
+                                         MultipartFile profileImage,
+                                         @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (id.longValue() != myUserDetails.getUser().getId()) {
+            throw new Exception403("권한이 없습니다.");
+        }
+
+        if (profileImage.isEmpty()) {
+            throw new Exception400("profile", "사진이 전송되지 않았습니다.");
+        }
+
+        User userPS = userService.uploadImage(profileImage, id);
+
+        myUserDetails.setUser(userPS); // 동기화
+
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(null);
         return ResponseEntity.ok().body(responseDTO);
     }
 }
