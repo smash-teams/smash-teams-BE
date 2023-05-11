@@ -168,10 +168,10 @@ public class UserService {
     }
 
     @Transactional
-    public void withdraw(UserRequest.CancelUserInDTO cancelUserInDTO, Long id) {
+    public void withdraw(UserRequest.WithdrawInDTO withdrawInDTO, Long id) {
 
         User userOP = userRepository.findUserById(id);
-        if (bCryptPasswordEncoder.matches(cancelUserInDTO.getPassword(), userOP.getPassword())) {
+        if (bCryptPasswordEncoder.matches(withdrawInDTO.getPassword(), userOP.getPassword())) {
             try {
                 userOP.changeStatus(Status.INACTIVE.getStatus());
                 userRepository.save(userOP);
@@ -179,7 +179,7 @@ public class UserService {
                 throw new Exception500("탈퇴 실패 : " + e.getMessage());
             }
         }else{
-            throw new Exception403("비밀번호가 맞지 않습니다");
+            throw new Exception400("password","비밀번호가 맞지 않습니다");
         }
     }
 }

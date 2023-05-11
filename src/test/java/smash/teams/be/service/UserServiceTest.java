@@ -27,11 +27,11 @@ import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
 
 import org.springframework.test.web.servlet.ResultActions;
-<<<<<<< HEAD
 
-=======
+
+
 import smash.teams.be.core.auth.session.MyUserDetails;
->>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
+
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
@@ -54,7 +54,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-<<<<<<< HEAD
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,12 +67,12 @@ import static smash.teams.be.core.auth.jwt.JwtProvider.verify;
 import static smash.teams.be.dto.user.UserRequest.LoginInDTO;
 import static smash.teams.be.dto.user.UserRequest.UpdateInDTO;
 
-=======
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
->>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -238,8 +238,7 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(joinOutDTO.getEmail()).isEqualTo("user7777777@gmail.com");
     }
 
-<<<<<<< HEAD
-=======
+
     @Test
     public void check_test() throws Exception{
         // given
@@ -255,15 +254,13 @@ public class UserServiceTest extends DummyEntity {
         Assertions.assertThat(checkOutDTO).isEqualTo(true);
     }
 
-<<<<<<< HEAD
->>>>>>> 2ed0c4c (Feat: 이메일 중복확인 및 회원탈퇴 구현)
-=======
+
     @Test
     public void cancelUser_test() throws Exception{
         // given
-        UserRequest.CancelUserInDTO cancelUserInDTO = new UserRequest.CancelUserInDTO();
-        cancelUserInDTO.setEmail("user1234@gmail.com");
-        cancelUserInDTO.setPassword("1234");
+        UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
+        withdrawInDTO.setEmail("user1234@gmail.com");
+        withdrawInDTO.setPassword("1234");
 
         Long id = 7L;
 
@@ -276,10 +273,9 @@ public class UserServiceTest extends DummyEntity {
 //        doNothing().when(userRepository).deleteById(any());
 
         // when
-        userService.withdraw(cancelUserInDTO,id);
+        userService.withdraw(withdrawInDTO,id);
 
         // then
 
     }
->>>>>>> 2bd7141 (Feat: 서비스테스트 및 통합테스트 완료)
 }

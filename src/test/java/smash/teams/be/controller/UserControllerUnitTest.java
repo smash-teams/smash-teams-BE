@@ -124,7 +124,7 @@ public class UserControllerUnitTest extends DummyEntity {
         // given
         UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
         joinInDTO.setName("권으뜸");
-        joinInDTO.setPassword("1234");
+        joinInDTO.setPassword("#asfdd1234");
         joinInDTO.setEmail("user7@gmail.com");
         joinInDTO.setPhoneNumber("010-1111-1111");
         joinInDTO.setStartWork("2020-05-01");
@@ -151,6 +151,44 @@ public class UserControllerUnitTest extends DummyEntity {
 
         // 검증해볼께
         resultActions.andExpect(status().isOk());
+    }
+
+    @DisplayName("join 실패")
+    @Test
+    public void join_fail_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("#asfdd");
+        joinInDTO.setEmail("user7@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        Team 개발팀 = Team.builder().teamName("개발팀").id(1L)
+                .createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+
+        User 권으뜸 = User.builder().id(1L).name("권으뜸").email("user7@gmail.com")
+                .status(Status.ACTIVE.getStatus()).team(개발팀)
+                .startWork(LocalDateTime.now())
+                .phoneNumber("010-1111-1111").role(Role.USER.getRole()).remain(20).profileImage(null).build();
+
+        UserResponse.JoinOutDTO joinOutDTO = new UserResponse.JoinOutDTO(권으뜸);
+        Mockito.when(userService.join(any())).thenReturn(joinOutDTO);
+
+        // 테스트진행
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // 검증해볼께
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("password"));
+        resultActions.andExpect(jsonPath("$.data.value").value("영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요."));
     }
 
 
