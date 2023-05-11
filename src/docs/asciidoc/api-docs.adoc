@@ -242,3 +242,145 @@ include::{snippets}/{admin}/delete_fail_test/http-response.adoc[]
 
 ===== Curl
 include::{snippets}/{admin}/delete_fail_test/curl-request.adoc[]
+
+
+== 스케줄
+=== 개인 스케줄 내역 조회 (성공)
+===== Request Example
+include::{snippets}/{schedule}/get_schedule_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/get_schedule_list_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/get_schedule_list_test/curl-request.adoc[]
+
+
+=== 개인 스케줄 내역 조회 (실패: 인증 안됨)
+===== Request Example
+include::{snippets}/{schedule}/get_schedule_list_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/get_schedule_list_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/get_schedule_list_fail_test/curl-request.adoc[]
+
+
+=== 스케쥴 관리 페이지(CEO) (성공)
+===== Request Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_ceo_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_ceo_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/get_schedule_list_for_manage_ceo_test/curl-request.adoc[]
+
+
+=== 스케쥴 관리 페이지(manager) (성공)
+===== Request Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_manager_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_manager_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/get_schedule_list_for_manage_manager_test/curl-request.adoc[]
+
+
+=== 스케쥴 관리 페이지 (실패: 권한 없음)
+===== Request Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/get_schedule_list_for_manage_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/get_schedule_list_for_manage_fail_test/curl-request.adoc[]
+
+
+=== 승인 및 거절하기 (성공)
+===== Request Example
+include::{snippets}/{schedule}/order_schedule_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/order_schedule_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/order_schedule_test/curl-request.adoc[]
+
+
+=== 승인 및 거절하기 (성공: 권한 문제1)
+===== Request Example
+include::{snippets}/{schedule}/order_schedule_role_fail1_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/order_schedule_role_fail1_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/order_schedule_role_fail1_test/curl-request.adoc[]
+
+
+=== 승인 및 거절하기 (성공: 권한 문제2)
+===== Request Example
+include::{snippets}/{schedule}/order_schedule_role_fail2_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/order_schedule_role_fail2_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/order_schedule_role_fail2_test/curl-request.adoc[]
+
+
+=== 메인 페이지 조회 (성공)
+===== Request Example
+include::{snippets}/{schedule}/load_schedule_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/load_schedule_list_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/load_schedule_list_test/curl-request.adoc[]
+
+
+=== 메인 페이지 조회 (실패)
+===== Request Example
+include::{snippets}/{schedule}/load_schedule_list_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/load_schedule_list_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/load_schedule_list_fail_test/curl-request.adoc[]
+
+
+=== 승인 요청 (성공)
+===== Request Example
+include::{snippets}/{schedule}/make_schedule_request_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/make_schedule_request_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/make_schedule_request_test/curl-request.adoc[]
+
+
+=== 승인 요청 (실패)
+===== Request Example
+include::{snippets}/{schedule}/make_schedule_request_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{schedule}/make_schedule_request_fail_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{schedule}/make_schedule_request_fail_test/curl-request.adoc[]
+
+
+
+
+
+
+
+
+
