@@ -1,5 +1,5 @@
 server:
-  port: 5000
+  port: 7777
   servlet:
     encoding:
       charset: utf-8
@@ -7,10 +7,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mariadb://${rds.hostname}:${rds.port}/${rds.db.name}?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://${RDS_ENDPOINT}:${RDS_PORT}/${RDS_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
-    username: ${rds.username}
-    password: ${rds.password}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
   jpa:
     open-in-view: false
     hibernate:
@@ -25,3 +25,5 @@ logging:
 
 file:
   path: ./upload/ # UPLOAD 폴더 상대경로 / AWS에 S3 사용하는게 좋음
+
+JWT_SECRET_KEY: ${JWT_SECRET_KEY}
