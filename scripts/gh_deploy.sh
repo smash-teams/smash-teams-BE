@@ -1,4 +1,5 @@
 #!/bin/bash
+source /home/custom_env.sh
 PROJECT_NAME="github_action"
 JAR_PATH="/home/ubuntu/github_action/build/libs/*.jar"
 DEPLOY_PATH=/home/ubuntu/$PROJECT_NAME/
@@ -28,7 +29,6 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >>$DEPLOY_LOG_PATH
-source /home/custom_env.sh
 nohup java -jar -Dspring.profiles.active=prod $DEPLOY_JAR >>$APPLICATION_LOG_PATH 2>$DEPLOY_ERR_LOG_PATH &
 
 sleep 3
