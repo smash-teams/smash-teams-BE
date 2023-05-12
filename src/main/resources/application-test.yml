@@ -33,3 +33,5 @@ logging:
 
 file:
   path: ./upload/
+
+JWT_SECRET_KEY: "승민"
