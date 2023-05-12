@@ -14,11 +14,15 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    private static final int EXP = 1000 * 60 * 60* 24; // 24시간
+    private static final int EXP = 1000 * 60 * 60 * 24; // 24시간
     public static final String TOKEN_PREFIX = "Bearer "; // 스페이스 필요함
     public static final String HEADER = "Authorization";
-    @Value("${JWT_SECRET_KEY}")
     private static String SECRET;
+
+    @Value("${JWT_SECRET_KEY}")
+    public void setSecret(String secret) {
+        SECRET = secret;
+    }
 
     public static String create(User user) {
         String jwt = JWT.create()
