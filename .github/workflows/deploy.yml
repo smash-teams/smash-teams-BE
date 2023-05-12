@@ -14,7 +14,7 @@ on:
 
 env:
   S3_BUCKET_NAME: smashbeserverbucket
-  RESOURCE_PATH: ./src/main/resources/application.yml
+  RESOURCE_PATH: ./src/main/resources/application-prod.yml
   CODE_DEPLOY_APPLICATION_NAME: smash-be-server-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: smash-be-server
 
