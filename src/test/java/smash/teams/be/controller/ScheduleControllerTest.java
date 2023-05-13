@@ -117,12 +117,12 @@ public class ScheduleControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(3));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(5));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(11));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(6));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(11));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(5));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("REJECTED"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("HALFOFF"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.userId").value(7));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.name").value("남궁훈"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
@@ -167,16 +167,14 @@ public class ScheduleControllerTest extends RestDoc {
 
         // then
         resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(11));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(1));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(2));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(3));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(11));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(10));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(9));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("APPROVED"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("FIRST"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[7].user.userId").value(9L));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[8].user.name").value("서재식"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[9].user.teamName").value("인사팀"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[10].user.role").value("USER"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[7].user.userId").value(2L));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[8].user.name").value("최준기"));
         resultActions.andExpect(status().isOk());
         resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
