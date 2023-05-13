@@ -22,18 +22,6 @@ include::{snippets}/{user}/join_test/http-response.adoc[]
 ===== Curl
 include::{snippets}/{user}/join_test/curl-request.adoc[]
 
-
-=== 회원가입 (실패: 이름 중복)
-===== Request Example
-include::{snippets}/{user}/join_fail_name_test/http-request.adoc[]
-
-===== Response Example
-include::{snippets}/{user}/join_fail_name_test/http-response.adoc[]
-
-===== Curl
-include::{snippets}/{user}/join_fail_name_test/curl-request.adoc[]
-
-
 === 회원가입 (실패: 이메일 형식)
 ===== Request Example
 include::{snippets}/{user}/join_fail_email_test/http-request.adoc[]
@@ -78,16 +66,6 @@ include::{snippets}/{user}/withdraw_test/http-response.adoc[]
 include::{snippets}/{user}/withdraw_test/curl-request.adoc[]
 
 
-=== 회원탈퇴 (실패)
-===== Request Example
-include::{snippets}/{user}/withdraw_fail_test/http-request.adoc[]
-
-===== Response Example
-include::{snippets}/{user}/withdraw_fail_test/http-response.adoc[]
-
-===== Curl
-include::{snippets}/{user}/withdraw_fail_test/curl-request.adoc[]
-
 
 === 이메일 중복확인 (성공: 중복된 이메일 아님)
 ===== Request Example
@@ -114,13 +92,14 @@ include::{snippets}/{user}/check_duplicate_email_true_test/curl-request.adoc[]
 === 내 정보 조회 (성공)
 ===== Request Example
 include::{snippets}/{user}/find_my_info_test/http-request.adoc[]
-
 ===== Response Example
 include::{snippets}/{user}/find_my_info_test/http-response.adoc[]
-
 ===== Curl
 include::{snippets}/{user}/find_my_info_test/curl-request.adoc[]
+include::{snippets}/{user}/find_my_info_test/request-headers.adoc[]
 
+[caption=]
+include::{snippets}/{user}/find_my_info_test/path-parameters.adoc[]
 
 === 내 정보 조회 (실패)
 ===== Request Example
