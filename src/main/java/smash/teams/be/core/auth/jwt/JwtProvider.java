@@ -17,7 +17,7 @@ public class JwtProvider {
     private static final int EXP = 1000 * 60 * 60 * 24; // 24시간
     public static final String TOKEN_PREFIX = "Bearer "; // 스페이스 필요함
     public static final String HEADER = "Authorization";
-    private static String SECRET;
+    private static String SECRET = "승민"; // UserService 유닛 테스트를 위한 임시값 할당
 
     @Value("${JWT_SECRET_KEY}")
     public void setSecret(String secret) {

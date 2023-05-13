@@ -10,47 +10,27 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-
-import org.springframework.mock.web.MockMultipartFile;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.RestDoc;
-
 import smash.teams.be.core.auth.jwt.JwtProvider;
-
-import smash.teams.be.core.auth.session.MyUserDetails;
-
 import smash.teams.be.core.dummy.DummyEntity;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
-import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserQueryRepository;
 import smash.teams.be.model.user.UserRepository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,8 +61,6 @@ public class UserControllerTest extends RestDoc {
 
     @BeforeEach
     public void setUp() {
-
-
         Team teamPS = teamRepository.save(dummy.newTeam("개발팀"));
         Team teamPS2 = teamRepository.save(dummy.newTeam("회계팀"));
         Team teamPS3 = teamRepository.save(dummy.newTeam("마케팅팀"));
@@ -96,8 +74,7 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newCeoWithTeam("Ceo", teamPS5)); // 5
         userRepository.save(dummy.newManagerWithTeam("Manager1", teamPS5)); // 6
         userRepository.save(dummy.newManagerWithTeam("Manager2", teamPS5)); // 7
-        userRepository.save(dummy.newUserForIntergratingTest("권으뜸",teamPS,"USER","user1234")); //8
-
+        userRepository.save(dummy.newUserForIntergratingTest("권으뜸", teamPS, "USER", "user1234")); //8
 
         em.clear();
     }
@@ -122,6 +99,7 @@ public class UserControllerTest extends RestDoc {
         // then
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
+        Assertions.assertThat(jsonPath("$.data.id").value(1L));
         Assertions.assertThat(jsonPath("$.data.name").value("User1"));
         Assertions.assertThat(jsonPath("$.data.email").value("User1@gmail.com"));
         Assertions.assertThat(jsonPath("$.data.phoneNumber").value("010-1234-5678"));
@@ -401,7 +379,7 @@ public class UserControllerTest extends RestDoc {
 
     @DisplayName("이메일 중복확인 : 중복된 이메일이 아닙니다")
     @Test
-    public void check_duplicate_email_false_test() throws Exception{
+    public void check_duplicate_email_false_test() throws Exception {
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user7777777@gmail.com");
@@ -423,7 +401,7 @@ public class UserControllerTest extends RestDoc {
 
     @DisplayName("이메일 중복화인 : 중복된 이메일입니다.")
     @Test
-    public void check_duplicate_email_true_test() throws Exception{
+    public void check_duplicate_email_true_test() throws Exception {
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user1234@gmail.com");
@@ -447,7 +425,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("회원탈퇴 성공")
     @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void withdraw_test() throws Exception{
+    public void withdraw_test() throws Exception {
         // given
         Long id = 8L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
@@ -457,7 +435,7 @@ public class UserControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/user/" + id + "/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -471,7 +449,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("회원탈퇴 실패 : 이메일 틀림")
     @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void withdraw_fail_email_test() throws Exception{
+    public void withdraw_fail_email_test() throws Exception {
         // given
         Long id = 8L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
@@ -481,7 +459,7 @@ public class UserControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/user/" + id + "/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -497,7 +475,7 @@ public class UserControllerTest extends RestDoc {
     @DisplayName("회원탈퇴 실패 : 비밀번호 틀림")
     @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void withdraw_fail_password_test() throws Exception{
+    public void withdraw_fail_password_test() throws Exception {
         // given
         Long id = 8L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
@@ -507,7 +485,7 @@ public class UserControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/"+id+"/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/auth/user/" + id + "/delete").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 

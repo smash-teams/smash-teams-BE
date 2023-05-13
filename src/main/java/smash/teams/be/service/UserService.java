@@ -5,41 +5,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.AuthenticationManager;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.annotation.Log;
-
 import smash.teams.be.core.auth.jwt.JwtProvider;
-
-
 import smash.teams.be.core.auth.session.MyUserDetails;
 import smash.teams.be.core.exception.Exception400;
-
-
 import smash.teams.be.core.exception.Exception401;
-
-
-import smash.teams.be.core.exception.Exception403;
-
 import smash.teams.be.core.exception.Exception404;
-
 import smash.teams.be.core.exception.Exception500;
 import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
-
+import smash.teams.be.model.loginLog.LoginLog;
+import smash.teams.be.model.loginLog.LoginLogRepository;
 import smash.teams.be.model.team.Team;
-
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,13 +37,15 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private final LoginLogRepository loginLogRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final HttpServletRequest request;
 
     @Value("${file.path}")
     private String uploadFolder;
 
     @Log
+    @Transactional
     public UserResponse.LoginOutDTO login(UserRequest.LoginInDTO loginInDTO) {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
@@ -63,6 +53,13 @@ public class UserService {
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
             String jwt = JwtProvider.create(myUserDetails.getUser());
+
+            // login_log_tb에 기록
+            loginLogRepository.save(LoginLog.builder()
+                    .userId(myUserDetails.getUser().getId())
+                    .userAgent(request.getHeader("User-Agent"))
+                    .clientIP(request.getRemoteAddr())
+                    .build());
 
             return new UserResponse.LoginOutDTO(new UserResponse.LoginInfoOutDTO(myUserDetails.getUser()), jwt);
         } catch (Exception e) {
@@ -161,7 +158,7 @@ public class UserService {
 
         if (userPS == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -172,8 +169,8 @@ public class UserService {
         User userPS = userRepository.findUserById(id);
         System.out.println(userPS.getEmail());
         System.out.println(withdrawInDTO.getEmail());
-        if(!Objects.equals(userPS.getEmail(), withdrawInDTO.getEmail())){
-            throw new Exception400("email","이메일이 틀렸습니다");
+        if (!Objects.equals(userPS.getEmail(), withdrawInDTO.getEmail())) {
+            throw new Exception400("email", "이메일이 틀렸습니다");
         }
         if (bCryptPasswordEncoder.matches(withdrawInDTO.getPassword(), userPS.getPassword())) {
             try {
@@ -182,8 +179,8 @@ public class UserService {
             } catch (Exception e) {
                 throw new Exception500("탈퇴 실패 : " + e.getMessage());
             }
-        }else{
-            throw new Exception400("password","비밀번호가 틀렸습니다");
+        } else {
+            throw new Exception400("password", "비밀번호가 틀렸습니다");
         }
     }
 }
