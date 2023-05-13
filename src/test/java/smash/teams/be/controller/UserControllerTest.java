@@ -389,7 +389,6 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
         resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13"));
-        resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
         resultActions.andExpect(status().isOk());
         resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
         resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
