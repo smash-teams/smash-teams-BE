@@ -156,7 +156,6 @@ public class UserServiceTest extends DummyEntity {
         updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-8765-4321");
         updateInDTO.setStartWork("2023-05-10");
-        updateInDTO.setProfileImage("사진 33"); // request
 
         // stub
         User ssar = newMockUserUpdate(1L, "ssar"); // DB
@@ -173,7 +172,6 @@ public class UserServiceTest extends DummyEntity {
 
         // then
         Assertions.assertThat(updateOutDTO.getPhoneNumber()).isEqualTo("010-8765-4321");
-        Assertions.assertThat(updateOutDTO.getProfileImage()).isEqualTo("사진 33");
     }
 
 
