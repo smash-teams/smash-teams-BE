@@ -2,6 +2,7 @@ package smash.teams.be.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.User;
 
 public class UserResponse {
@@ -61,17 +62,23 @@ public class UserResponse {
     @Setter
     public static class FindMyInfoOutDTO {
         private Long id;
+        private String teamName;
         private String name;
         private String email;
+        private String phoneNumber;
         private String startWork;
         private String profileImage;
+        private String role;
 
         public FindMyInfoOutDTO(User user) {
             this.id = user.getId();
+            this.teamName = user.getTeam().getTeamName();
             this.name = user.getName();
             this.email = user.getEmail();
+            this.phoneNumber = user.getPhoneNumber();
             this.startWork = user.getStartWork().toLocalDate().toString();
             this.profileImage = user.getProfileImage();
+            this.role = user.getRole();
         }
     }
 
