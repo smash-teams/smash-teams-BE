@@ -144,10 +144,9 @@ public class UserControllerTest extends RestDoc {
     @Test
     public void find_my_info_test() throws Exception {
         // given
-        Long id = 5L;
 
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/" + id));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -162,21 +161,20 @@ public class UserControllerTest extends RestDoc {
     }
 
     @DisplayName("내 정보 조회 실패")
-    @WithUserDetails(value = "Ceo@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void find_my_info_fail_test() throws Exception {
         // given
-        Long id = 2L;
 
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/" + id));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.status").value(403));
-        resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
-        resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
+        resultActions.andExpect(jsonPath("$.status").value(401));
+        resultActions.andExpect(jsonPath("$.msg").value("unAuthorized"));
+        resultActions.andExpect(jsonPath("$.data").value("인증되지 않았습니다."));
+        resultActions.andExpect(status().isUnauthorized());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 

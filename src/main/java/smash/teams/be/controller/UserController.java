@@ -46,13 +46,9 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/auth/user/{id}")
-    public ResponseEntity<?> findMyInfo(@PathVariable Long id, @AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
-        if (id.longValue() != myUserDetails.getUser().getId()) {
-            throw new Exception403("권한이 없습니다.");
-        }
-        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = userService.findMyId(id);
-        System.out.println(new ObjectMapper().writeValueAsString(findMyInfoOutDTO));
+    @GetMapping("/auth/user")
+    public ResponseEntity<?> findMyInfo(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = userService.findMyId(myUserDetails.getUser().getId());
         ResponseDTO<?> responseDTO = new ResponseDTO<>(findMyInfoOutDTO);
         return ResponseEntity.ok(responseDTO);
     }

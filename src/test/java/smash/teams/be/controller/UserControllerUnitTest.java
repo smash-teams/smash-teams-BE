@@ -67,7 +67,6 @@ public class UserControllerUnitTest extends DummyEntity {
     @Test
     public void findMyInfo_test() throws Exception {
         // given
-        Long id = 1L;
         User cosPS = newMockUser(1L, "cos");
 
         UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = new UserResponse.FindMyInfoOutDTO(cosPS);
@@ -75,7 +74,7 @@ public class UserControllerUnitTest extends DummyEntity {
         Mockito.when(userService.findMyId(any())).thenReturn(findMyInfoOutDTO);
 
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/"+id));
+        ResultActions resultActions = mvc.perform(get("/auth/user/"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트2 : " + responseBody);
 
