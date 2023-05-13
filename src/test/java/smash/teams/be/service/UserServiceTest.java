@@ -10,39 +10,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mock.web.MockMultipartFile;
-
-import org.springframework.http.MediaType;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
-import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
-
-import org.springframework.test.web.servlet.ResultActions;
-
-
-
-import smash.teams.be.core.auth.session.MyUserDetails;
-
 import smash.teams.be.core.dummy.DummyEntity;
-import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
-
-import smash.teams.be.model.user.Role;
-import smash.teams.be.model.user.User;
-import smash.teams.be.model.user.UserRepository;
-
-import java.time.LocalDateTime;
-
+import smash.teams.be.model.loginLog.LoginLogRepository;
 import smash.teams.be.model.team.Team;
 import smash.teams.be.model.team.TeamRepository;
 import smash.teams.be.model.user.Role;
@@ -50,32 +28,16 @@ import smash.teams.be.model.user.Status;
 import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static smash.teams.be.core.auth.jwt.JwtProvider.verify;
 import static smash.teams.be.dto.user.UserRequest.LoginInDTO;
 import static smash.teams.be.dto.user.UserRequest.UpdateInDTO;
-
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ActiveProfiles("test")
@@ -88,6 +50,10 @@ public class UserServiceTest extends DummyEntity {
     private UserRepository userRepository;
     @Mock
     private TeamRepository teamRepository;
+    @Mock
+    private LoginLogRepository loginLogRepository;
+    @Mock
+    private HttpServletRequest request;
     @Mock
     private AuthenticationManager authenticationManager;
     @Spy
@@ -115,6 +81,7 @@ public class UserServiceTest extends DummyEntity {
         System.out.println(om.writeValueAsString(loginOutDTO));
 
         // then
+        Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getId()).isEqualTo(1L);
         Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getName()).isEqualTo("seungmin");
         Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getEmail()).isEqualTo("seungmin@gmail.com");
         Assertions.assertThat(loginOutDTO.getLoginInfoOutDTO().getPhoneNumber()).isEqualTo("010-1234-5678");
@@ -238,7 +205,7 @@ public class UserServiceTest extends DummyEntity {
 
 
     @Test
-    public void check_duplicate_email_test() throws Exception{
+    public void check_duplicate_email_test() throws Exception {
         // given
         UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
         checkInDTO.setEmail("user1234@gmail.com");
@@ -258,7 +225,7 @@ public class UserServiceTest extends DummyEntity {
 
 
     @Test
-    public void withdraw_test() throws Exception{
+    public void withdraw_test() throws Exception {
         // given
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
         withdrawInDTO.setEmail("user1234@gmail.com");
@@ -274,7 +241,7 @@ public class UserServiceTest extends DummyEntity {
         Mockito.when(userRepository.save(any())).thenReturn(userPS);
 
         // when
-        userService.withdraw(withdrawInDTO,id);
+        userService.withdraw(withdrawInDTO, id);
 
         // then
         Assertions.assertThat(userPS.getStatus()).isEqualTo("INACTIVE");

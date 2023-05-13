@@ -34,6 +34,7 @@ public class UserResponse {
     @Getter
     @Setter
     public static class LoginInfoOutDTO {
+        private Long id;
         private String name;
         private String email;
         private String phoneNumber;
@@ -44,6 +45,7 @@ public class UserResponse {
         private String role;
 
         public LoginInfoOutDTO(User user) {
+            this.id = user.getId();
             this.name = user.getName();
             this.email = user.getEmail();
             this.phoneNumber = user.getPhoneNumber();

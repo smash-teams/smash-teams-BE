@@ -20,6 +20,7 @@ import smash.teams.be.dto.user.UserResponse;
 import smash.teams.be.model.user.User;
 import smash.teams.be.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -30,14 +31,13 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequest.LoginInDTO loginInDTO, Errors errors) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequest.LoginInDTO loginInDTO, Errors errors, HttpServletRequest request) {
         UserResponse.LoginOutDTO loginOutDTO = userService.login(loginInDTO);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(loginOutDTO.getLoginInfoOutDTO());
         return ResponseEntity.ok().header(JwtProvider.HEADER, loginOutDTO.getJwt()).body(responseDTO);
     }
 
-    @ErrorLog
     @Log
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinInDTO joinInDTO, Errors errors) {
