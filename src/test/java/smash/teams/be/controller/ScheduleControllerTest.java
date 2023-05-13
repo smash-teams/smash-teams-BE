@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
@@ -34,6 +35,10 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -106,7 +111,7 @@ public class ScheduleControllerTest extends RestDoc {
         // given
         Long id = 7L;
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/"+id+"/schedule"));
+        ResultActions resultActions = mvc.perform(RestDocumentationRequestBuilders.get("/auth/user/{id}/schedule",id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -123,6 +128,8 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.role").value("USER"));
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -131,9 +138,9 @@ public class ScheduleControllerTest extends RestDoc {
     @Test
     public void get_schedule_list_fail_test() throws Exception {
         // given
-
+        Long id = 1L;
         // when
-        ResultActions resultActions = mvc.perform(get("/auth/user/schedule"));
+        ResultActions resultActions = mvc.perform(RestDocumentationRequestBuilders.get("/auth/user/{id}/schedule",id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -142,6 +149,8 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("unAuthorized"));
         resultActions.andExpect(jsonPath("$.data").value("인증되지 않았습니다."));
         resultActions.andExpect(status().isUnauthorized());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -169,6 +178,7 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.scheduleList[9].user.teamName").value("인사팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[10].user.role").value("USER"));
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -203,10 +213,11 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.scheduleList[5].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[6].user.teamName").value("개발팀"));
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("스케쥴 관리 페이지 : 권한 실패")
+    @DisplayName("스케쥴 관리 페이지 : 로그인한 유저의 role이 USER or ADMIN 일 때")
     @WithUserDetails(value = "user7@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void get_schedule_list_for_manage_fail_test() throws Exception {
@@ -221,10 +232,12 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(403));
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다"));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
+        resultActions.andExpect(status().isForbidden());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("승인 및 거절하기")
+    @DisplayName("승인 및 거절하기 성공")
     @WithUserDetails(value = "ceo1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void order_schedule_test() throws Exception {
@@ -236,6 +249,8 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc.perform(post("/auth/super/schedule").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
+        resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -265,10 +280,13 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.scheduleList[9].scheduleId").value(10));
         resultActions.andExpect(jsonPath("$.data.scheduleList[9].user.userId").value(12));
         resultActions.andExpect(jsonPath("$.data.scheduleList[9].type").value("SHIFT"));
+
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("메인 페이지 조회 실패") // 로그인 X
+    @DisplayName("메인 페이지 조회 실패: 로그인 X") // 로그인 X
     @Test
     public void load_schedule_list_fail_test() throws Exception {
         // given
@@ -282,10 +300,12 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(401));
         resultActions.andExpect(jsonPath("$.msg").value("unAuthorized"));
         resultActions.andExpect(jsonPath("$.data").value("인증되지 않았습니다."));
+        resultActions.andExpect(status().isUnauthorized());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("승인 및 거절하기 : 권한 문제")
+    @DisplayName("승인 및 거절하기 실패: 요청한 스케쥴을 승인거절할 수 없는 직급일 때")
     @WithUserDetails(value = "manager2@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void order_schedule_role_fail1_test() throws Exception {
@@ -305,17 +325,19 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(403));
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다"));
+        resultActions.andExpect(status().isForbidden());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("승인 및 거절하기 : 권한 문제")
-    @WithUserDetails(value = "user3@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("승인 및 거절하기 실패: 요청한 스케쥴이 최종승인 또는 거절된 상태일 때")
+    @WithUserDetails(value = "manager2@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void order_schedule_role_fail2_test() throws Exception {
         // given
         Long id = 3L;
         OrderScheduleInDTO orderScheduleInDTO = new OrderScheduleInDTO();
-        orderScheduleInDTO.setScheduleId(7L);
+        orderScheduleInDTO.setScheduleId(6L);
         orderScheduleInDTO.setStatus("APPROVED");
         String requestBody = om.writeValueAsString(orderScheduleInDTO);
 
@@ -325,17 +347,14 @@ public class ScheduleControllerTest extends RestDoc {
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.status").value(403));
-        resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
-        resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다"));
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("status"));
+        resultActions.andExpect(jsonPath("$.data.value").value("이미 최종승인되었거나 거절된 스케쥴입니다"));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-//        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("ok"));
-//
-//        resultActions.andExpect(jsonPath("$.data.id").value(5));
-//        resultActions.andExpect(jsonPath("$.data.name").value("Ceo"));
-//        resultActions.andExpect(jsonPath("$.data.email").value("Ceo@gmail.com"));
-//        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
     }
 
     @DisplayName("승인 요청 성공")
@@ -353,7 +372,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/"+id+"/schedule")
+                .perform(RestDocumentationRequestBuilders.post("/auth/user/{id}/schedule",id)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -363,6 +382,9 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -386,7 +408,7 @@ public class ScheduleControllerTest extends RestDoc {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/auth/user/"+id+"/schedule")
+                .perform(RestDocumentationRequestBuilders.post("/auth/user/{id}/schedule",id)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -397,6 +419,9 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
         resultActions.andExpect(jsonPath("$.data.key").value(userId));
         resultActions.andExpect(jsonPath("$.data.value").value("ADMIN 계정으로는 승인 요청이 불가능합니다."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
