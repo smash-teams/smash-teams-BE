@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,13 +30,15 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("사용자 API")
-@AutoConfigureRestDocs(uriScheme = "http", uriHost = "localhost", uriPort = 8080)
+@AutoConfigureRestDocs(uriScheme = "http", uriHost = "52.78.70.225", uriPort = 7777)
 @ActiveProfiles("test")
 @Sql("classpath:db/teardown.sql")
 @AutoConfigureMockMvc
@@ -76,7 +79,165 @@ public class UserControllerTest extends RestDoc {
         userRepository.save(dummy.newManagerWithTeam("Manager2", teamPS5)); // 7
         userRepository.save(dummy.newUserForIntergratingTest("권으뜸", teamPS, "USER", "user1234")); //8
 
+
+
         em.clear();
+    }
+
+    @DisplayName("회원가입 성공")
+    @Test
+    public void join_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권민수");
+        joinInDTO.setPassword("##234dkfid");
+        joinInDTO.setEmail("user7777@gmail.com");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+
+    @DisplayName("회원가입 실패: 이메일 형식")
+    @Test
+    public void join_fail_email_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("##smash1234");
+        joinInDTO.setEmail("user7777@gmail.c");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("email"));
+        resultActions.andExpect(jsonPath("$.data.value").value("50자가 넘지 않도록 이메일 형식에 맞춰 작성해주세요."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("회원가입 실패: 패스워드")
+    @Test
+    public void join_fail_password_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("smash1234");
+        joinInDTO.setEmail("user7777@gmail.c");
+        joinInDTO.setPhoneNumber("010-1111-1111");
+        joinInDTO.setStartWork("2020-05-01");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("password"));
+        resultActions.andExpect(jsonPath("$.data.value").value("영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+    @DisplayName("회원가입 실패: 입사일")
+    @Test
+    public void join_fail_start_work_test() throws Exception {
+        // given
+        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
+        joinInDTO.setName("권으뜸");
+        joinInDTO.setPassword("##smash1234");
+        joinInDTO.setEmail("user7777@gmail.com");
+        joinInDTO.setPhoneNumber("010-1234-5678");
+        joinInDTO.setStartWork("2020-05-01T00:00:00");
+        joinInDTO.setTeamName("개발팀");
+        String requestBody = om.writeValueAsString(joinInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(400));
+        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
+        resultActions.andExpect(jsonPath("$.data.key").value("startWork"));
+        resultActions.andExpect(jsonPath("$.data.value").value("입사일(2023-05-10)의 형태로 작성해주세요."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
+
+
+    @DisplayName("이메일 중복화인: 중복된 이메일")
+    @Test
+    public void check_duplicate_email_true_test() throws Exception{
+        // given
+        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
+        checkInDTO.setEmail("user1234@gmail.com");
+        String requestBody = om.writeValueAsString(checkInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
+        resultActions.andExpect(jsonPath("$.data").value(true));
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
+    }
+
+
+    @DisplayName("이메일 중복확인: 중복된 이메일 X")
+    @Test
+    public void check_duplicate_email_false_test() throws Exception{
+        // given
+        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
+        checkInDTO.setEmail("user7777777@gmail.com");
+        String requestBody = om.writeValueAsString(checkInDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.status").value(200));
+        resultActions.andExpect(jsonPath("$.msg").value("ok"));
+        resultActions.andExpect(jsonPath("$.data").value(false));
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("로그인 성공")
@@ -137,6 +298,7 @@ public class UserControllerTest extends RestDoc {
         Assertions.assertThat(jsonPath("$.data").value("인증되지 않았습니다."));
         resultActions.andExpect(status().isUnauthorized());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+
     }
 
     @DisplayName("내 정보 조회 성공")
@@ -157,8 +319,10 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.id").value(5));
         resultActions.andExpect(jsonPath("$.data.name").value("Ceo"));
         resultActions.andExpect(jsonPath("$.data.email").value("Ceo@gmail.com"));
+        resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
+
 
     @DisplayName("내 정보 조회 실패")
     @Test
@@ -205,10 +369,12 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
         resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13"));
+        resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
+        resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-    @DisplayName("개인정보 수정 실패")
+    @DisplayName("개인정보 수정 실패: api-path의 id값과 로그인한 유저id 값이 다를 때")
     @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void update_fail_test() throws Exception {
@@ -234,6 +400,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.status").value(403));
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
+        resultActions.andExpect(status().isForbidden());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -289,146 +456,18 @@ public class UserControllerTest extends RestDoc {
 //        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 //    }
 
-    @DisplayName("회원가입 성공")
-    @Test
-    public void join_test() throws Exception {
-        // given
-        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
-        joinInDTO.setName("권민수");
-        joinInDTO.setPassword("##234dkfid");
-        joinInDTO.setEmail("user7777@gmail.com");
-        joinInDTO.setPhoneNumber("010-1111-1111");
-        joinInDTO.setStartWork("2020-05-01");
-        joinInDTO.setTeamName("개발팀");
-        String requestBody = om.writeValueAsString(joinInDTO);
 
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-//        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("성공"));
-//        resultActions.andExpect(jsonPath("$.data").value(null));
-        resultActions.andExpect(status().isOk());
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-    }
-
-
-    @DisplayName("회원가입 실패 : 이름이 이미 존재할 때")
-    @Test
-    public void join_fail_name_test() throws Exception {
-        // given
-        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
-        joinInDTO.setName("권으뜸");
-        joinInDTO.setPassword("##smash1234");
-        joinInDTO.setEmail("user7777@gmail.com");
-        joinInDTO.setPhoneNumber("010-1111-1111");
-        joinInDTO.setStartWork("2020-05-01");
-        joinInDTO.setTeamName("개발팀");
-        String requestBody = om.writeValueAsString(joinInDTO);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-        resultActions.andExpect(jsonPath("$.status").value(400));
-        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
-        resultActions.andExpect(jsonPath("$.data.key").value("name"));
-        resultActions.andExpect(jsonPath("$.data.value").value("이름이 존재합니다"));
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-    }
-
-    @DisplayName("회원가입 실패 : 이메일 형식을 지키지 않았을 때")
-    @Test
-    public void join_fail_email_test() throws Exception {
-        // given
-        UserRequest.JoinInDTO joinInDTO = new UserRequest.JoinInDTO();
-        joinInDTO.setName("권으뜸");
-        joinInDTO.setPassword("##smash1234");
-        joinInDTO.setEmail("user7777@gmail.c");
-        joinInDTO.setPhoneNumber("010-1111-1111");
-        joinInDTO.setStartWork("2020-05-01");
-        joinInDTO.setTeamName("개발팀");
-        String requestBody = om.writeValueAsString(joinInDTO);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-//        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("성공"));
-//        resultActions.andExpect(jsonPath("$.data").value(null));
-//        resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.status").value(400));
-        resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
-        resultActions.andExpect(jsonPath("$.data.key").value("email"));
-        resultActions.andExpect(jsonPath("$.data.value").value("50자가 넘지 않도록 이메일 형식에 맞춰 작성해주세요."));
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-    }
-
-    @DisplayName("이메일 중복확인 : 중복된 이메일이 아닙니다")
-    @Test
-    public void check_duplicate_email_false_test() throws Exception {
-        // given
-        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
-        checkInDTO.setEmail("user7777777@gmail.com");
-        String requestBody = om.writeValueAsString(checkInDTO);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-        resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("ok"));
-        resultActions.andExpect(jsonPath("$.data").value(false));
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-
-    }
-
-    @DisplayName("이메일 중복화인 : 중복된 이메일입니다.")
-    @Test
-    public void check_duplicate_email_true_test() throws Exception {
-        // given
-        UserRequest.CheckInDTO checkInDTO = new UserRequest.CheckInDTO();
-        checkInDTO.setEmail("user1234@gmail.com");
-        String requestBody = om.writeValueAsString(checkInDTO);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/join/check").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-        resultActions.andExpect(jsonPath("$.status").value(200));
-        resultActions.andExpect(jsonPath("$.msg").value("ok"));
-        resultActions.andExpect(jsonPath("$.data").value(true));
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-
-    }
 
 
     @DisplayName("회원탈퇴 성공")
-    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void withdraw_test() throws Exception {
         // given
-        Long id = 8L;
+        Long id = 1L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
-        withdrawInDTO.setEmail("user1234@gmail.com");
-        withdrawInDTO.setPassword("##smash1234");
+        withdrawInDTO.setEmail("User1@gmail.com");
+        withdrawInDTO.setPassword("dltmdals123!");
         String requestBody = om.writeValueAsString(withdrawInDTO);
 
         // when
@@ -439,20 +478,21 @@ public class UserControllerTest extends RestDoc {
 
         resultActions.andExpect(jsonPath("$.status").value(200));
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
+        resultActions.andExpect(status().isOk());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
 
 
     @DisplayName("회원탈퇴 실패 : 이메일 틀림")
-    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void withdraw_fail_email_test() throws Exception {
         // given
-        Long id = 8L;
+        Long id = 1L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
         withdrawInDTO.setEmail("user1234567@gmail.com");
-        withdrawInDTO.setPassword("##smash1234");
+        withdrawInDTO.setPassword("dltmdals123!");
         String requestBody = om.writeValueAsString(withdrawInDTO);
 
         // when
@@ -465,19 +505,20 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
         resultActions.andExpect(jsonPath("$.data.key").value("email"));
         resultActions.andExpect(jsonPath("$.data.value").value("이메일이 틀렸습니다"));
+        resultActions.andExpect(status().isBadRequest());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
 
 
     @DisplayName("회원탈퇴 실패 : 비밀번호 틀림")
-    @WithUserDetails(value = "user1234@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void withdraw_fail_password_test() throws Exception {
         // given
-        Long id = 8L;
+        Long id = 1L;
         UserRequest.WithdrawInDTO withdrawInDTO = new UserRequest.WithdrawInDTO();
-        withdrawInDTO.setEmail("user1234@gmail.com");
+        withdrawInDTO.setEmail("User1@gmail.com");
         withdrawInDTO.setPassword("smash1234");
         String requestBody = om.writeValueAsString(withdrawInDTO);
 
@@ -491,6 +532,7 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
         resultActions.andExpect(jsonPath("$.data.key").value("password"));
         resultActions.andExpect(jsonPath("$.data.value").value("비밀번호가 틀렸습니다"));
+        resultActions.andExpect(status().isBadRequest());
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }

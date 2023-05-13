@@ -188,7 +188,6 @@ public class UserServiceTest extends DummyEntity {
                 .phoneNumber("010-1111-1111").role(Role.USER.getRole()).remain(20).profileImage(null).build();
 
         // stub 1
-        Mockito.when(userRepository.findByName(any())).thenReturn(Optional.empty());
         Mockito.when(teamRepository.findTeamByTeamName(any())).thenReturn(개발팀);
 
         // stub 2
