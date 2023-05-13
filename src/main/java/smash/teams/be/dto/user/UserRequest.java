@@ -101,9 +101,6 @@ public class UserRequest {
         @NotEmpty
         private String startWork;
 
-        @NotEmpty
-        private String profileImage;
-
         public User toEntity() {
             LocalDate startDate = LocalDate.parse(startWork, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIDNIGHT);
@@ -112,7 +109,6 @@ public class UserRequest {
                     .password(newPassword)
                     .phoneNumber(phoneNumber)
                     .startWork(startDateTime)
-                    .profileImage(profileImage)
                     .build();
         }
     }

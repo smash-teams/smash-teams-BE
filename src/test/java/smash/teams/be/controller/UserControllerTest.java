@@ -213,7 +213,6 @@ public class UserControllerTest extends RestDoc {
         updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-8765-4321");
         updateInDTO.setStartWork("2023-05-13");
-        updateInDTO.setProfileImage("User1의 사진!!");
 
         String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
@@ -230,7 +229,6 @@ public class UserControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-8765-4321"));
         resultActions.andExpect(jsonPath("$.data.startWork").value("2023-05-13"));
-        resultActions.andExpect(jsonPath("$.data.profileImage").value("User1의 사진!!"));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -245,7 +243,6 @@ public class UserControllerTest extends RestDoc {
         updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-8765-4321");
         updateInDTO.setStartWork("2023-05-13");
-        updateInDTO.setProfileImage("User1의 사진!!");
 
         String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
