@@ -90,7 +90,7 @@ public class UserController {
 
         myUserDetails.setUser(userPS); // 동기화
 
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(null);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>();
         return ResponseEntity.ok().body(responseDTO);
     }
 

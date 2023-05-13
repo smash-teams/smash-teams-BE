@@ -96,7 +96,6 @@ public class UserControllerUnitTest extends DummyEntity {
         updateInDTO.setNewPassword("dltmdals1234!");
         updateInDTO.setPhoneNumber("010-1234-5678");
         updateInDTO.setStartWork("2023-05-09");
-        updateInDTO.setProfileImage("사진 2");
 
         String requestBody = om.writeValueAsString(updateInDTO);
         System.out.println("테스트1 : " + requestBody);
@@ -114,7 +113,6 @@ public class UserControllerUnitTest extends DummyEntity {
 
         // then
         resultActions.andExpect(jsonPath("$.data.phoneNumber").value("010-1234-5678"));
-        resultActions.andExpect(jsonPath("$.data.profileImage").value("사진 2"));
         resultActions.andExpect(status().isOk());
     }
 

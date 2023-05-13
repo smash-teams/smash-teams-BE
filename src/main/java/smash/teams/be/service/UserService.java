@@ -131,7 +131,6 @@ public class UserService {
             userPS.updatePassword(encPassword);
             userPS.updatePhoneNumber(userEntity.getPhoneNumber());
             userPS.updateStartWork(userEntity.getStartWork());
-            userPS.updateProfileImage(userEntity.getProfileImage());
 
             userRepository.save(userPS);
             return new UserResponse.UpdateOutDTO(userPS);
