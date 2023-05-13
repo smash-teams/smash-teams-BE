@@ -211,7 +211,7 @@ public class UserControllerTest extends RestDoc {
     }
 
 
-    @DisplayName("이메일 중복화인: 중복된 이메일")
+    @DisplayName("이메일 중복확인: 중복된 이메일")
     @Test
     public void check_duplicate_email_true_test() throws Exception{
         // given
