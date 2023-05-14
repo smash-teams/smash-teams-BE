@@ -24,6 +24,6 @@ logging:
     '[smash.teams.be]': INFO
 
 file:
-  path: /home/ubuntu/github_action/src/main/resources/static/upload/
+  path: /home/ubuntu/github_action/upload/
 
 JWT_SECRET_KEY: ${JWT_SECRET_KEY}
