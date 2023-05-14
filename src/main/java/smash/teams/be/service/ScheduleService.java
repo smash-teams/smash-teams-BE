@@ -148,7 +148,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
                 if (schedulePS.getType().equals(Type.HALFOFF.getType())) {
@@ -165,7 +165,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
                 if (schedulePS.getType().equals(Type.SHIFT.getType())) {
@@ -182,7 +182,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
             }
@@ -200,7 +200,7 @@ public class ScheduleService {
                     throw new Exception403("권한이 없습니다");
                 }
                 if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                    throw new Exception400("잘못된 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                    throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                 }
             }
         }
@@ -223,7 +223,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
                 if (schedulePS.getType().equals(Type.HALFOFF.getType())) {
@@ -242,7 +242,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
                 if (schedulePS.getType().equals(Type.SHIFT.getType())) {
@@ -260,7 +260,7 @@ public class ScheduleService {
                         throw new Exception403("권한이 없습니다");
                     }
                     if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                        throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                        throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                     }
                 }
             }
@@ -279,7 +279,7 @@ public class ScheduleService {
                     throw new Exception403("권한이 없습니다");
                 }
                 if(schedulePS.getStatus().equals(Status.APPROVED.getStatus()) || schedulePS.getStatus().equals(Status.REJECTED.getStatus())){
-                    throw new Exception400("잘못된 승인 요청","이미 최종승인되었거나 거절된 스케쥴입니다");
+                    throw new Exception400("status","이미 최종승인되었거나 거절된 스케쥴입니다");
                 }
             }
         }

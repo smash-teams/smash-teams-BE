@@ -8,10 +8,10 @@ import smash.teams.be.model.team.Team;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query("SELECT s FROM Schedule s JOIN FETCH s.user u JOIN FETCH u.team t")
+    @Query("SELECT s FROM Schedule s JOIN FETCH s.user u JOIN FETCH u.team t ORDER BY s.id DESC")
     List<Schedule> findSchedules();
 
-    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId")
+    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId ORDER BY s.id DESC")
     List<Schedule> findSchedulesByUserId(@Param("userId") Long userId);
 
     @Query("SELECT s FROM Schedule s JOIN FETCH s.user u JOIN FETCH u.team t WHERE s.user.team.id = :teamId ORDER BY s.id DESC")

@@ -70,13 +70,7 @@ public class UserService {
     @Log
     @Transactional
     public UserResponse.JoinOutDTO join(UserRequest.JoinInDTO joinInDTO) {
-        Optional<User> userOP = userRepository.findByName(joinInDTO.getName());
         Team teamOP = teamRepository.findTeamByTeamName(joinInDTO.getTeamName());
-
-        if (userOP.isPresent()) {
-            // 이 부분이 try catch 안에 있으면 Exception500에게 제어권을 뺏긴다.
-            throw new Exception400("name", "이름이 존재합니다");
-        }
 
         if (teamOP == null) {
             throw new Exception404(joinInDTO.getTeamName() + "이 존재하지 않습니다");

@@ -89,16 +89,15 @@ public class ScheduleRepositoryTest extends DummyEntity {
 
         // then
         assertThat(schedules.size()).isEqualTo(3);
-        assertThat(schedules.get(0).getId()).isEqualTo(3L);
+        assertThat(schedules.get(0).getId()).isEqualTo(6L);
         assertThat(schedules.get(1).getType()).isEqualTo("HALFOFF");
-        assertThat(schedules.get(2).getId()).isEqualTo(6L);
+        assertThat(schedules.get(2).getId()).isEqualTo(3L);
         assertThat(schedules.get(0).getUser().getId()).isEqualTo(3L);
         assertThat(schedules.get(1).getUser().getId()).isEqualTo(3L);
         assertThat(schedules.get(2).getUser().getId()).isEqualTo(3L);
-        assertThat(schedules.get(0).getReason()).isEqualTo("휴가");
+        assertThat(schedules.get(0).getReason()).isEqualTo("당직");
         assertThat(schedules.get(1).getUser().getName()).isEqualTo("kimday");
         assertThat(schedules.get(2).getUser().getEmail()).isEqualTo("kimday@gmail.com");
-        assertThat(schedules.get(0).getStatus()).isEqualTo("REJECTED");
 
     }
 

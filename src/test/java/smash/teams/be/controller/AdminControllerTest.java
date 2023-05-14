@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,6 +29,10 @@ import smash.teams.be.model.user.UserRepository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -237,6 +242,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.last").value(false));
         resultActions.andExpect(jsonPath("$.data.empty").value(false));
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -263,6 +269,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("forbidden"));
         resultActions.andExpect(jsonPath("$.data").value("권한이 없습니다."));
         resultActions.andExpect(status().isForbidden());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -290,6 +297,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -317,6 +325,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("notFound"));
         resultActions.andExpect(jsonPath("$.data").value("존재하지 않는 팀입니다."));
         resultActions.andExpect(status().isNotFound());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -344,6 +353,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.teamName").value("영업팀"));
         resultActions.andExpect(jsonPath("$.data.teamCount").value(0));
         resultActions.andExpect(status().isOk());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -370,6 +380,7 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.key").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.value").value("이미 존재하는 팀입니다."));
         resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -378,11 +389,11 @@ public class AdminControllerTest extends RestDoc {
     @Test
     public void delete_test() throws Exception {
         // given
-        Long teamId = 4L;
+        Long id = 4L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(delete("/auth/admin/team/{id}", teamId));
+                .perform(RestDocumentationRequestBuilders.delete("/auth/admin/team/{id}", id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -391,7 +402,8 @@ public class AdminControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.msg").value("ok"));
         resultActions.andExpect(jsonPath("$.data").isEmpty());
         resultActions.andExpect(status().isOk());
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("팀 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @DisplayName("팀 삭제 실패")
@@ -399,20 +411,22 @@ public class AdminControllerTest extends RestDoc {
     @Test
     public void delete_fail_test() throws Exception {
         // given
-        Long teamId = 1L;
+        Long id = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(delete("/auth/admin/team/{id}", teamId));
+                .perform(RestDocumentationRequestBuilders.delete("/auth/admin/team/{id}", id));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
         resultActions.andExpect(jsonPath("$.status").value(400));
         resultActions.andExpect(jsonPath("$.msg").value("badRequest"));
-        resultActions.andExpect(jsonPath("$.data.key").value(String.valueOf(teamId)));
+        resultActions.andExpect(jsonPath("$.data.key").value(String.valueOf(id)));
         resultActions.andExpect(jsonPath("$.data.value").value("팀에 소속된 인원이 1명 이상입니다."));
         resultActions.andExpect(status().isBadRequest());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("팀 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
