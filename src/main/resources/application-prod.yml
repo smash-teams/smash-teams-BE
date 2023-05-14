@@ -26,5 +26,7 @@ logging:
 file:
   path: /home/ubuntu/github_action/upload/
   location: file:///home/ubuntu/github_action/upload/
+  prefix: http://52.78.70.225:7777/upload/
+
 
 JWT_SECRET_KEY: ${JWT_SECRET_KEY}
