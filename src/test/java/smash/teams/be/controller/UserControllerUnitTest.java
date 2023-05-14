@@ -68,8 +68,9 @@ public class UserControllerUnitTest extends DummyEntity {
     public void findMyInfo_test() throws Exception {
         // given
         User cosPS = newMockUser(1L, "cos");
+        String prefix = "http://localhost:8080/upload/";
 
-        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = new UserResponse.FindMyInfoOutDTO(cosPS);
+        UserResponse.FindMyInfoOutDTO findMyInfoOutDTO = new UserResponse.FindMyInfoOutDTO(cosPS, prefix);
         System.out.println("테스트1 : " + findMyInfoOutDTO);
         Mockito.when(userService.findMyId(any())).thenReturn(findMyInfoOutDTO);
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class FileUtil {
+public class FileUtil { // /home/ubuntu/github_action/upload/
     public static String write(String uploadFolder, MultipartFile file) {
         // 롤링 기법 (사진명을 시간_person.png)
         UUID uuid = UUID.randomUUID();

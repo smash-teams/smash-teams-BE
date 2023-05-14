@@ -42,6 +42,8 @@ public class UserService {
 
     @Value("${file.path}")
     private String uploadFolder;
+    @Value("${file.prefix}")
+    private String urlPrefix;
 
     @Log
     @Transactional
@@ -95,7 +97,9 @@ public class UserService {
             User userPS = userRepository.findById(id).orElseThrow(
                     () -> new Exception400("id", "해당 유저를 찾을 수 없습니다")
             );
-            return new UserResponse.FindMyInfoOutDTO(userPS);
+
+
+            return new UserResponse.FindMyInfoOutDTO(userPS, urlPrefix);
         } catch (Exception e) {
             throw new Exception500("내 정보 조회 실패 : " + e.getMessage());
         }
@@ -138,7 +142,7 @@ public class UserService {
 
             User userPS = userRepository.findById(id)
                     .orElseThrow(() -> new Exception500("로그인 된 유저가 DB에 존재하지 않습니다."));
-            userPS.uploadImage(uuidImageName);
+            userPS.uploadImage(urlPrefix + uuidImageName);
             return userPS;
         } catch (Exception e) {
             throw new Exception500("프로필 사진 등록 실패 : " + e.getMessage());
