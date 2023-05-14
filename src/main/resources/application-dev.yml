@@ -32,5 +32,6 @@ logging:
 
 file:
   path: ./upload/
+  location: file:./upload/
 
 JWT_SECRET_KEY: "승민"

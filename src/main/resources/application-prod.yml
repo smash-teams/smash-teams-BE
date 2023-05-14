@@ -25,5 +25,6 @@ logging:
 
 file:
   path: /home/ubuntu/github_action/upload/
+  location: file:///home/ubuntu/github_action/upload/
 
 JWT_SECRET_KEY: ${JWT_SECRET_KEY}
