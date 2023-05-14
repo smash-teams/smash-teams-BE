@@ -107,7 +107,7 @@ include::{snippets}/{user}/find_my_info_test/request-headers.adoc[]
 [caption=]
 include::{snippets}/{user}/find_my_info_test/path-parameters.adoc[]
 
-=== 내 정보 조회 (실패: apipath의 id와 로그인한 유저id가 다름)
+=== 내 정보 조회 (실패: 인증안됨)
 ===== Request Example
 include::{snippets}/{user}/find_my_info_fail_test/http-request.adoc[]
 
