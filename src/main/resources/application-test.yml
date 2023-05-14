@@ -34,5 +34,6 @@ logging:
 file:
   path: ./upload/
   location: file:./upload/
+  prefix: http://localhost:8080/upload/
 
 JWT_SECRET_KEY: "승민"

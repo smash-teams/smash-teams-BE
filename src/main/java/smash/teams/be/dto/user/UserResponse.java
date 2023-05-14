@@ -2,6 +2,7 @@ package smash.teams.be.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import smash.teams.be.model.user.User;
 
 public class UserResponse {
@@ -70,7 +71,7 @@ public class UserResponse {
         private String profileImage;
         private String role;
 
-        public FindMyInfoOutDTO(User user) {
+        public FindMyInfoOutDTO(User user, String prefix) {
             this.id = user.getId();
             this.teamName = user.getTeam().getTeamName();
             this.name = user.getName();
@@ -78,7 +79,7 @@ public class UserResponse {
             this.phoneNumber = user.getPhoneNumber();
             this.remain = user.getRemain();
             this.startWork = user.getStartWork().toLocalDate().toString();
-            this.profileImage = user.getProfileImage();
+            this.profileImage = prefix + user.getProfileImage();
             this.role = user.getRole();
         }
     }
