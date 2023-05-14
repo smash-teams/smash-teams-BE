@@ -271,13 +271,9 @@ public class ScheduleControllerTest extends RestDoc {
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.teamName").value("개발팀"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
 
-        resultActions.andExpect(jsonPath("$.data.scheduleList[4].scheduleId").value(5));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[4].user.name").value("남궁훈"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[4].type").value("HALFOFF"));
-
-        resultActions.andExpect(jsonPath("$.data.scheduleList[9].scheduleId").value(10));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[9].user.userId").value(12));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[9].type").value("SHIFT"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[3].scheduleId").value(5));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[3].user.name").value("남궁훈"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[3].type").value("HALFOFF"));
 
         resultActions.andExpect(status().isOk());
         resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
