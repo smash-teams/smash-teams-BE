@@ -99,7 +99,7 @@ public class UserService {
             );
 
 
-            return new UserResponse.FindMyInfoOutDTO(userPS, urlPrefix);
+            return new UserResponse.FindMyInfoOutDTO(userPS);
         } catch (Exception e) {
             throw new Exception500("내 정보 조회 실패 : " + e.getMessage());
         }
