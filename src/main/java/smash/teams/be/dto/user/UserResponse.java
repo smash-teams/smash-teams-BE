@@ -66,6 +66,7 @@ public class UserResponse {
         private String name;
         private String email;
         private String phoneNumber;
+        private Double remain;
         private String startWork;
         private String profileImage;
         private String role;
@@ -76,6 +77,7 @@ public class UserResponse {
             this.name = user.getName();
             this.email = user.getEmail();
             this.phoneNumber = user.getPhoneNumber();
+            this.remain = user.getRemain();
             this.startWork = user.getStartWork().toLocalDate().toString();
             this.profileImage = user.getProfileImage();
             this.role = user.getRole();
