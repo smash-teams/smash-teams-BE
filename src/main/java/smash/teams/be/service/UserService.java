@@ -29,7 +29,6 @@ import smash.teams.be.model.user.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
