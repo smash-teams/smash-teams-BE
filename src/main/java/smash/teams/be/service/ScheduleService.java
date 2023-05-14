@@ -90,12 +90,19 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse.ListOutDto findByScheduleList() {
-        List<Schedule> scheduleListPS = scheduleRepository.findSchedulesWithName();
-        if (scheduleListPS == null) {
+        List<Schedule> scheduleListBeforePS = scheduleRepository.findSchedulesWithName();
+        List<Schedule> schedulesListAfterPS = new ArrayList<>();
+        if (scheduleListBeforePS == null) {
             throw new Exception403("스케줄을 찾을 수 없습니다.");
         }
 
-        return new ScheduleResponse.ListOutDto(scheduleListPS);
+        for (Schedule schedule: scheduleListBeforePS) {
+            if (schedule.getStatus().equals(Status.APPROVED.getStatus())) {
+                schedulesListAfterPS.add(schedule);
+            }
+        }
+
+        return new ScheduleResponse.ListOutDto(schedulesListAfterPS);
     }
 
     @Log
