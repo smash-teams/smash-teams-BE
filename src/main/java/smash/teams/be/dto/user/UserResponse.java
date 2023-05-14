@@ -2,7 +2,6 @@ package smash.teams.be.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import smash.teams.be.model.team.Team;
 import smash.teams.be.model.user.User;
 
 public class UserResponse {
@@ -107,4 +106,13 @@ public class UserResponse {
         }
     }
 
+    @Getter
+    @Setter
+    public static class UpdateImageOutDTO {
+        private String profileImage;
+
+        public UpdateImageOutDTO(User user) {
+            this.profileImage = user.getProfileImage();
+        }
+    }
 }
