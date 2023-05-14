@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import smash.teams.be.core.annotation.ErrorLog;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
@@ -86,8 +85,8 @@ public class UserController {
         User userPS = userService.uploadImage(profileImage, id);
 
         myUserDetails.setUser(userPS); // 동기화
-
-        ResponseDTO<?> responseDTO = new ResponseDTO<>();
+        UserResponse.UpdateImageOutDTO uploadImageOutDTO = new UserResponse.UpdateImageOutDTO(userPS);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(uploadImageOutDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
 
