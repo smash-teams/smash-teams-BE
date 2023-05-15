@@ -67,10 +67,8 @@ public class ScheduleService {
 
                 List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
                 for (Schedule schedule : schedules) {
-                    if (schedule.getStatus().equals(Status.LAST.getStatus())) {
-                        ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
-                        scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
-                    }
+                    ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+                    scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
                 }
 
                 return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
@@ -81,7 +79,7 @@ public class ScheduleService {
 
                 List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
                 for (Schedule schedule : schedules) {
-                    if (schedule.getStatus().equals(Status.FIRST.getStatus()) && schedule.getUser().getTeam().getId().equals(user.getTeam().getId())) {
+                    if (schedule.getUser().getTeam().getId().equals(user.getTeam().getId())) {
                         ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
                         scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
                     }
