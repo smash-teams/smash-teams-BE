@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
@@ -26,7 +27,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import smash.teams.be.core.RestDoc;
 import smash.teams.be.core.auth.jwt.JwtProvider;
@@ -427,60 +430,28 @@ public class UserControllerTest extends RestDoc {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
+    @DisplayName("이미지 업로드 성공")
+    @Test
+    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void upload_image_test() throws Exception {
+        Long userId = 1L;
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "profileImage",
+                "test-image.jpg",
+                MediaType.MULTIPART_FORM_DATA_VALUE,
+                "test image content".getBytes()
+        );
 
-//    @DisplayName("이미지 업로드 성공")
-//    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @Test
-//    public void uploadImage_test() throws Exception {
-//        // given
-//        Long id = 1L;
-//        MockMultipartFile multipartFile = new MockMultipartFile("profileImage",
-//                "person.png", "multipart/form-data", "Hello, World!".getBytes());
-////        String requestBody = om.writeValueAsString(multipartFile);
-////        System.out.println("테스트1 : " + requestBody);
-//
-//        // when
-//        ResultActions resultActions = mvc.perform(
-//                post("/auth/user/" + id + "/image")
-//                        .contentType(MediaType.MULTIPART_FORM_DATA)
-//        );
-//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-//        System.out.println("테스트2 : " + responseBody);
-//
-//        // then
-//        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("OK"));
-//        resultActions.andExpect(jsonPath("$.data").value("null"));
-//        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-//    }
-//
-//    @DisplayName("이미지 업로드 실패") //
-//    @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @Test
-//    public void uploadImage_fail_test() throws Exception {
-//        // given
-//        Long id = 1L;
-//        MockMultipartFile multipartFile = new MockMultipartFile("profileImage",
-//                "person.png", "multipart/form-data", "Hello, World!".getBytes());
-//
-//        // when
-//        ResultActions resultActions = mvc.perform(
-//                MockMvcRequestBuilders.multipart("/auth/user/" + id + "/image")
-//                        .file(multipartFile)
-//                        .contentType(MediaType.MULTIPART_FORM_DATA)
-//        );
-//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-//        System.out.println("테스트2 : " + responseBody);
-//
-//        // then
-//        resultActions.andExpect(jsonPath("$.status").value(200));
-//        resultActions.andExpect(jsonPath("$.msg").value("ok"));
-//        resultActions.andExpect(jsonPath("$.data").value(null));
-//        //resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-//    }
+        ResultActions resultActions = mvc.perform(RestDocumentationRequestBuilders.multipart("/auth/user/{id}/image", userId)
+                .file(imageFile).contentType(MediaType.MULTIPART_FORM_DATA_VALUE));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
 
-
-
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andDo(document.document(pathParameters(parameterWithName("id").description("유저 id"))));
+        resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
 
     @DisplayName("회원탈퇴 성공")
     @WithUserDetails(value = "User1@gmail.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
