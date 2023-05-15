@@ -33,8 +33,8 @@ public class ScheduleResponse {
 
         public ScheduleOutDTO(Schedule schedule, UserOutDTOWithScheduleOutDTO user) {
             this.scheduleId = schedule.getId();
-            this.startDate = schedule.getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            this.endDate = schedule.getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            this.startDate = schedule.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+            this.endDate = schedule.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
             this.type = schedule.getType();
             this.status = schedule.getStatus();
             this.reason = schedule.getReason();
