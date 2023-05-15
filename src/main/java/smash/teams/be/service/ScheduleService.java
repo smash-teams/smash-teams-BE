@@ -23,6 +23,7 @@ import smash.teams.be.model.user.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +35,10 @@ public class ScheduleService {
     @Log
     @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleListDTO getScheduleList(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new Exception404("존재하지 않는 사용자입니다")
+        );
+
         List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
 
         List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
@@ -46,41 +51,47 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public ScheduleResponse.ScheduleListDTO getScheduleListForManage(User user) {
+    public ScheduleResponse.ScheduleListDTO getScheduleListForManage(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new Exception404("존재하지 않는 사용자입니다")
+        );
 
         if(user.getRole().equals(Role.USER.getRole()) || user.getRole().equals(Role.ADMIN.getRole())){
             throw new Exception403("권한이 없습니다");
         }
 
-        if (user.getRole().equals(Role.CEO.getRole())) {
+        try {
+            if (user.getRole().equals(Role.CEO.getRole())) {
 
-            List<Schedule> schedules = scheduleRepository.findSchedules();
+                List<Schedule> schedules = scheduleRepository.findSchedules();
 
-            List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
-            for (Schedule schedule : schedules) {
-                if(schedule.getStatus().equals(Status.LAST.getStatus())) {
-                    ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
-                    scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
+                List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
+                for (Schedule schedule : schedules) {
+                    if (schedule.getStatus().equals(Status.LAST.getStatus())) {
+                        ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+                        scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
+                    }
                 }
-            }
 
-            return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
+                return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
+
+            } else {
+
+                List<Schedule> schedules = scheduleRepository.findSchedules();
+
+                List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
+                for (Schedule schedule : schedules) {
+                    if (schedule.getStatus().equals(Status.FIRST.getStatus()) && schedule.getUser().getTeam().getId().equals(user.getTeam().getId())) {
+                        ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
+                        scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
+                    }
+                }
+                return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
+            }
+        }catch (Exception e){
+            throw new Exception500("스케쥴 조회 실패: "+e.getMessage());
         }
 
-        if (user.getRole().equals(Role.MANAGER.getRole())) {
-
-            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamId(user.getTeam().getId());
-
-            List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
-            for (Schedule schedule : schedules) {
-                if(schedule.getStatus().equals(Status.FIRST.getStatus())) {
-                    ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
-                    scheduleOutDTOList.add(new ScheduleResponse.ScheduleOutDTO(schedule, userOutDTOWithScheduleOutDTO));
-                }
-            }
-            return new ScheduleResponse.ScheduleListDTO(scheduleOutDTOList);
-        }
-        return null;
     }
 
     @Transactional(readOnly = true)
@@ -124,7 +135,11 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponse.OrderScheduleOutWithRemainDTO orderSchedule(User user, ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO) {
+    public ScheduleResponse.OrderScheduleOutWithRemainDTO orderSchedule(Long userId, ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO) {
+
+        User userPS = userRepository.findById(userId).orElseThrow(
+                () -> new Exception404("존재하지 않는 사용자입니다")
+        );
         Long scheduleId = orderScheduleInDTO.getScheduleId();
         String status = orderScheduleInDTO.getStatus();
 
@@ -134,7 +149,7 @@ public class ScheduleService {
             throw new Exception404("스케쥴을 찾을 수 없습니다.");
         }
 
-        if(user.getRole().equals(Role.MANAGER.getRole())){
+        if(userPS.getRole().equals(Role.MANAGER.getRole())){
             if (status.equals(Status.APPROVED.getStatus())) {
                 if (schedulePS.getType().equals(Type.DAYOFF.getType())) {
                     if (schedulePS.getStatus().equals(Status.FIRST.getStatus())) {
@@ -207,7 +222,7 @@ public class ScheduleService {
             }
         }
 
-        if(user.getRole().equals(Role.CEO.getRole())){
+        if(userPS.getRole().equals(Role.CEO.getRole())){
             if (status.equals(Status.APPROVED.getStatus())) {
                 if (schedulePS.getType().equals(Type.DAYOFF.getType())) {
                     if (schedulePS.getStatus().equals(Status.LAST.getStatus())) {
