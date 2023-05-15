@@ -190,6 +190,21 @@ include::{snippets}/{user}/withdraw_fail_password_test/request-headers.adoc[]
 include::{snippets}/{user}/withdraw_fail_password_test/path-parameters.adoc[]
 
 
+=== 이미지 업로드 (성공)
+===== Request Example
+include::{snippets}/{user}/upload_image_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/upload_image_test/http-response.adoc[]
+
+===== Curl
+include::{snippets}/{user}/upload_image_test/curl-request.adoc[]
+
+include::{snippets}/{user}/upload_image_test/request-headers.adoc[]
+[caption=]
+include::{snippets}/{user}/upload_image_test/path-parameters.adoc[]
+
+
 == 관리자
 === 사용자 권한 설정 페이지 조회 (성공)
 ===== Request Example

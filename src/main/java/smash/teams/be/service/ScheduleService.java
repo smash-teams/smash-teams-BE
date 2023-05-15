@@ -35,9 +35,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleListDTO getScheduleList(Long userId) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByUserId(userId);
-        if (schedules.isEmpty()) {
-            throw new Exception404("스케쥴을 찾을 수 없습니다.");
-        }
+
         List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             ScheduleResponse.UserOutDTOWithScheduleOutDTO userOutDTOWithScheduleOutDTO = new ScheduleResponse.UserOutDTOWithScheduleOutDTO(schedule.getUser());
@@ -58,10 +56,6 @@ public class ScheduleService {
 
             List<Schedule> schedules = scheduleRepository.findSchedules();
 
-            if (schedules.isEmpty()) {
-                throw new Exception404("스케쥴을 찾을 수 없습니다.");
-            }
-
             List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
             for (Schedule schedule : schedules) {
                 if(schedule.getStatus().equals(Status.LAST.getStatus())) {
@@ -74,11 +68,8 @@ public class ScheduleService {
         }
 
         if (user.getRole().equals(Role.MANAGER.getRole())) {
-            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamId(user.getTeam().getId());
 
-            if (schedules.isEmpty()) {
-                throw new Exception404("스케쥴을 찾을 수 없습니다.");
-            }
+            List<Schedule> schedules = scheduleRepository.findSchedulesByTeamId(user.getTeam().getId());
 
             List<ScheduleResponse.ScheduleOutDTO> scheduleOutDTOList = new ArrayList<>();
             for (Schedule schedule : schedules) {
