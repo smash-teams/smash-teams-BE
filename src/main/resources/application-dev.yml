@@ -30,12 +30,6 @@ logging:
     '[smash.teams.be]': DEBUG
     '[org.hibernate.type]': TRACE # 콘솔 쿼리에 ? 에 주입된 값 보기
 
-sentry:
-  dsn: https://cc29f1ec6bf3416c89ebd59fcdd28c30@o4505186517057536.ingest.sentry.io/4505186827960320
-  # Set traces-sample-rate to 1.0 to capture 100% of transactions for performance monitoring.
-  # We recommend adjusting this value in production.
-  traces-sample-rate: 1.0
-
 file:
   path: ./upload/
   location: file:./upload/
