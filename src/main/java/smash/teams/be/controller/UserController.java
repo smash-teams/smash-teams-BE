@@ -56,9 +56,27 @@ public class UserController {
     @Log
     @PostMapping("/auth/user/{id}/upload")
     public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody @Valid UserRequest.UpdateInDTO updateInDTO,
-                                    Errors errors,
+                                    @RequestBody UserRequest.UpdateInDTO updateInDTO,
                                     @AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
+        if (updateInDTO.getCurPassword().isBlank()) {
+            throw new Exception400(String.valueOf(id), "현재 비밀번호를 입력해야합니다.");
+        }
+
+        if (!updateInDTO.getNewPassword().isBlank()
+                && !updateInDTO.getNewPassword().matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$")) {
+            throw new Exception400(String.valueOf(id), "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요.");
+        }
+
+        if (!updateInDTO.getPhoneNumber().isBlank()
+                && !updateInDTO.getPhoneNumber().matches("^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$")) {
+            throw new Exception400(String.valueOf(id), "휴대폰 번호(010-1234-5678)의 형태로 작성해주세요.");
+        }
+
+        if (!updateInDTO.getStartWork().isBlank()
+                && !updateInDTO.getStartWork().matches("^(?:(?:19|20)\\d{2})-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])$")) {
+            throw new Exception400(String.valueOf(id), "입사일(2023-05-10)의 형태로 작성해주세요.");
+        }
+
         if (id.longValue() != myUserDetails.getUser().getId()) {
             throw new Exception403("권한이 없습니다.");
         }

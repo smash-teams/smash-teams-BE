@@ -81,24 +81,9 @@ public class UserRequest {
     @Getter
     @Setter
     public static class UpdateInDTO {
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$",
-                message = "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요.")
-        @NotEmpty
         private String curPassword;
-
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$",
-                message = "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요..")
-        @NotEmpty
         private String newPassword;
-
-        @Pattern(regexp = "^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$",
-                message = "휴대폰 번호(010-1234-5678)의 형태로 작성해주세요.")
-        @NotEmpty
         private String phoneNumber;
-
-        @Pattern(regexp = "^(?:(?:19|20)\\d{2})-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])$",
-                message = "입사일(2023-05-10)의 형태로 작성해주세요.")
-        @NotEmpty
         private String startWork;
 
         public User toEntity() {

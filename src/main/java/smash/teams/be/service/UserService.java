@@ -28,6 +28,7 @@ import smash.teams.be.model.user.User;
 import smash.teams.be.model.user.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -117,14 +118,17 @@ public class UserService {
         }
 
         try {
-            User userEntity = updateInDTO.toEntity();
+            if (!updateInDTO.getNewPassword().isBlank()) {
+                userPS.updatePassword(bCryptPasswordEncoder.encode(updateInDTO.getNewPassword()));
+            }
 
-            String rawPassword = userEntity.getPassword();
-            String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+            if (!updateInDTO.getPhoneNumber().isBlank()) {
+                userPS.updatePhoneNumber(updateInDTO.getPhoneNumber());
+            }
 
-            userPS.updatePassword(encPassword);
-            userPS.updatePhoneNumber(userEntity.getPhoneNumber());
-            userPS.updateStartWork(userEntity.getStartWork());
+            if (!updateInDTO.getStartWork().isBlank()) {
+                userPS.updateStartWork(LocalDate.parse(updateInDTO.getStartWork()).atStartOfDay());
+            }
 
             userRepository.save(userPS);
             return new UserResponse.UpdateOutDTO(userPS);
