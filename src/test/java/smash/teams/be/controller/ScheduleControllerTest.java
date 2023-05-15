@@ -166,16 +166,16 @@ public class ScheduleControllerTest extends RestDoc {
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(3));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(9));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(8));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(7));
+        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(11));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(11));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].scheduleId").value(10));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].scheduleId").value(9));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("LAST"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("HALFOFF"));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.userId").value(4L));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.userId").value(9L));
-        resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.name").value("최민우"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].status").value("FIRST"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].type").value("DAYOFF"));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[0].user.userId").value(7));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[1].user.userId").value(12));
+        resultActions.andExpect(jsonPath("$.data.scheduleList[2].user.name").value("서재식"));
         resultActions.andExpect(status().isOk());
         resultActions.andDo(document.document(requestHeaders(headerWithName("Authorization").optional().description("인증헤더 Bearer token 필수"))));
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -193,7 +193,7 @@ public class ScheduleControllerTest extends RestDoc {
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(1));
+        resultActions.andExpect(jsonPath("$.data.scheduleList.length()").value(7));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].scheduleId").value(11));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].reason").value("쉬고싶음"));
         resultActions.andExpect(jsonPath("$.data.scheduleList[0].status").value("FIRST"));
