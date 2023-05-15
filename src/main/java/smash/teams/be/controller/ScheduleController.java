@@ -46,9 +46,9 @@ public class ScheduleController {
     @GetMapping("/auth/super/schedule")
     public ResponseEntity<?> getScheduleListForManage(@AuthenticationPrincipal MyUserDetails myUserDetails){
 
-        User user = myUserDetails.getUser();
+        Long userId = myUserDetails.getUser().getId();
 
-        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(user);
+        ScheduleResponse.ScheduleListDTO scheduleListDTO = scheduleService.getScheduleListForManage(userId);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(scheduleListDTO);
         return ResponseEntity.ok(responseDTO);
@@ -83,7 +83,8 @@ public class ScheduleController {
     public ResponseEntity<?> orderSchedule(@RequestBody @Valid ScheduleRequest.OrderScheduleInDTO orderScheduleInDTO,
                                            @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
-        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutDTO = scheduleService.orderSchedule(myUserDetails.getUser(), orderScheduleInDTO);
+        Long userId = myUserDetails.getUser().getId();
+        ScheduleResponse.OrderScheduleOutWithRemainDTO orderScheduleOutDTO = scheduleService.orderSchedule(userId, orderScheduleInDTO);
 
         ResponseDTO<?> responseDTO = new ResponseDTO<>(orderScheduleOutDTO);
         return ResponseEntity.ok(responseDTO);

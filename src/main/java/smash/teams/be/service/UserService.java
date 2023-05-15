@@ -142,6 +142,7 @@ public class UserService {
 
             User userPS = userRepository.findById(id)
                     .orElseThrow(() -> new Exception500("로그인 된 유저가 DB에 존재하지 않습니다."));
+
             userPS.uploadImage(urlPrefix + uuidImageName);
             return userPS;
         } catch (Exception e) {
