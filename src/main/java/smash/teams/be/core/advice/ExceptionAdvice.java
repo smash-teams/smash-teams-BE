@@ -1,5 +1,6 @@
 package smash.teams.be.core.advice;
 
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ public class ExceptionAdvice {
     @ErrorLog
     @ExceptionHandler(Exception500.class)
     public ResponseEntity<?> serverError(Exception500 e) {
+        Sentry.captureException(e); // sentry.io로 로그 전송
         return new ResponseEntity<>(e.body(), e.status());
     }
 
@@ -47,6 +49,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> unknownServerError(Exception e) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>(HttpStatus.INTERNAL_SERVER_ERROR, "unknownServerError", e.getMessage());
+        Sentry.captureException(e); // sentry.io로 로그 전송
         return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
