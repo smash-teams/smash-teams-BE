@@ -16,12 +16,144 @@
 </p>
 <h2 align=center>연차, 당직을 "때려"버리는 근태관리 플랫폼 서비스, Team SMASH</h2>
 
+
+## UI
+### ✋ 로그인, 회원가입 페이지 구성 - 수정필요
+<table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/ca11d0b9-f33f-4cac-9ab6-a34fe5333c27" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 로그인 또는 회원가입 권유 페이지
+  </div>
+</th>
+ 
+ <th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/76b79759-69ba-4a8b-afdf-e50362747550" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 로그아웃
+  </div>
+</th>
+</table>
+
+<table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/dfffe4a1-b1c7-4c47-9417-79c7e0082411" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋회원가입 페이지
+  </div>
+</th>
+ 
+ <th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/56443f5b-8b50-4e03-8c5c-ef151c3f06a5" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋개인정보수 페이지
+  </div>
+</th>
+</table>
+
+<br/>
+
+### ✋ Side Bar - 네비게이션 페이지 구성
+<table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/1792fbb5-62f5-4f92-abaa-2449ac1cd147" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 전체 일정보기
+  </div>
+</th>
+
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/277b3d0a-3853-4868-8247-ef025f9acc15" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 연차/반차신청하기
+  </div>
+</th>
+</table>
+
+<table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/6d791c5b-1446-41ae-bbe4-bbcdaf8aa164" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 당직신청하기
+  </div>
+</th>
+ 
+ <th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/4249b6f9-a994-4141-9cf8-5e62d948c8d8" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 연반차/당직 내역보기
+  </div>
+</th>
+</table>
+<br/>
+
+### ✋ 어드민과 매니저 - 멤버권한, 관리자 페이지 구성
+<table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/29b0e1b0-d38f-470a-8959-b2e5e784f90e" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ admin - 유저권한 설정하기
+  </div>
+</th>
+ 
+ <th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/4249b6f9-a994-4141-9cf8-5e62d948c8d8" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 연반차/당직 내역보기
+  </div>
+</th>
+ </table>
+
+ <table>
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/70e8b3b7-cb95-4539-a208-9f54a8736114" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 승인권한 유저 - 연반차,당직 관리하기 신청중 목록
+  </div>
+</th>
+
+<th style={{width: "25%"}}>
+  <div style={{width: "50%"}}>
+    <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/f4c63636-2cd4-4450-87e1-e6bed1e42cef" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+  </div>
+  <div align="center">
+ ✋ 승인권한 유저 - 연반차,당직 관리하기 완료 목록
+  </div>
+</th>
+</table>
+
+<br/>
+
+
+
 ## API Docs
 
 ### 💎 [REST - API 명세서]([api-docs.html](build%2Fdocs%2Fasciidoc%2Fapi-docs.html))
 
 
-## 기술스택
+## 🛠️ 기술스택
 
 <p>
   <img src="https://img.shields.io/badge/OpenJDK-339933?style=for-the-badge&logo=OpenJDK&logoColor=FFFFFF">
@@ -51,6 +183,8 @@
   <img src="https://img.shields.io/badge/Github Actions-black?style=for-the-badge&logo=Github Actions&logoColor=2088FF"/>
 </p>
 
+
+
 ## 개발환경
 
 - #### backend
@@ -58,9 +192,13 @@
     - gradle
     - spring-boot 2.7.9
 
+
+
 ## 시스템 구성도
 
 ![img.png](read-me-image/system-structure.png)
+
+
 
 ## Usage
 
@@ -68,8 +206,10 @@
 $ ./gradlew clean build
 ```
 
+
 ## ERD
 ![img_1.png](read-me-image/ERD.png)
+
 
 
 ## 개발일지
