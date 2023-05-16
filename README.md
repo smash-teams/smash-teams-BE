@@ -61,6 +61,7 @@
 
 ## 시스템 구성도
 
+![image](https://github.com/smash-teams/smash-teams-BE/assets/107292103/9c298723-7b59-4299-a96a-298a8e8617e5)
 
 
 ## Usage
