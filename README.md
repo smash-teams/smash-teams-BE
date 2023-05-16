@@ -24,7 +24,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/ca11d0b9-f33f-4cac-9ab6-a34fe5333c27" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 로그인 또는 회원가입 권유 페이지
+ 로그인 페이지
   </div>
 </th>
  
@@ -33,7 +33,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/76b79759-69ba-4a8b-afdf-e50362747550" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 로그아웃
+ 로그아웃 처리
   </div>
 </th>
 </table>
@@ -44,7 +44,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/dfffe4a1-b1c7-4c47-9417-79c7e0082411" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋회원가입 페이지
+ 회원가입 페이지
   </div>
 </th>
  
@@ -53,7 +53,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/56443f5b-8b50-4e03-8c5c-ef151c3f06a5" style={{width: "30%", height: "30%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋개인정보수 페이지
+ 개인정보 수정 페이지
   </div>
 </th>
 </table>
@@ -70,7 +70,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/1792fbb5-62f5-4f92-abaa-2449ac1cd147" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 전체 일정보기
+ 전체 일정보기
   </div>
 </th>
 
@@ -79,7 +79,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/277b3d0a-3853-4868-8247-ef025f9acc15" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 연차/반차신청하기
+ 연차/반차 신청하기
   </div>
 </th>
 </table>
@@ -90,7 +90,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/6d791c5b-1446-41ae-bbe4-bbcdaf8aa164" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 당직신청하기
+ 당직 신청하기
   </div>
 </th>
  
@@ -99,7 +99,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/4249b6f9-a994-4141-9cf8-5e62d948c8d8" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 연반차/당직 내역보기
+ 연차/반차/당직 내역보기
   </div>
 </th>
 </table>
@@ -108,14 +108,14 @@
 ---
 <br/>
 
-### ✋ 어드민과 매니저 - 멤버권한, 관리자 페이지 구성
+### ✋ admin/manager 권한 페이지
 <table>
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}}>
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/29b0e1b0-d38f-470a-8959-b2e5e784f90e" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ admin - 유저권한 설정하기
+ admin - 유저 팀/권한 설정하기
   </div>
 </th>
  
@@ -124,7 +124,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/4249b6f9-a994-4141-9cf8-5e62d948c8d8" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 연반차/당직 내역보기
+ 연차/반차/당직 내역보기
   </div>
 </th>
  </table>
@@ -135,7 +135,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/70e8b3b7-cb95-4539-a208-9f54a8736114" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 승인권한 유저 - 연반차,당직 관리하기 신청중 목록
+ 승인 권한 유저 - 연차/반차/당직 관리하기 신청 중 목록
   </div>
 </th>
 
@@ -144,7 +144,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/f4c63636-2cd4-4450-87e1-e6bed1e42cef" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- ✋ 승인권한 유저 - 연반차,당직 관리하기 완료 목록
+ 승인 권한 유저 - 연차/반차/당직 관리하기 완료 목록
   </div>
 </th>
 </table>
@@ -159,31 +159,30 @@
 ## 기술스택
 
 <p>
-  <img src="https://img.shields.io/badge/OpenJDK-339933?style=for-the-badge&logo=OpenJDK&logoColor=FFFFFF">
-  <img src="https://img.shields.io/badge/Spring_Boot-339933?style=for-the-badge&logo=spring-boot" />
-  <img src="https://img.shields.io/badge/Spring Security-339933?style=for-the-badge&logo=Spring Security&logoColor=6DB33F"/> 
-  <img src="https://img.shields.io/badge/Spring%20REST%20Docs-339933?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Junit5-339933?style=for-the-badge&logo=Junit5&logoColor=25A162"/>
-  <img src="https://img.shields.io/badge/JWT-339933?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" />
-</p>
-<p>
-  <img src="https://img.shields.io/badge/MySQL-white?style=for-the-badge&logo=MySQL&logoColor=4479A1"/> 
-  <img src="https://img.shields.io/badge/MariaDB-white?style=for-the-badge&logo=MariaDB&logoColor=003545"/>
-  <img src="https://img.shields.io/badge/H2-white?style=for-the-badge&logo=h2" />
-</p>
-<p>
-  <img src="https://img.shields.io/badge/Amazon EC2-grey?style=for-the-badge&logo=Amazon EC2&logoColor=FF9900"/>
-  <img src="https://img.shields.io/badge/Amazon S3-grey?style=for-the-badge&logo=Amazon S3&logoColor=569A31"/>
-  <img src="https://img.shields.io/badge/Amazon RDS-grey?style=for-the-badge&logo=Amazon RDS&logoColor=527FFF"/>
-  <img src="https://img.shields.io/badge/AWS Code%20Deploy-grey?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Ubuntu-grey?style=for-the-badge&logo=Ubuntu&logoColor=E95420"/>
-</p>
-<p>
+  <img src="https://img.shields.io/badge/OpenJDK-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white">
+  <img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot" />
+  <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Spring%20REST%20Docs-6DB33F?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" />
   <img src="https://img.shields.io/badge/Sentry-black?style=for-the-badge&logo=Sentry&logoColor=#362D59" />
-  <img src="https://img.shields.io/badge/Trello-black?style=for-the-badge&logo=Trello&logoColor=0052CC"/>
+</p>
+<p>
+  <img src="https://img.shields.io/badge/AWS%20EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS%20RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
+</p>
+<p>
+  <img src="https://img.shields.io/badge/H2-0052CC?style=for-the-badge&logo=h2" />
+  <img src="https://img.shields.io/badge/MariaDB-white?style=for-the-badge&logo=MariaDB&logoColor=003545"/>
+</p>
+<p>
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Code%20Deploy-2F93E0?style=for-the-badge" />
+</p>
+<p>
   <img src="https://img.shields.io/badge/Git-black?style=for-the-badge&logo=Git&logoColor=F05032"/> 
-  <img src="https://img.shields.io/badge/Github-black?style=for-the-badge&logo=Github&logoColor=181717"/> 
-  <img src="https://img.shields.io/badge/Github Actions-black?style=for-the-badge&logo=Github Actions&logoColor=2088FF"/>
+  <img src="https://img.shields.io/badge/Github-black?style=for-the-badge&logo=Github&logoColor=181717"/>
+  <img src="https://img.shields.io/badge/Trello-black?style=for-the-badge&logo=Trello&logoColor=0052CC"/>
 </p>
 
 ## 개발환경
