@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import smash.teams.be.core.annotation.Log;
 import smash.teams.be.core.auth.jwt.JwtProvider;
 import smash.teams.be.core.auth.session.MyUserDetails;
-import smash.teams.be.core.exception.Exception400;
-import smash.teams.be.core.exception.Exception401;
-import smash.teams.be.core.exception.Exception404;
-import smash.teams.be.core.exception.Exception500;
+import smash.teams.be.core.exception.*;
 import smash.teams.be.core.util.FileUtil;
 import smash.teams.be.dto.user.UserRequest;
 import smash.teams.be.dto.user.UserResponse;
@@ -60,7 +57,7 @@ public class UserService {
         }
 
         if (myUserDetails.getUser().getStatus().equals(Status.INACTIVE.getStatus())) {
-            throw new Exception401("이미 탈퇴한 계정입니다.");
+            throw new Exception403("이미 탈퇴한 계정입니다.");
         }
 
         try {
