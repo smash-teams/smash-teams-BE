@@ -194,7 +194,7 @@
 
 ## 시스템 구성도
 
-![img.png](read-me-image/system-structure.png)
+![system-architecture](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238632794-baf8940b-5f47-4158-b43e-b072ea2fb09c.png)
 
 ## Usage
 
@@ -203,7 +203,7 @@ $ ./gradlew clean build
 ```
 
 ## ERD
-![img_1.png](read-me-image/ERD.png)
+![erd](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238632785-01a36f4a-ee30-40a7-b687-07926c35f446.png)
 
 
 ## 개발일지
