@@ -135,7 +135,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/70e8b3b7-cb95-4539-a208-9f54a8736114" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- 승인 권한 유저 - 연차/반차/당직 관리하기 신청 중 목록
+ 승인 권한 유저 - 연차/반차/당직 관리하기(승인 대기 목록)
   </div>
 </th>
 
@@ -144,7 +144,7 @@
     <img src="https://github.com/smash-teams/smash-teams-FE/assets/76941552/f4c63636-2cd4-4450-87e1-e6bed1e42cef" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- 승인 권한 유저 - 연차/반차/당직 관리하기 완료 목록
+ 승인 권한 유저 - 연차/반차/당직 관리하기(승인 완료 목록)
   </div>
 </th>
 </table>
