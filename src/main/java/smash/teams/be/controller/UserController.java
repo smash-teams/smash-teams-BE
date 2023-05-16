@@ -37,7 +37,6 @@ public class UserController {
         return ResponseEntity.ok().header(JwtProvider.HEADER, loginOutDTO.getJwt()).body(responseDTO);
     }
 
-
     @Log
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinInDTO joinInDTO, Errors errors) {
