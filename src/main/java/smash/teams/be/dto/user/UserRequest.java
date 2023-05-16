@@ -85,17 +85,6 @@ public class UserRequest {
         private String newPassword;
         private String phoneNumber;
         private String startWork;
-
-        public User toEntity() {
-            LocalDate startDate = LocalDate.parse(startWork, DateTimeFormatter.ISO_LOCAL_DATE);
-            LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIDNIGHT);
-
-            return User.builder()
-                    .password(newPassword)
-                    .phoneNumber(phoneNumber)
-                    .startWork(startDateTime)
-                    .build();
-        }
     }
 
     @Getter @Setter
