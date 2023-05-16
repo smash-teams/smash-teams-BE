@@ -32,7 +32,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-        
 
       - name: Set yaml file
         uses: microsoft/variable-substitution@v1
