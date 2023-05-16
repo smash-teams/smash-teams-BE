@@ -7,7 +7,6 @@ server:
   ssl:
     key-store: classpath:AN-keystore.p12
     key-store-type: PKCS12
-    key-alias: AN-keystore
     key-store-password: tmdals0520!
 
 spring:
