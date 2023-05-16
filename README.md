@@ -16,10 +16,9 @@
 </p>
 <h2 align=center>연차, 당직을 "때려"버리는 근태관리 플랫폼 서비스, Team SMASH</h2>
 
-
 ## API Docs
 
-### 💎 [REST - API 명세서](..%2F..%2FUsers%2Fuser%2FDownloads%2Fapi-docs%20%283%29.html)
+### 💎 [REST - API 명세서]([api-docs.html](build%2Fdocs%2Fasciidoc%2Fapi-docs.html))
 
 
 ## 기술스택
@@ -61,7 +60,7 @@
 
 ## 시스템 구성도
 
-
+![img.png](read-me-image/system-structure.png)
 
 ## Usage
 
@@ -70,10 +69,21 @@ $ ./gradlew clean build
 ```
 
 ## ERD
-![img_1.png](img_1.png)
+![img_1.png](read-me-image/ERD.png)
 
 
 ## 개발일지
+👤 **dltmdalssssss**
+- 백엔드 프로젝트 생성 (21/10/13) - `commit` : [9100388](https://github.com/smash-teams/smash-teams-BE/commit/9100388cd4ee3121a49b838409e15b5848ca9a49)
+
+---
+👤 **realgreatcode**
+- 유저 스케쥴 조회 구현 완료 (21/10/13) - `commit` : [3e27392](https://github.com/smash-teams/smash-teams-BE/commit/3e273928403b0ad8fa0b720acddf77491f171fa8)
+
+---
+👤 **Jason_song97**
+- Schedule Controller, Service Repository 테스트 완료 (21/10/13) - `commit` : [d793af5](https://github.com/smash-teams/smash-teams-BE/commit/d793af550c6dbef9c00d7668ac3756b923bf82f3)
+
 
 
 ## Author
