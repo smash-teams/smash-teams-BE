@@ -217,8 +217,21 @@ $ ./gradlew clean build
 
 ---
 👤 **Jason_song97**
-- Schedule Controller, Service Repository 테스트 완료 (21/10/13) - `commit` : [d793af5](https://github.com/smash-teams/smash-teams-BE/commit/d793af550c6dbef9c00d7668ac3756b923bf82f3)
-
+- 전체 스케줄 조회 구현 및 서비스, 레포지토리 테스트 완료 (23/5/7) - `commit` : [d793af5](https://github.com/smash-teams/smash-teams-BE/commit/d793af550c6dbef9c00d7668ac3756b923bf82f3)
+- 유저 컨트롤러 테스트 완료 (23/5/8) - `commit` : [ca187db](https://github.com/smash-teams/smash-teams-BE/commit/ca187dbf49de298c9c7c051b9948de8a97e9c7d1)
+- 내 개인 정보 수정 기능 완료 (23/5/9) - `commit` : [8401349](https://github.com/smash-teams/smash-teams-BE/commit/8401349a5cad098dd39606c08d7f88596966a51e)
+- 내 개인 정보 수정 통합 테스트 완료(성공, 실패) (23/5/10) - `commit` : [6877b5d](https://github.com/smash-teams/smash-teams-BE/commit/6877b5df23a0e484ffc38475347c7fa160e50ec2)
+- 이미지 업로드 기능 구현 (23/5/11) - `commit` : [5f099f4](https://github.com/smash-teams/smash-teams-BE/commit/5f099f4b88dc1d9fe8c0a2f0951bd4b5084a4ba4)
+- 이미지 업로드 서비스 테스트 완료 (21/10/13) - `commit` : [507024b](https://github.com/smash-teams/smash-teams-BE/commit/507024b3101d863c89f56cf3a0c1539294192021)
+- 회원 REST-API 명세서 (23/5/12) - `commit` : [d51c7bd](https://github.com/smash-teams/smash-teams-BE/commit/d51c7bdf976d8dc039db248ec92c8a97fe60785b)
+- 관리자 REST-API 명세서 (23/5/12) - `commit` : [8549334](https://github.com/smash-teams/smash-teams-BE/commit/8549334fb1e823fd21bdc406b67e519025dd2311)
+- 스케줄 REST-API 명세서 (23/5/12) - `commit` : [d5009cb](https://github.com/smash-teams/smash-teams-BE/commit/d5009cbdb11998b8f21389fa148de5b4cf5ceaff)
+- 이미지 업로드 DTO 추가 (23/5/14) - `commit` : [806c5f4](https://github.com/smash-teams/smash-teams-BE/commit/806c5f4f4f21a12d03d0c6af189d7a2ad7d87ca6)
+- DTO 오류 해결 (23/5/15) - `commit` : [4ae8313](https://github.com/smash-teams/smash-teams-BE/commit/4ae8313b4902d4efed6ee9dac1d1c692818425cb)
+- 이미지 업로드 통합 테스트 코드 (23/5/15) - `commit` : [fdc312c](https://github.com/smash-teams/smash-teams-BE/commit/fdc312c3d2f5a7e36d12a474abb38bf69fcb7e25)
+- RestDoc 빌드 후 생성 (23/5/15) - `commit` : [2e591fa](https://github.com/smash-teams/smash-teams-BE/commit/2e591faacfae60372e769fca0652787f83b1ccee)
+- 개인정보 에러 해결 (23/5/16) - `commit` : [175fa46](https://github.com/smash-teams/smash-teams-BE/commit/175fa46c7cd4cb0f2317f57df624624048b4be13)
+- 리드미 작성 (23/5/16) - `commit` : [4cf3de9](https://github.com/smash-teams/smash-teams-BE/commit/4cf3de9e07b00a79eb1443cd8838dca402d0839c)
 
 
 ## Author
