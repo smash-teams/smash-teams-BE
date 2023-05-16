@@ -49,14 +49,24 @@ public class UserService {
     @Log
     @Transactional
     public UserResponse.LoginOutDTO login(UserRequest.LoginInDTO loginInDTO) {
+        MyUserDetails myUserDetails = null;
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                     = new UsernamePasswordAuthenticationToken(loginInDTO.getEmail(), loginInDTO.getPassword());
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+            myUserDetails = (MyUserDetails) authentication.getPrincipal();
+        } catch (Exception e) {
+            throw new Exception401("인증되지 않았습니다.");
+        }
+
+        if (myUserDetails.getUser().getStatus().equals(Status.INACTIVE.getStatus())) {
+            throw new Exception401("이미 탈퇴한 계정입니다.");
+        }
+
+        try {
             String jwt = JwtProvider.create(myUserDetails.getUser());
 
-            // login_log_tb에 기록
+            // db에 기록
             loginLogRepository.save(LoginLog.builder()
                     .userId(myUserDetails.getUser().getId())
                     .userAgent(request.getHeader("User-Agent"))
