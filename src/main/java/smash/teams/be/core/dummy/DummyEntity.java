@@ -21,62 +21,6 @@ import java.util.List;
 public class DummyEntity {
     private final int SIZE = 12; // 한 페이지 당 사용자 정보 최대 갯수
 
-    public User newUser(String name) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return User.builder()
-                .name(name)
-                .password(passwordEncoder.encode("dltmdals123!"))
-                .email(name + "@newUserWithTeam.newUserWithTeam")
-                .phoneNumber("010-1234-5678")
-                .remain(20)
-                .role(Role.USER.getRole())
-                .status(Status.ACTIVE.getStatus())
-                .startWork(LocalDateTime.now().toLocalDate().atStartOfDay())
-                .build();
-    }
-
-    public User newManager(String name) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return User.builder()
-                .name(name)
-                .password(passwordEncoder.encode("dltmdals123!"))
-                .email(name + "@gmail.com")
-                .phoneNumber("010-1234-5678")
-                .remain(20)
-                .role(Role.MANAGER.getRole())
-                .status(Status.ACTIVE.getStatus())
-                .startWork(LocalDateTime.now())
-                .build();
-    }
-
-    public User newCeo(String name) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return User.builder()
-                .name(name)
-                .password(passwordEncoder.encode("dltmdals123!"))
-                .email(name + "@gmail.com")
-                .phoneNumber("010-1234-5678")
-                .remain(20)
-                .role(Role.CEO.getRole())
-                .status(Status.ACTIVE.getStatus())
-                .startWork(LocalDateTime.now())
-                .build();
-    }
-
-    public User newAdmin(String name) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return User.builder()
-                .name(name)
-                .password(passwordEncoder.encode("dltmdals123!"))
-                .email(name + "@gmail.com")
-                .phoneNumber("010-1234-5678")
-                .remain(20)
-                .role(Role.ADMIN.getRole())
-                .status(Status.ACTIVE.getStatus())
-                .startWork(LocalDateTime.now())
-                .build();
-    }
-
     public User newUserWithTeam(String name, Team team) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return User.builder()

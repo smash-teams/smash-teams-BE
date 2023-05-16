@@ -21,11 +21,9 @@ public class DataInit extends DummyEntity {
 
             Team common = teamRepository.save(newTeam("common"));
             Team 개발팀 = teamRepository.save(newTeam("개발팀"));
-            userRepository.save(newUserForIntergratingTest("김사장",common,"CEO","ceo1"));
-            userRepository.save(newUserForIntergratingTest("김팀장",개발팀,"MANAGER","manager2"));
-            userRepository.save(newUserForIntergratingTest("김사원",개발팀,"USER","user3"));
-
-
+            userRepository.save(newUserForIntergratingTest("김사장", common, "CEO", "ceo1"));
+            userRepository.save(newUserForIntergratingTest("김팀장", 개발팀, "MANAGER", "manager2"));
+            userRepository.save(newUserForIntergratingTest("김사원", 개발팀, "USER", "user3"));
 
         };
     }
