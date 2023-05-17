@@ -155,6 +155,7 @@
 
 ### 💎 [REST - API 명세서](https://smash-teams.github.io/smash-teams-BE/src/main/resources/static/docs/api-docs.html)
 
+<br/>
 
 ## 기술스택
 
@@ -185,6 +186,8 @@
   <img src="https://img.shields.io/badge/Trello-black?style=for-the-badge&logo=Trello&logoColor=0052CC"/>
 </p>
 
+<br/>
+
 ## 개발환경
 
 - #### backend
@@ -192,23 +195,38 @@
     - gradle
     - spring-boot 2.7.9
 
+<br/>
+
 ## 시스템 구성도
 
 ![system-architecture](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238824151-d0dc8a9b-129a-49bd-ab19-b5755d86a3a3.png)
 
-## Usage
-
-```sh
-$ ./gradlew clean build
-```
+<br/>
 
 ## ERD
 ![erd](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238632785-01a36f4a-ee30-40a7-b687-07926c35f446.png)
 
+<br/>
 
 ## 개발일지
-👤 **dltmdalssssss**
-- 백엔드 프로젝트 생성 (21/10/13) - `commit` : [9100388](https://github.com/smash-teams/smash-teams-BE/commit/9100388cd4ee3121a49b838409e15b5848ca9a49)
+👤 **berrypicker777(=dltmdalssssss)**
+- 백엔드 프로젝트 생성 및 1차 환경설정 (23/05/02) - `commit` : [9100388](https://github.com/smash-teams/smash-teams-BE/commit/9100388cd4ee3121a49b838409e15b5848ca9a49)
+- 엔티티 DB 제약 조건 추가 (23/05/03) - `commit` : [546bbc9](https://github.com/smash-teams/smash-teams-BE/commit/546bbc9940137a75587cfb4312da3359e616c677)
+- 팀 추가, 팀 삭제 구현 (23/05/04) - `commit` : [dc7e3a3](https://github.com/smash-teams/smash-teams-BE/commit/dc7e3a34262a37e540275620ddb3cc5696537754)
+- 팀 추가 통합테스트 완료 (23/05/10) - `commit` : [0cee8f3](https://github.com/smash-teams/smash-teams-BE/commit/0cee8f373975da8d40fef40ac44da1c1038e39d3)
+- 팀 삭제 통합테스트 완료 (23/05/10) - `commit` : [30cef22](https://github.com/smash-teams/smash-teams-BE/commit/30cef22a0bab726db0884029bf59ff8a99db1612)
+- 사용자 권한 설정 페이지 조회(검색 기능 포함) 구현 (23/05/07) - `commit` : [e15e51f](https://github.com/smash-teams/smash-teams-BE/commit/e15e51f8f16f486951cfae2f68bfc4d759a923f2)
+- 사용자 권한 설정 페이지 조회(검색 기능 포함) 통합테스트 완료 (23/05/09) - `commit` : [3fa39e1](https://github.com/smash-teams/smash-teams-BE/commit/3fa39e19f83a3d55064e5e5b19295a769d2f09b1)
+- 사용자 권한/팀 변경 구현 (23/05/07) - `commit` : [7a3865b](https://github.com/smash-teams/smash-teams-BE/commit/7a3865b649b0720d98c4706e798bef067935a80e)
+- 사용자 권한/팀 변경 통합테스트 완료(23/05/09) - `commit` : [b68d32f](https://github.com/smash-teams/smash-teams-BE/commit/b68d32f9e973e8e36c85ab40597b69713e298fc8)
+- 승인 요청 구현 (23/05/09) - `commit` : [57dd76f](https://github.com/smash-teams/smash-teams-BE/commit/57dd76f837479f5568ec8544575006943ca6f5b6)
+- 승인 요청 통합테스트 완료(23/05/10) - `commit` : [121483a](https://github.com/smash-teams/smash-teams-BE/commit/121483ac5f1979e4541ad7d9471e69b72314b59b)
+- 로그인 구현 (23/05/11) - `commit` : [fe0765a](https://github.com/smash-teams/smash-teams-BE/commit/fe0765af6ba551cfec6ca012e04e27a490d694e8)
+- 로그인 통합테스트 완료 (23/05/12) - `commit` : [685630e](https://github.com/smash-teams/smash-teams-BE/commit/685630eaf6cc6418087778d480b0c6e263732f7c)
+- 로그인시 DB에 기록이 남도록 수정 (23/05/13) - `commit` : [b61ee0f](https://github.com/smash-teams/smash-teams-BE/commit/b61ee0f71c3c88beff4d8a0a0eda4bd83c24840e#diff-18222e408e194dc4fa6fc421c32550de52b64d1fc6590762f81f40c9859cf742)
+- 회원탈퇴한 계정으로 로그인할 수 없도록 수정 (23/05/16) - `commit` : [4bcf928](https://github.com/smash-teams/smash-teams-BE/commit/4bcf92827eb68444036d576966158ec1dfb8f4b1)
+
+
 
 ---
 👤 **realgreatcode**
@@ -241,24 +259,23 @@ $ ./gradlew clean build
 - 개인정보 에러 해결 (23/5/16) - `commit` : [175fa46](https://github.com/smash-teams/smash-teams-BE/commit/175fa46c7cd4cb0f2317f57df624624048b4be13)
 - 리드미 작성 (23/5/16) - `commit` : [4cf3de9](https://github.com/smash-teams/smash-teams-BE/commit/4cf3de9e07b00a79eb1443cd8838dca402d0839c)
 
+<br/>
 
 ## Author & Role
 
-👤 **dltmdalssssss(팀장)**
+👤 **berrypicker777(팀장)**
 
 - Role
   - ERD 설계, Spring Security, AOP, Sentry, CI/CD, 도메인 네임 및 HTTPS 관련 설정
   - API(6개)
     - 로그인, 승인 요청, 사용자 권한 설정 페이지(검색 기능 포함), 사용자 권한/팀 변경, 팀 추가 및 삭제
-- Website: dltmdalssssss.github.io
-- Github: [@dltmdalssssss](https://github.com/dltmdalssssss)
+- Github: [@berrypicker777](https://github.com/berrypicker777)
 
 👤 **realgreatcode(팀원)**
 
 - Role
   - API(6개)
     - 회원가입, 이메일 중복 확인, 회원탈퇴, 연차/당직 내역 보기 페이지 조회, 연차/당직 관리하기 페이지 조회, 거절/승인
-- Website: realgreatcode.github.io
 - Github: [@realgreatcode](https://github.com/realgreatcode)
 
 👤 **Jason_song97(팀원)**
@@ -266,16 +283,15 @@ $ ./gradlew clean build
 - Role
   - API(4개)
   - 프로필 이미지 업로드, 내 정보 조회, 개인정보 수정, 메인페이지 
-- Website: Jason_song97.github.io
 - Github: [@Jason_song97](https://github.com/JasonSong97)
 
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/vividswan/K.Cook-Server/issues).
+<br/>
 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+<br/>
 
 ## 📝 License
 
