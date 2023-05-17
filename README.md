@@ -212,7 +212,16 @@ $ ./gradlew clean build
 
 ---
 👤 **realgreatcode**
-- 유저 스케쥴 조회 구현 완료 (21/10/13) - `commit` : [3e27392](https://github.com/smash-teams/smash-teams-BE/commit/3e273928403b0ad8fa0b720acddf77491f171fa8)
+- 유저 스케쥴 조회 구현 (23/05/07) - `commit` : [3e27392](https://github.com/smash-teams/smash-teams-BE/commit/3e273928403b0ad8fa0b720acddf77491f171fa8)
+- 관리자 스케쥴 조회 구현 (23/05/07) - `commit` : [49f7806](https://github.com/smash-teams/smash-teams-BE/commit/49f78063478abcc5ecdb9519c0286a81d11dfaaf)
+- 승인 및 거절하기 구현 (23/05/09) - `commit` : [7e6cfd3](https://github.com/smash-teams/smash-teams-BE/commit/7e6cfd3777b39ff4903c4ef29bc523d10e3ef290)
+- 로그인 구현 (23/05/12) - `commit` : [f53adae](https://github.com/smash-teams/smash-teams-BE/commit/f53adae4c6d7ac9c0b73cdd1a6364e68057041e8)
+- email 중복확인, 회원탈퇴 구현 (23/05/12) - `commit` : [7c18557](https://github.com/smash-teams/smash-teams-BE/commit/7c18557eebafcc00274dfa5a81e652622c5dba7b)
+- RestAPI 문서 관련 테스트 코드 수정 (23/05/14) - `commit` : [0642f40](https://github.com/smash-teams/smash-teams-BE/commit/0642f40627ca0c6316a4d2a248fdf0896bec9b4b)
+- RestAPI 문서 수정 (23/05/14) - `commit` : [d532cc3](https://github.com/smash-teams/smash-teams-BE/commit/d532cc32ca4c60551c7f2a20d22dc16ee1b4e159)
+- 유저 스케쥴 조회, 관리자 스케쥴 조회 수정 (23/05/15) - `commit` : [e1ff744](https://github.com/smash-teams/smash-teams-BE/commit/e1ff74457ea6c7fc4772ee016d0c302ed7cb83c3)
+- 유저 스케쥴 조회, 관리자 스케쥴 조회 수정 (23/05/15) - `commit` : [61efa0f](https://github.com/smash-teams/smash-teams-BE/commit/61efa0f554dc3753af22fb326e9de9798cfd9d96)
+- 관리자 스케쥴 조회 수정 (23/05/15) - `commit` : [fc90f14](https://github.com/smash-teams/smash-teams-BE/commit/fc90f14f66376df35bab34ad40e1e44b82f01ce4)
 
 ---
 👤 **Jason_song97**

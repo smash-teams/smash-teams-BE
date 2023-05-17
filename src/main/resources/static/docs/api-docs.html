@@ -667,14 +667,14 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 211
+Content-Length: 179
 
 {
   "status" : 400,
   "msg" : "badRequest",
   "data" : {
-    "key" : "password",
-    "value" : "영문, 숫자, 특수문자를 각각 1개 이상 사용하여 8~20자 이내로 작성해주세요."
+    "key" : "email",
+    "value" : "50자가 넘지 않도록 이메일 형식에 맞춰 작성해주세요."
   }
 }</code></pre>
 </div>
@@ -899,7 +899,7 @@ Host: 52.78.70.225:7777
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiVVNFUiIsImlkIjoxLCJleHAiOjE2ODQyMjE4Nzl9.ftrC7zH9muQQnV9XBsTl13bzdvl6TQJstdj0nuI0UJbjhy2Hh8H74zmOzFeJbi2cgqVmJ5PwclOUXOwOxWYzoQ
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiVVNFUiIsImlkIjoxLCJleHAiOjE2ODQyOTQ2MDJ9.CoUO_h_4zyTIxoYuYNHgwMX4tFacqb0m5AlclL6i2LRkfYN_Qeli47n3vRKufd5CCy0ITOQOqWOpLPlf05D4Hg
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
@@ -917,7 +917,7 @@ Content-Length: 304
     "email" : "User1@gmail.com",
     "phoneNumber" : "010-1234-5678",
     "profileImage" : null,
-    "startWork" : "2023-05-15",
+    "startWork" : "2023-05-16",
     "remain" : 20.0,
     "teamName" : "개발팀",
     "role" : "USER"
@@ -1033,7 +1033,7 @@ Content-Length: 295
     "email" : "Ceo@gmail.com",
     "phoneNumber" : "010-1234-5678",
     "remain" : 20.0,
-    "startWork" : "2023-05-15",
+    "startWork" : "2023-05-16",
     "profileImage" : null,
     "role" : "CEO"
   }
@@ -1652,7 +1652,7 @@ Content-Length: 164
   "status" : 200,
   "msg" : "ok",
   "data" : {
-    "profileImage" : "http://localhost:8080/upload/86be4802-e506-4fd1-9567-a6bdb17ea49f_test-image.jpg"
+    "profileImage" : "http://localhost:8080/upload/b84043d0-8505-480f-b042-8555f25f4a27_test-image.jpg"
   }
 }</code></pre>
 </div>
@@ -1769,7 +1769,7 @@ Content-Length: 3835
       "name" : "이경주",
       "email" : "이경주@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "USER"
     }, {
@@ -1778,7 +1778,7 @@ Content-Length: 3835
       "name" : "이광조",
       "email" : "이광조@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "회계팀",
       "role" : "USER"
     }, {
@@ -1787,7 +1787,7 @@ Content-Length: 3835
       "name" : "이백준",
       "email" : "이백준@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "마케팅팀",
       "role" : "USER"
     }, {
@@ -1796,7 +1796,7 @@ Content-Length: 3835
       "name" : "이빛나",
       "email" : "이빛나@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "USER"
     }, {
@@ -1805,7 +1805,7 @@ Content-Length: 3835
       "name" : "이산",
       "email" : "이산@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "USER"
     }, {
@@ -1814,7 +1814,7 @@ Content-Length: 3835
       "name" : "이석주",
       "email" : "이석주@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "마케팅팀",
       "role" : "USER"
     }, {
@@ -1823,7 +1823,7 @@ Content-Length: 3835
       "name" : "이석준",
       "email" : "이석준@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "마케팅팀",
       "role" : "USER"
     }, {
@@ -1832,7 +1832,7 @@ Content-Length: 3835
       "name" : "이승민",
       "email" : "이승민@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "MANAGER"
     }, {
@@ -1841,7 +1841,7 @@ Content-Length: 3835
       "name" : "이요한",
       "email" : "이요한@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "회계팀",
       "role" : "USER"
     }, {
@@ -1850,7 +1850,7 @@ Content-Length: 3835
       "name" : "이원우",
       "email" : "이원우@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "마케팅팀",
       "role" : "USER"
     }, {
@@ -1859,7 +1859,7 @@ Content-Length: 3835
       "name" : "이윤경",
       "email" : "이윤경@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "USER"
     }, {
@@ -1868,7 +1868,7 @@ Content-Length: 3835
       "name" : "이인호",
       "email" : "이인호@gmail.com",
       "phoneNumber" : "010-1234-5678",
-      "startWork" : "2023-05-15",
+      "startWork" : "2023-05-16",
       "teamName" : "개발팀",
       "role" : "USER"
     } ],
@@ -2489,8 +2489,8 @@ Content-Length: 1653
       },
       "type" : "DAYOFF",
       "reason" : "쉬고싶음",
-      "startDate" : "2023-05-15T16:24:30",
-      "endDate" : "2023-05-15T16:24:30"
+      "startDate" : "2023-05-16T12:36:36",
+      "endDate" : "2023-05-16T12:36:36"
     }, {
       "scheduleId" : 2,
       "user" : {
@@ -2503,8 +2503,8 @@ Content-Length: 1653
       },
       "type" : "DAYOFF",
       "reason" : "쉬고싶음",
-      "startDate" : "2023-05-15T16:24:30",
-      "endDate" : "2023-05-15T16:24:30"
+      "startDate" : "2023-05-16T12:36:36",
+      "endDate" : "2023-05-16T12:36:36"
     }, {
       "scheduleId" : 3,
       "user" : {
@@ -2517,8 +2517,8 @@ Content-Length: 1653
       },
       "type" : "DAYOFF",
       "reason" : "쉬고싶음",
-      "startDate" : "2023-05-15T16:24:30",
-      "endDate" : "2023-05-15T16:24:30"
+      "startDate" : "2023-05-16T12:36:36",
+      "endDate" : "2023-05-16T12:36:36"
     }, {
       "scheduleId" : 5,
       "user" : {
@@ -2531,8 +2531,8 @@ Content-Length: 1653
       },
       "type" : "HALFOFF",
       "reason" : "쉬고싶음",
-      "startDate" : "2023-05-15T16:24:30",
-      "endDate" : "2023-05-15T16:24:30"
+      "startDate" : "2023-05-16T12:36:36",
+      "endDate" : "2023-05-16T12:36:36"
     } ]
   }
 }</code></pre>
@@ -2661,8 +2661,8 @@ Content-Length: 1586
   "data" : {
     "scheduleList" : [ {
       "scheduleId" : 11,
-      "startDate" : "2023-05-15T16:24:20",
-      "endDate" : "2023-05-15T16:24:20",
+      "startDate" : "2023-05-16T12:36:29",
+      "endDate" : "2023-05-16T12:36:29",
       "type" : "DAYOFF",
       "status" : "FIRST",
       "reason" : "쉬고싶음",
@@ -2671,15 +2671,15 @@ Content-Length: 1586
         "name" : "남궁훈",
         "email" : "user7@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
         "teamName" : "개발팀",
         "profileImage" : null
       }
     }, {
       "scheduleId" : 6,
-      "startDate" : "2023-05-15T16:24:20",
-      "endDate" : "2023-05-15T16:24:20",
+      "startDate" : "2023-05-16T12:36:29",
+      "endDate" : "2023-05-16T12:36:29",
       "type" : "DAYOFF",
       "status" : "REJECTED",
       "reason" : "쉬고싶음",
@@ -2688,15 +2688,15 @@ Content-Length: 1586
         "name" : "남궁훈",
         "email" : "user7@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
         "teamName" : "개발팀",
         "profileImage" : null
       }
     }, {
       "scheduleId" : 5,
-      "startDate" : "2023-05-15T16:24:20",
-      "endDate" : "2023-05-15T16:24:20",
+      "startDate" : "2023-05-16T12:36:29",
+      "endDate" : "2023-05-16T12:36:29",
       "type" : "HALFOFF",
       "status" : "APPROVED",
       "reason" : "쉬고싶음",
@@ -2705,7 +2705,7 @@ Content-Length: 1586
         "name" : "남궁훈",
         "email" : "user7@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
         "teamName" : "개발팀",
         "profileImage" : null
@@ -3065,16 +3065,50 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 1582
+Content-Length: 5594
 
 {
   "status" : 200,
   "msg" : "ok",
   "data" : {
     "scheduleList" : [ {
+      "scheduleId" : 11,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "FIRST",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 7,
+        "name" : "남궁훈",
+        "email" : "user7@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 10,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "SHIFT",
+      "status" : "FIRST",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 12,
+        "name" : "황고은",
+        "email" : "user12@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "인사팀",
+        "profileImage" : null
+      }
+    }, {
       "scheduleId" : 9,
-      "startDate" : "2023-05-15T16:24:26",
-      "endDate" : "2023-05-15T16:24:26",
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
       "type" : "DAYOFF",
       "status" : "LAST",
       "reason" : "쉬고싶음",
@@ -3083,15 +3117,15 @@ Content-Length: 1582
         "name" : "서재식",
         "email" : "user4@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
         "teamName" : "개발팀",
         "profileImage" : null
       }
     }, {
       "scheduleId" : 8,
-      "startDate" : "2023-05-15T16:24:26",
-      "endDate" : "2023-05-15T16:24:26",
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
       "type" : "DAYOFF",
       "status" : "LAST",
       "reason" : "쉬고싶음",
@@ -3100,15 +3134,15 @@ Content-Length: 1582
         "name" : "김잔디",
         "email" : "user9@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
         "teamName" : "인사팀",
         "profileImage" : null
       }
     }, {
       "scheduleId" : 7,
-      "startDate" : "2023-05-15T16:24:26",
-      "endDate" : "2023-05-15T16:24:26",
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
       "type" : "HALFOFF",
       "status" : "LAST",
       "reason" : "쉬고싶음",
@@ -3117,9 +3151,111 @@ Content-Length: 1582
         "name" : "최민우",
         "email" : "manager8@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "MANAGER",
         "teamName" : "인사팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 6,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "REJECTED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 7,
+        "name" : "남궁훈",
+        "email" : "user7@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 5,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "HALFOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 7,
+        "name" : "남궁훈",
+        "email" : "user7@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 4,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "REJECTED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 2,
+        "name" : "정한울",
+        "email" : "manager2@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "MANAGER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 3,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 3,
+        "name" : "최준기",
+        "email" : "user3@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 2,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 11,
+        "name" : "황민서",
+        "email" : "user11@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "인사팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 1,
+      "startDate" : "2023-05-16T12:36:33",
+      "endDate" : "2023-05-16T12:36:33",
+      "type" : "DAYOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 1,
+        "name" : "김사장",
+        "email" : "ceo1@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "CEO",
+        "teamName" : "개발팀",
         "profileImage" : null
       }
     } ]
@@ -3180,7 +3316,7 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 583
+Content-Length: 3590
 
 {
   "status" : 200,
@@ -3188,8 +3324,8 @@ Content-Length: 583
   "data" : {
     "scheduleList" : [ {
       "scheduleId" : 11,
-      "startDate" : "2023-05-15T16:24:22",
-      "endDate" : "2023-05-15T16:24:22",
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
       "type" : "DAYOFF",
       "status" : "FIRST",
       "reason" : "쉬고싶음",
@@ -3198,8 +3334,110 @@ Content-Length: 583
         "name" : "남궁훈",
         "email" : "user7@gmail.com",
         "phoneNumber" : "010-1111-1111",
-        "startWork" : "2023-05-15",
+        "startWork" : "2023-05-16",
         "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 9,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "DAYOFF",
+      "status" : "LAST",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 4,
+        "name" : "서재식",
+        "email" : "user4@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 6,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "DAYOFF",
+      "status" : "REJECTED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 7,
+        "name" : "남궁훈",
+        "email" : "user7@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 5,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "HALFOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 7,
+        "name" : "남궁훈",
+        "email" : "user7@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 4,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "DAYOFF",
+      "status" : "REJECTED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 2,
+        "name" : "정한울",
+        "email" : "manager2@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "MANAGER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 3,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "DAYOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 3,
+        "name" : "최준기",
+        "email" : "user3@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "USER",
+        "teamName" : "개발팀",
+        "profileImage" : null
+      }
+    }, {
+      "scheduleId" : 1,
+      "startDate" : "2023-05-16T12:36:30",
+      "endDate" : "2023-05-16T12:36:30",
+      "type" : "DAYOFF",
+      "status" : "APPROVED",
+      "reason" : "쉬고싶음",
+      "user" : {
+        "userId" : 1,
+        "name" : "김사장",
+        "email" : "ceo1@gmail.com",
+        "phoneNumber" : "010-1111-1111",
+        "startWork" : "2023-05-16",
+        "role" : "CEO",
         "teamName" : "개발팀",
         "profileImage" : null
       }
@@ -3533,7 +3771,7 @@ Content-Length: 168
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-15 16:20:45 +0900
+Last updated 2023-05-15 22:27:35 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
