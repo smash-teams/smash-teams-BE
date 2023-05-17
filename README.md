@@ -153,7 +153,7 @@
 
 ## API Docs
 
-### 💎 [REST - API 명세서]([api-docs.html](build%2Fdocs%2Fasciidoc%2Fapi-docs.html))
+### 💎 [REST - API 명세서](https://smash-teams.github.io/smash-teams-BE/src/main/resources/static/docs/api-docs.html)
 
 
 ## 기술스택
