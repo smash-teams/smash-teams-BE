@@ -238,7 +238,7 @@ $ ./gradlew clean build
 👤 **dltmdalssssss(팀장)**
 
 - Role
-  - RDS 설계, Spring Security, AOP, Sentry, CI/CD, 도메인 네임 및 HTTPS 관련 설정
+  - ERD 설계, Spring Security, AOP, Sentry, CI/CD, 도메인 네임 및 HTTPS 관련 설정
   - API(6개)
     - 로그인, 승인 요청, 사용자 권한 설정 페이지(검색 기능 포함), 사용자 권한/팀 변경, 팀 추가 및 삭제
 - Website: dltmdalssssss.github.io
