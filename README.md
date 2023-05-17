@@ -194,7 +194,7 @@
 
 ## 시스템 구성도
 
-![system-architecture](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238632794-baf8940b-5f47-4158-b43e-b072ea2fb09c.png)
+![system-architecture](https://github-production-user-asset-6210df.s3.amazonaws.com/90882909/238824151-d0dc8a9b-129a-49bd-ab19-b5755d86a3a3.png)
 
 ## Usage
 
