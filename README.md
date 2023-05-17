@@ -246,13 +246,19 @@ $ ./gradlew clean build
 
 👤 **realgreatcode(팀원)**
 
-* Website: realgreatcode.github.io
-* Github: [@realgreatcode](https://github.com/realgreatcode)
+- Role
+  - API(6개)
+    - 회원가입, 이메일 중복 확인, 회원탈퇴, 연차/당직 내역 보기 페이지 조회, 연차/당직 관리하기 페이지 조회, 거절/승인
+- Website: realgreatcode.github.io
+- Github: [@realgreatcode](https://github.com/realgreatcode)
 
 👤 **Jason_song97(팀원)**
 
-* Website: Jason_song97.github.io
-* Github: [@Jason_song97](https://github.com/JasonSong97)
+- Role
+  - API(4개)
+  - 프로필 이미지 업로드, 내 정보 조회, 개인정보 수정, 메인페이지 
+- Website: Jason_song97.github.io
+- Github: [@Jason_song97](https://github.com/JasonSong97)
 
 ## 🤝 Contributing
 
