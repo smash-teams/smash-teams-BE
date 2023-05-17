@@ -233,19 +233,23 @@ $ ./gradlew clean build
 - 리드미 작성 (23/5/16) - `commit` : [4cf3de9](https://github.com/smash-teams/smash-teams-BE/commit/4cf3de9e07b00a79eb1443cd8838dca402d0839c)
 
 
-## Author
+## Author & Role
 
-👤 **dltmdalssssss**
+👤 **dltmdalssssss(팀장)**
 
-* Website: dltmdalssssss.github.io
-* Github: [@dltmdalssssss](https://github.com/dltmdalssssss)
+- Role
+  - Spring Security, AOP, Sentry, CI/CD, 도메인 네임 및 HTTPS 관련 설정
+  - API(6개)
+    - 로그인, 승인 요청, 사용자 권한 설정 페이지(검색 기능 포함), 사용자 권한/팀 변경, 팀 추가 및 삭제
+- Website: dltmdalssssss.github.io
+- Github: [@dltmdalssssss](https://github.com/dltmdalssssss)
 
-👤 **realgreatcode**
+👤 **realgreatcode(팀원)**
 
 * Website: realgreatcode.github.io
 * Github: [@realgreatcode](https://github.com/realgreatcode)
 
-👤 **Jason_song97**
+👤 **Jason_song97(팀원)**
 
 * Website: Jason_song97.github.io
 * Github: [@Jason_song97](https://github.com/JasonSong97)
