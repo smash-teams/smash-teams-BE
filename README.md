@@ -17,7 +17,7 @@
 <h2 align=center>연차, 당직을 "때려"버리는 근태관리 플랫폼 서비스, Team SMASH</h2>
 
 ## UI
-### ✋ 로그인, 회원가입 페이지 구성 - 수정필요
+### ✋ 로그인, 회원가입 페이지 구성
 <table>
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}}>
