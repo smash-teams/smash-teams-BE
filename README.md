@@ -263,22 +263,22 @@
 
 ## Author & Role
 
-👤 **berrypicker777(팀장)**
+👤 **이승민(팀장)**
 
 - Role
-  - ERD 설계, Spring Security, AOP, Sentry, CI/CD, 도메인 네임 및 HTTPS 관련 설정
+  - ERD 설계, Spring Security 및 AOP 세팅, CI/CD, 도메인 네임 및 HTTPS 관련 설정, Sentry 세팅
   - API(6개)
     - 로그인, 승인 요청, 사용자 권한 설정 페이지(검색 기능 포함), 사용자 권한/팀 변경, 팀 추가 및 삭제
 - Github: [@berrypicker777](https://github.com/berrypicker777)
 
-👤 **realgreatcode(팀원)**
+👤 **양진호(팀원)**
 
 - Role
   - API(6개)
     - 회원가입, 이메일 중복 확인, 회원탈퇴, 연차/당직 내역 보기 페이지 조회, 연차/당직 관리하기 페이지 조회, 거절/승인
 - Github: [@realgreatcode](https://github.com/realgreatcode)
 
-👤 **Jason_song97(팀원)**
+👤 **송재근(팀원)**
 
 - Role
   - API(4개)
